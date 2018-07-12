@@ -1,0 +1,4208 @@
+#
+# When we add a new service name in the tnsnames.ora file.
+# We must follow the following naming convention for database that are part of the upgrade from 9i to 10g.
+# The following naming convention allow us to have the 9i and the 10g databases
+# reachable without confusion:
+#
+# The new service name must have the suffix 10g.  seach for BMSPROD in this file
+# you will see 2 different entries:
+# one BMSPROD10g for 10 g database and one BMSPROD for 9i database
+#
+# This way both databases can remain started and reachable without any confusion.
+#
+#
+# You also need to add new service definition in the proper file section.
+# If you look carefully each server has its own section.
+# see below the section for server stha64458 and stha64459
+# in each section please add new entry in alphabetical order
+#
+#
+########################### stha64458 stha64459
+
+
+BMSTEST.CA.ECAMERICAS = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha28126)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = bmstest.ingcanada.com)
+    )
+  )
+
+
+ALCPROD10g = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha64458)
+      (PORT = 1521)
+    )
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha64459)
+      (PORT = 1521)
+    )
+    (LOAD_BALANCE = yes)
+    (CONNECT_DATA = 
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = ALCPROD.INTACT.NET)
+    )
+  )
+
+
+AUSPROD10g = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (LOAD_BALANCE = YES)
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = STHA64458)
+        (PORT = 1521)
+      )
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = STHA64459)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = AUSPROD.INTACT.NET)
+      (failover_mode = 
+        (type = select)
+        (method = basic)
+      )
+    )
+  )
+
+
+RMNPROD = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64458)
+      (PORT = 1521)
+    )
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64459)
+      (PORT = 1521)
+    )
+    (LOAD_BALANCE = YES)
+    (CONNECT_DATA = 
+      (SERVICE_NAME = RMNPROD.INGCANADA.COM)
+      (FAILOVER_MODE = 
+        (TYPE = SELECT)
+        (METHOD = BASIC)
+      )
+    )
+  )
+
+
+WMTPROD10G = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64458)
+      (PORT = 1521)
+    )
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64459)
+      (PORT = 1521)
+    )
+    (LOAD_BALANCE = YES)
+    (CONNECT_DATA = 
+      (SERVICE_NAME = WMTPROD.INTACT.NET)
+      (FAILOVER_MODE = 
+        (TYPE = SELECT)
+        (METHOD = BASIC)
+      )
+    )
+  )
+
+
+RMNPROD1 = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = STHA64458)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SID = RMNPROD1)
+    )
+  )
+
+
+RMNPROD2 = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = STHA64459)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SID = RMNPROD2)
+    )
+  )
+
+
+BMSPROD10g = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (LOAD_BALANCE = NO)
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = STHA64458)
+        (PORT = 1521)
+      )
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = STHA64459)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = BMSPROD.INTACT.COM)
+      (failover_mode = 
+        (type = select)
+        (method = basic)
+      )
+    )
+  )
+
+PSCPROD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (LOAD_BALANCE = NO)
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = STHA64458)
+        (PORT = 1521)
+      )
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = STHA64459)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = PSCPROD.INTACT.COM)
+      (failover_mode = 
+        (type = select)
+        (method = basic)
+      )
+    )
+  )
+
+
+HCMPRD2 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64458)
+      (PORT = 1521)
+    )
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64459)
+      (PORT = 1521)
+    )
+    (LOAD_BALANCE = YES)
+    (CONNECT_DATA = 
+      (SERVICE_NAME = HCMPRD2.INTACT.NET)
+      (FAILOVER_MODE = 
+        (TYPE = SELECT)
+        (METHOD = BASIC)
+      )
+    )
+  )
+
+
+OEMPROD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (LOAD_BALANCE = NO)
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = STHA64458)
+        (PORT = 1521)
+      )
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = STHA64459)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = OEMPROD.INTACT.COM)
+      (failover_mode = 
+        (type = select)
+        (method = basic)
+      )
+    )
+  )
+
+
+UTLPROD = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64458)
+      (PORT = 1521)
+    )
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64459)
+      (PORT = 1521)
+    )
+    (LOAD_BALANCE = YES)
+    (CONNECT_DATA = 
+      (SERVICE_NAME = UTLPROD.INTACT.NET)
+      (FAILOVER_MODE = 
+        (TYPE = SELECT)
+        (METHOD = BASIC)
+      )
+    )
+  )
+
+
+ALCPREP10g = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64454)
+      (PORT = 1521)
+    )
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64455)
+      (PORT = 1521)
+    )
+    (LOAD_BALANCE = YES)
+    (CONNECT_DATA = 
+      (SERVICE_NAME = ALCPREP.INTACT.NET)
+      (FAILOVER_MODE = 
+        (TYPE = SELECT)
+        (METHOD = BASIC)
+      )
+    )
+  )
+
+
+BREPREP10g = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64454)
+      (PORT = 1521)
+    )
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64455)
+      (PORT = 1521)
+    )
+    (LOAD_BALANCE = YES)
+    (CONNECT_DATA = 
+      (SERVICE_NAME = BREPREP.INTACT.NET)
+      (FAILOVER_MODE = 
+        (TYPE = SELECT)
+        (METHOD = BASIC)
+      )
+    )
+  )
+
+
+BMSPREP10g = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64454)
+      (PORT = 1521)
+    )
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64455)
+      (PORT = 1521)
+    )
+    (LOAD_BALANCE = YES)
+    (CONNECT_DATA = 
+      (SERVICE_NAME = BMSPREP.INTACT.COM)
+      (FAILOVER_MODE = 
+        (TYPE = SELECT)
+        (METHOD = BASIC)
+      )
+    )
+  )
+
+
+DPSPREP10g = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64454)
+      (PORT = 1521)
+    )
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64455)
+      (PORT = 1521)
+    )
+    (LOAD_BALANCE = YES)
+    (CONNECT_DATA = 
+      (SERVICE_NAME = DPSPREP.INTACT.NET)
+      (FAILOVER_MODE = 
+        (TYPE = SELECT)
+        (METHOD = BASIC)
+      )
+    )
+  )
+
+
+DPSTEMP10g = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64454)
+      (PORT = 1521)
+    )
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64455)
+      (PORT = 1521)
+    )
+    (LOAD_BALANCE = YES)
+    (CONNECT_DATA = 
+      (SERVICE_NAME = DPSTEMP.INTACT.NET)
+      (FAILOVER_MODE = 
+        (TYPE = SELECT)
+        (METHOD = BASIC)
+      )
+    )
+  )
+
+
+WMTPREP10g = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64454)
+      (PORT = 1521)
+    )
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64455)
+      (PORT = 1521)
+    )
+    (LOAD_BALANCE = YES)
+    (CONNECT_DATA = 
+      (SERVICE_NAME = WMTPREP.INTACT.NET)
+      (FAILOVER_MODE = 
+        (TYPE = SELECT)
+        (METHOD = BASIC)
+      )
+    )
+  )
+
+
+PSCPREP = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64454)
+      (PORT = 1521)
+    )
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64455)
+      (PORT = 1521)
+    )
+    (LOAD_BALANCE = YES)
+    (CONNECT_DATA = 
+      (SERVICE_NAME = PSCPREP.INTACT.COM)
+      (FAILOVER_MODE = 
+        (TYPE = SELECT)
+        (METHOD = BASIC)
+      )
+    )
+  )
+
+
+HCMPRE2 = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (LOAD_BALANCE = NO)
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = STHA64454)
+        (PORT = 1521)
+      )
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = STHA64455)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = HCMPRE2.INTACT.NET)
+      (failover_mode = 
+        (type = select)
+        (method = basic)
+      )
+    )
+  )
+
+
+WBAPREP10g = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64454)
+      (PORT = 1521)
+    )
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64455)
+      (PORT = 1521)
+    )
+    (LOAD_BALANCE = YES)
+    (CONNECT_DATA = 
+      (SERVICE_NAME = WBAPREP.INTACT.NET)
+      (FAILOVER_MODE = 
+        (TYPE = SELECT)
+        (METHOD = BASIC)
+      )
+    )
+  )
+
+
+HUBSIT3 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha24033)
+      (PORT = 1531)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = hubsit3)
+      (SERVICE_NAME = hubsit3.ingcanada.com)
+    )
+  )
+
+
+HUBHSIT3 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha24033)
+      (PORT = 1531)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = hubhsit3)
+      (SERVICE_NAME = hubhsit3.ingcanada.com)
+    )
+  )
+
+
+HUBHUAT3 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha24033)
+      (PORT = 1531)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = hubhuat3)
+      (SERVICE_NAME = hubhuat3.ingcanada.com)
+    )
+  )
+
+
+HUBUAT3 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha24033)
+      (PORT = 1531)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = hubuat3)
+      (SERVICE_NAME = hubuat3.ingcanada.com)
+    )
+  )
+
+
+EDWSIT3 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha24033)
+      (PORT = 1531)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = edwsit3)
+      (SERVICE_NAME = edwsit3.ingcanada.com)
+    )
+  )
+
+
+EDWUAT3 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha24033)
+      (PORT = 1531)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = edwuat3)
+      (SERVICE_NAME = edwuat3.ingcanada.com)
+    )
+  )
+
+
+AUSINTG210g = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha24041)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = AUSINTG2.INTACT.NET)
+    )
+  )
+
+
+AUSDEV310g = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha24041)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = AUSDEV3.INTACT.NET)
+    )
+  )
+
+
+DPSDEV10g = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = STHA24041)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = DPSDEV.INTACT.NET)
+    )
+  )
+
+
+DPSDEV210g = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = STHA24041)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = DPSDEV2.INTACT.NET)
+    )
+  )
+
+
+DPSINTG10g = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = STHA24041)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = DPSINTG.INTACT.NET)
+    )
+  )
+
+
+DPSINTG210g = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = STHA24041)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = DPSINTG2.INTACT.NET)
+    )
+  )
+
+
+BMSDEV10g = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = STHA24041)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = BMSDEV.INGCANADA.COM)
+    )
+  )
+
+
+BMSINTG = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = STHA24041)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = BMSINTG.INTACT.NET)
+    )
+  )
+
+
+BREDEV10g = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = STHA24041)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = BREDEV.INTACT.NET)
+    )
+  )
+
+
+HCMDMO2 = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = STHA24041)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = HCMDMO2.INGCANADA.COM)
+    )
+  )
+
+
+HCMDEV2 = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = STHA24041)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = HCMDEV2.INTACT.NET)
+    )
+  )
+
+
+HCMINT2 = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = STHA24041)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SID = HCMINT2)
+    )
+  )
+
+
+PSCDEV = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = STHA24041)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = PSCDEV.INGCANADA.COM)
+    )
+  )
+
+
+RATDEV10G = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = STHA24041)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = RATDEV.INTACT.NET)
+    )
+  )
+
+
+RMNDEV = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = STHA24041)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = RMNDEV.INGCANADA.COM)
+    )
+  )
+
+
+WEBDEVA10g = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = STHA24041)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = WEBDEVA.INTACT.NET)
+    )
+  )
+
+
+WMTDEV10G = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24041)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = WMTDEV)
+      (SERVICE_NAME = WMTDEV.intact.net)
+    )
+  )
+
+
+WSLDEV = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24041)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = wsldev.intact.net)
+    )
+  )
+
+
+ACCTEST10g = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha24042)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = ACCTEST.INTACT.NET)
+    )
+  )
+
+
+AUSUAT = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha24042)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = AUSUAT.INTACT.NET)
+    )
+  )
+
+
+BRETEST10G = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha24042)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = BRETEST.INTACT.NET)
+    )
+  )
+
+
+HCMTST2 = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = STHA24042)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = HCMTST2.INTACT.NET)
+    )
+  )
+
+
+PSCTEST = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = STHA24042)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = PSCTEST.INTACT.COM)
+    )
+  )
+
+
+DPSTEST10G = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24042)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = DPSTEST)
+      (SERVICE_NAME = DPSTEST.intact.net)
+    )
+  )
+
+
+DPSTEST210G = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24042)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = DPSTEST2)
+      (SERVICE_NAME = DPSTEST2.intact.net)
+    )
+  )
+
+
+WMTTEST10G = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24042)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = WMTTEST)
+      (SERVICE_NAME = WMTTEST.intact.net)
+    )
+  )
+
+
+BMSTEST10G = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24042)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = BMSTEST)
+      (SERVICE_NAME = BMSTEST.intact.net)
+    )
+  )
+
+
+ALCDEV10g = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha24041)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = ALCDEV.INTACT.NET)
+    )
+  )
+
+
+ALCTEST10g = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha24042)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = ALCTEST.INTACT.NET)
+    )
+  )
+
+
+BREINTG10g = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha24041)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = BREINTG.INTACT.NET)
+    )
+  )
+
+
+CTRMPROD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha64046)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVER = DEDICATED)
+      (SID = CTRMPROD)
+    )
+  )
+
+
+CLMTST2 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha2a053)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (SID = clmtst21)
+    )
+  )
+
+
+CLMTST3 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha2a053)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (SID = clmtst31)
+    )
+  )
+
+
+CLMTST4 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha2a053)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (SID = clmtst41)
+    )
+  )
+
+
+CLMTST5 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha2a053)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (SID = clmtst51)
+    )
+  )
+
+
+OPTPROD = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha2a053)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (SID = optprod1)
+    )
+  )
+
+
+OPUAT = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha2a053)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (SID = opuat1)
+    )
+  )
+
+
+CLMTST6 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha2a053)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (SID = clmtst61)
+    )
+  )
+
+
+OPROD.WORLD = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha64061)
+      (PORT = 1521)
+    )
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha64062)
+      (PORT = 1521)
+    )
+    (LOAD_BALANCE = yes)
+    (CONNECT_DATA = 
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = oprod.world)
+    )
+  )
+
+
+EDWPROD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha28144)
+        (PORT = 1521)
+      )
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha28143)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = edwprod.ingcanada.com)
+    )
+  )
+
+
+EISIFPRD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha28143)
+        (PORT = 1531)
+      )
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha28144)
+        (PORT = 1531)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = eisifprd.ingcanada.com)
+    )
+  )
+
+
+HUBPROD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha28143)
+        (PORT = 1521)
+      )
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha28144)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = hubprod.ingcanada.com)
+    )
+  )
+
+
+HUBHPROD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha28143)
+        (PORT = 1531)
+      )
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha28144)
+        (PORT = 1531)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = hubhprod.ingcanada.com)
+    )
+  )
+
+
+EDWPRE = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha28142)
+        (PORT = 1521)
+      )
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha28141)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = edwpre.ingcanada.com)
+    )
+  )
+
+
+EISIFPRE = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha28141)
+        (PORT = 1531)
+      )
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha28142)
+        (PORT = 1531)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = eisifpre.ingcanada.com)
+    )
+  )
+
+
+HUBPRE = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha28141)
+        (PORT = 1521)
+      )
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha28142)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = hubpre.ingcanada.com)
+    )
+  )
+
+
+EISDPPRE = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha28141)
+        (PORT = 1522)
+      )
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha28142)
+        (PORT = 1522)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = eisdppre.ingcanada.com)
+    )
+  )
+
+
+EDWQA = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28140)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = edwqa)
+      (SERVICE_NAME = edwqa.INGCANADA.COM)
+    )
+  )
+
+
+EDWQA3 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28140)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = edwqa3)
+      (SERVICE_NAME = edwqa3.INGCANADA.COM)
+    )
+  )
+
+
+EDWQA4 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28140)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = edwqa4)
+      (SERVICE_NAME = edwqa4.INGCANADA.COM)
+    )
+  )
+
+
+HUBPUAT = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28140)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = hubpuat)
+      (SERVICE_NAME = hubpuat.INGCANADA.COM)
+    )
+  )
+
+
+HUBHPUAT = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28140)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = hubhpuat)
+      (SERVICE_NAME = hubhpuat.INGCANADA.COM)
+    )
+  )
+
+
+HUBPQA = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28140)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = hubpqa)
+      (SERVICE_NAME = hubpqa.INGCANADA.COM)
+    )
+  )
+
+
+HUBHPQA = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28140)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = hubhpqa)
+      (SERVICE_NAME = hubhpqa.INGCANADA.COM)
+    )
+  )
+
+
+EDWUAT = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28140)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = edwuat)
+      (SERVICE_NAME = edwuat.INGCANADA.COM)
+    )
+  )
+
+
+EISIFQA = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28140)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = eisifqa)
+      (SERVICE_NAME = eisifqa.INGCANADA.COM)
+    )
+  )
+
+
+EISIFUAT = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28140)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = eisifuat)
+      (SERVICE_NAME = eisifuat.INGCANADA.COM)
+    )
+  )
+
+
+HUBHQA = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28140)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = hubhqa)
+      (SERVICE_NAME = hubhqa.INGCANADA.COM)
+    )
+  )
+
+
+HUBHQA3 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28140)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = hubhqa3)
+      (SERVICE_NAME = hubhqa3.INGCANADA.COM)
+    )
+  )
+
+
+HUBHQA4 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28140)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = hubhqa4)
+      (SERVICE_NAME = hubhqa4.INGCANADA.COM)
+    )
+  )
+
+
+HUBQA = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28140)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = hubqa)
+      (SERVICE_NAME = hubqa.INGCANADA.COM)
+    )
+  )
+
+
+HUBQA3 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28140)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = hubqa3)
+      (SERVICE_NAME = hubqa3.INGCANADA.COM)
+    )
+  )
+
+
+HUBQA4 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28140)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = hubqa4)
+      (SERVICE_NAME = hubqa4.INGCANADA.COM)
+    )
+  )
+
+
+HUBHUAT = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28140)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = hubhuat)
+      (SERVICE_NAME = hubhuat.INGCANADA.COM)
+    )
+  )
+
+
+HUBHUAT2 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28140)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = hubhuat2)
+      (SERVICE_NAME = hubhuat2.INGCANADA.COM)
+    )
+  )
+
+
+HUBUAT = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28140)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = hubuat)
+      (SERVICE_NAME = hubuat.INGCANADA.COM)
+    )
+  )
+
+
+HUBUAT2 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28140)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = hubuat2)
+      (SERVICE_NAME = hubuat2.INGCANADA.COM)
+    )
+  )
+
+
+EDWDEV = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28139)
+      (PORT = 1531)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = edwdev)
+      (SERVICE_NAME = edwdev.INGCANADA.COM)
+    )
+  )
+
+
+EDWDEV3 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28139)
+      (PORT = 1531)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = edwdev3)
+      (SERVICE_NAME = edwdev3.INGCANADA.COM)
+    )
+  )
+
+
+EDWDEV4 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28139)
+      (PORT = 1531)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = edwdev4)
+      (SERVICE_NAME = edwdev4.INGCANADA.COM)
+    )
+  )
+
+
+EDWSIT = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28139)
+      (PORT = 1531)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = edwsit)
+      (SERVICE_NAME = edwsit.INGCANADA.COM)
+    )
+  )
+
+
+EDWSIT4 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28139)
+      (PORT = 1531)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = edwsit4)
+      (SERVICE_NAME = edwsit4.INGCANADA.COM)
+    )
+  )
+
+
+EISIFDEV = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28139)
+      (PORT = 1531)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = eisifdev)
+      (SERVICE_NAME = eisifdev.INGCANADA.COM)
+    )
+  )
+
+
+EISIFSIT = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28139)
+      (PORT = 1531)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = eisifsit)
+      (SERVICE_NAME = eisifsit.INGCANADA.COM)
+    )
+  )
+
+
+HUBDEV = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28139)
+      (PORT = 1531)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = hubdev)
+      (SERVICE_NAME = hubdev.INGCANADA.COM)
+    )
+  )
+
+
+HUBDEV2 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28139)
+      (PORT = 1531)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = hubdev2)
+      (SERVICE_NAME = hubdev2.INGCANADA.COM)
+    )
+  )
+
+
+HUBDEV3 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28139)
+      (PORT = 1531)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = hubdev3)
+      (SERVICE_NAME = hubdev3.INGCANADA.COM)
+    )
+  )
+
+
+HUBDEV4 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28139)
+      (PORT = 1531)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = hubdev4)
+      (SERVICE_NAME = hubdev4.INGCANADA.COM)
+    )
+  )
+
+
+HUBHDEV = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28139)
+      (PORT = 1531)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = hubhdev)
+      (SERVICE_NAME = hubhdev.INGCANADA.COM)
+    )
+  )
+
+
+HUBHDEV2 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28139)
+      (PORT = 1531)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = hubhdev2)
+      (SERVICE_NAME = hubhdev2.INGCANADA.COM)
+    )
+  )
+
+
+HUBHDEV3 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28139)
+      (PORT = 1531)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = hubhdev3)
+      (SERVICE_NAME = hubhdev3.INGCANADA.COM)
+    )
+  )
+
+
+HUBHDEV4 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28139)
+      (PORT = 1531)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = hubhdev4)
+      (SERVICE_NAME = hubhdev4.INGCANADA.COM)
+    )
+  )
+
+
+HUBHSIT = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28139)
+      (PORT = 1531)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = hubhsit)
+      (SERVICE_NAME = hubhsit.INGCANADA.COM)
+    )
+  )
+
+
+HUBHSIT2 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28139)
+      (PORT = 1531)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = hubhsit2)
+      (SERVICE_NAME = hubhsit2.INGCANADA.COM)
+    )
+  )
+
+
+HUBHSIT4 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28139)
+      (PORT = 1531)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = hubhsit4)
+      (SERVICE_NAME = hubhsit4.INGCANADA.COM)
+    )
+  )
+
+
+HUBSIT = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28139)
+      (PORT = 1531)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = hubsit)
+      (SERVICE_NAME = hubsit.INGCANADA.COM)
+    )
+  )
+
+
+HUBSIT2 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28139)
+      (PORT = 1531)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = hubsit2)
+      (SERVICE_NAME = hubsit2.INGCANADA.COM)
+    )
+  )
+
+
+HUBSIT4 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28139)
+      (PORT = 1531)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = hubsit4)
+      (SERVICE_NAME = hubsit4.INGCANADA.COM)
+    )
+  )
+
+
+HUBHPDEV = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28139)
+      (PORT = 1531)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = hubhpdev)
+      (SERVICE_NAME = hubhpdev.INGCANADA.COM)
+    )
+  )
+
+
+HUBPSIT = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28139)
+      (PORT = 1531)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = hubpsit)
+      (SERVICE_NAME = hubpsit.INGCANADA.COM)
+    )
+  )
+
+
+HUBPDEV = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28139)
+      (PORT = 1531)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = hubpdev)
+      (SERVICE_NAME = hubpdev.INGCANADA.COM)
+    )
+  )
+
+
+HUBHPSIT = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28139)
+      (PORT = 1531)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = hubhpsit)
+      (SERVICE_NAME = hubhpsit.INGCANADA.COM)
+    )
+  )
+
+
+HYFPROD = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = 10.177.98.92)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = HYFPROD)
+    )
+  )
+
+
+HYFDEV = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha38164.ca.ecamericas)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = HYFDEV.INGCANADA.COM)
+    )
+  )
+
+
+HYFTEST = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha38164.ca.ecamericas)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = HYFTEST.INGCANADA.COM)
+    )
+  )
+
+DPSPREP = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA28123)
+      (PORT = 1528)
+    )
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA28124)
+      (PORT = 1528)
+    )
+    (LOAD_BALANCE = YES)
+    (CONNECT_DATA = 
+      (SERVICE_NAME = DPSPREP.INGCANADA.COM)
+      (FAILOVER_MODE = 
+        (TYPE = SELECT)
+        (METHOD = BASIC)
+      )
+    )
+  )
+
+
+DPSTRNG = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA28123)
+      (PORT = 1528)
+    )
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA28124)
+      (PORT = 1528)
+    )
+    (LOAD_BALANCE = YES)
+    (CONNECT_DATA = 
+      (SERVICE_NAME = DPSTRNG.INGCANADA.COM)
+      (FAILOVER_MODE = 
+        (TYPE = SELECT)
+        (METHOD = BASIC)
+      )
+    )
+  )
+
+
+SMXPREP = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA28123)
+      (PORT = 1521)
+    )
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA28124)
+      (PORT = 1521)
+    )
+    (LOAD_BALANCE = YES)
+    (CONNECT_DATA = 
+      (SERVICE_NAME = SMXPREP.INGCANADA.COM)
+      (FAILOVER_MODE = 
+        (TYPE = SELECT)
+        (METHOD = BASIC)
+      )
+    )
+  )
+
+
+WMTTRNG = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA28123)
+      (PORT = 1521)
+    )
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA28124)
+      (PORT = 1521)
+    )
+    (LOAD_BALANCE = YES)
+    (CONNECT_DATA = 
+      (SERVICE_NAME = WMTTRNG.INGCANADA.COM)
+      (FAILOVER_MODE = 
+        (TYPE = SELECT)
+        (METHOD = BASIC)
+      )
+    )
+  )
+
+
+WMTPROD = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA28111)
+      (PORT = 1522)
+    )
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA28112)
+      (PORT = 1522)
+    )
+    (LOAD_BALANCE = YES)
+    (CONNECT_DATA = 
+      (SERVICE_NAME = WMTPROD.INGCANADA.COM)
+      (FAILOVER_MODE = 
+        (TYPE = SELECT)
+        (METHOD = BASIC)
+      )
+    )
+  )
+
+
+SMXDEV1 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha24036)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = SMXDEV1)
+      (SERVICE_NAME = SMXDEV1.INGCANADA.COM)
+    )
+  )
+
+
+SMXDEV2 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha24036)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = SMXDEV2)
+      (SERVICE_NAME = SMXDEV2.INGCANADA.COM)
+    )
+  )
+
+
+SMXDEV3 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha24036)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = SMXDEV3)
+      (SERVICE_NAME = SMXDEV3.INGCANADA.COM)
+    )
+  )
+
+
+SMXDEV4 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha24036)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = SMXDEV4)
+      (SERVICE_NAME = SMXDEV4.INGCANADA.COM)
+    )
+  )
+
+
+SMXDEV5 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha24036)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = SMXDEV5)
+      (SERVICE_NAME = SMXDEV5.INGCANADA.COM)
+    )
+  )
+
+
+SMXDEV6 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha24036)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = SMXDEV6)
+      (SERVICE_NAME = SMXDEV6.INGCANADA.COM)
+    )
+  )
+
+
+SMXSYS1 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha24036)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = SMXSYS1)
+      (SERVICE_NAME = SMXSYS1.INGCANADA.COM)
+    )
+  )
+
+
+SMXSYS2 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha24036)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = SMXSYS2)
+      (SERVICE_NAME = SMXSYS2.INGCANADA.COM)
+    )
+  )
+
+
+SMXSYS3 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha24036)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = SMXSYS3)
+      (SERVICE_NAME = SMXSYS3.INGCANADA.COM)
+    )
+  )
+
+
+SMXSYS4 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha24036)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = SMXSYS4)
+      (SERVICE_NAME = SMXSYS4.INGCANADA.COM)
+    )
+  )
+
+
+SMXSYS5 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha24036)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = SMXSYS5)
+      (SERVICE_NAME = SMXSYS5.INGCANADA.COM)
+    )
+  )
+
+
+SMXSYS6 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha24036)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = SMXSYS6)
+      (SERVICE_NAME = SMXSYS6.INGCANADA.COM)
+    )
+  )
+
+
+SMXINTG = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha24036)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = SMXINTG)
+      (SERVICE_NAME = SMXINTG.INGCANADA.COM)
+    )
+  )
+
+
+ACINGDEV = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (Host = stha24024)
+        (Port = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SID = acingdev)
+      (SERVER = DEDICATED)
+    )
+  )
+
+############################ stha24022 Allianz History databases
+
+ACINGPRD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (Host = stha24022)
+        (Port = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SID = acingprd)
+      (SERVER = DEDICATED)
+    )
+  )
+
+############################ stha24021 Allianz History databases
+
+DSSFAC = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (Host = stha24021)
+        (Port = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SID = dssfac)
+      (SERVER = DEDICATED)
+    )
+  )
+
+
+DSSNEW = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (Host = stha24021)
+        (Port = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SID = dssnew)
+      (SERVER = DEDICATED)
+    )
+  )
+
+
+DSSTEST2 = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (Host = stha24021)
+        (Port = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SID = dsstest2)
+      (SERVER = DEDICATED)
+    )
+  )
+
+
+DSSTSTFA = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (Host = stha24021)
+        (Port = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SID = dsststfa)
+      (SERVER = DEDICATED)
+    )
+  )
+
+
+SMXP = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = INGPROD01)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (SID = SMXP)
+    )
+  )
+
+
+MRKTPROD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24007)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = MRKTPROD)
+      (SERVICE_NAME = MRKTPROD.ingcanada.com)
+    )
+  )
+
+
+MRKTTEST = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24007)
+        (PORT = 1522)
+      )
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = MRKTTEST)
+      (SERVICE_NAME = MRKTTEST.intact.net)
+    )
+  )
+
+
+DPSPROD_MRKT = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = STHA24007)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SID = DPSPROD)
+    )
+  )
+
+
+DPSPROD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = STHA24002)
+        (PORT = 1528)
+      )
+    )
+    (CONNECT_DATA = 
+      (SID = DPSPROD)
+    )
+  )
+
+
+ALCTEST = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28126)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = ALCTEST)
+      (SERVICE_NAME = ALCTEST.INGCANADA.COM)
+    )
+  )
+
+
+BMSTEST = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28126)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = BMSTEST)
+      (SERVICE_NAME = BMSTEST.INGCANADA.COM)
+    )
+  )
+
+
+CSMATEST = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28126)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = CSMATEST)
+      (SERVICE_NAME = CSMATEST.INGCANADA.COM)
+    )
+  )
+
+
+DPSTEST = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha28126)
+        (PORT = 1528)
+      )
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = DPSTEST)
+      (SERVICE_NAME = DPSTEST.ingcanada.com)
+    )
+  )
+
+
+DPSTEST2 = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha28126)
+        (PORT = 1528)
+      )
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = DPSTEST2)
+      (SERVICE_NAME = DPSTEST2.ingcanada.com)
+    )
+  )
+
+
+SMXA = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28126)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = SMXA)
+      (SERVICE_NAME = SMXA.INGCANADA.COM)
+    )
+  )
+
+
+SMXTEST = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha28126)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = SMXTEST)
+      (SERVICE_NAME = SMXTEST.INGCANADA.COM)
+    )
+  )
+
+
+WMTTEST = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28126)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = WMTTEST)
+      (SERVICE_NAME = WMTTEST.INGCANADA.COM)
+    )
+  )
+
+
+WEBTEST1 = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha28126)
+        (PORT = 1525)
+      )
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = WEBTEST1)
+      (SERVICE_NAME = WEBTEST1.ingcanada.com)
+    )
+  )
+
+
+ALCDEV = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28125)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = ALCDEV)
+      (SERVICE_NAME = ALCDEV.INGCANADA.COM)
+    )
+  )
+
+
+BMSDEV = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28125)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = BMSDEV)
+      (SERVICE_NAME = BMSDEV.INGCANADA.COM)
+    )
+  )
+
+
+DPSDEV = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha28125)
+        (PORT = 1528)
+      )
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = DPSDEV)
+      (SERVICE_NAME = DPSDEV.ingcanada.com)
+    )
+  )
+
+
+DPSDEV2 = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha28125)
+        (PORT = 1528)
+      )
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = DPSDEV2)
+      (SERVICE_NAME = DPSDEV2.ingcanada.com)
+    )
+  )
+
+
+DPSDEV3 = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha28125)
+        (PORT = 1528)
+      )
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = DPSDEV3)
+      (SERVICE_NAME = DPSDEV3.ingcanada.com)
+    )
+  )
+
+
+WMTDEV = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha28125)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = WMTDEV)
+      (SERVICE_NAME = WMTDEV.INGCANADA.COM)
+    )
+  )
+
+
+HUBPPRD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24474)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = hubpprd.ingcanada.com)
+    )
+  )
+
+
+HUBHPPRD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24474)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = hubhpprd.ingcanada.com)
+    )
+  )
+
+
+FE35DEV = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24462)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = fe35dev.ingcanada.com)
+    )
+  )
+
+
+FW35DEV = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24462)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = fw35dev.ingcanada.com)
+    )
+  )
+
+
+FW35DEV2 = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24462)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = fw35dev2.ingcanada.com)
+    )
+  )
+
+
+FW35UAT = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24473)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = fw35uat.ingcanada.com)
+    )
+  )
+
+
+FE35UAT = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24473)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = fe35uat.ingcanada.com)
+    )
+  )
+
+
+FW35PRE = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24475)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = FW35PRE.INGCANADA.COM)
+    )
+  )
+
+
+FE35PRE = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24475)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = FE35PRE.INGCANADA.COM)
+    )
+  )
+
+
+SRCUAT = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24475)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = srcuat.ingcanada.com)
+    )
+  )
+
+
+MRKTPROD10g = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha24489)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = MRKTPROD.WORLD)
+    )
+  )
+
+
+MRKTPREP10g = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha24490)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = MRKTPREP.INTACT.NET)
+    )
+  )
+
+
+MRKTDEV10G = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (Host = stha24041)
+        (Port = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = MRKTDEV.INTACT.NET)
+    )
+  )
+
+
+ACCDEV10G = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (Host = stha24041)
+        (Port = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = ACCDEV.INTACT.NET)
+    )
+  )
+
+
+AUSDEV410G = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (Host = stha24041)
+        (Port = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = AUSDEV4.INTACT.NET)
+    )
+  )
+
+
+AUSINTG = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24041)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = AUSINTG.INTACT.NET)
+    )
+  )
+
+
+MRKTTEST10G = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (Host = stha24042)
+        (Port = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = MRKTTEST.INTACT.NET)
+    )
+  )
+
+
+FW35PROD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24493)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = FW35PROD.INGCANADA.COM)
+    )
+  )
+
+
+FE35PROD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24493)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = FE35PROD.INGCANADA.COM)
+    )
+  )
+
+
+EDWMODL = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha24476)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = edwmodl)
+      (SERVICE_NAME = edwmodl.ingcanada.com)
+    )
+  )
+
+
+HUBHMODL = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha24476)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = hubhmodl)
+      (SERVICE_NAME = hubhmodl.ingcanada.com)
+    )
+  )
+
+
+HUBMODL = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha24476)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = hubmodl)
+      (SERVICE_NAME = hubmodl.ingcanada.com)
+    )
+  )
+
+
+OPRODEXT.WORLD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24465)
+        (PORT = 1526)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = oprodext.world)
+    )
+  )
+
+
+AUSQA = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24042)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = ausqa.intact.net)
+    )
+  )
+
+
+MARDEV10 = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24041)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = mardev.intact.net)
+    )
+  )
+
+
+WSLTEST = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24042)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = wsltest.intact.net)
+    )
+  )
+
+
+MARTEST10g = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24042)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = martest.intact.net)
+    )
+  )
+
+
+WSLPREP = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64454)
+      (PORT = 1521)
+    )
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64455)
+      (PORT = 1521)
+    )
+    (LOAD_BALANCE = YES)
+    (CONNECT_DATA = 
+      (SERVICE_NAME = WSLPREP.INTACT.NET)
+      (FAILOVER_MODE = 
+        (TYPE = SELECT)
+        (METHOD = BASIC)
+      )
+    )
+  )
+
+
+MARPREP10g = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64454)
+      (PORT = 1521)
+    )
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64455)
+      (PORT = 1521)
+    )
+    (LOAD_BALANCE = YES)
+    (CONNECT_DATA = 
+      (SERVICE_NAME = MARPREP.INTACT.NET)
+      (FAILOVER_MODE = 
+        (TYPE = SELECT)
+        (METHOD = BASIC)
+      )
+    )
+  )
+
+
+PPLDEV10g = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24041)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = ppldev.intact.net)
+    )
+  )
+
+
+AUSQA2 = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24042)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = ausqa2.intact.net)
+    )
+  )
+
+
+PPLTEST10g = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24042)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = ppltest.intact.net)
+    )
+  )
+
+
+WEBTESTA10g = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24042)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = webtesta.intact.net)
+    )
+  )
+
+
+AUSPREP10g = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64454)
+      (PORT = 1521)
+    )
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64455)
+      (PORT = 1521)
+    )
+    (LOAD_BALANCE = YES)
+    (CONNECT_DATA = 
+      (SERVICE_NAME = AUSPREP.INTACT.NET)
+      (FAILOVER_MODE = 
+        (TYPE = SELECT)
+        (METHOD = BASIC)
+      )
+    )
+  )
+
+
+MARPROD10 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha64458)
+      (PORT = 1521)
+    )
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha64459)
+      (PORT = 1521)
+    )
+    (LOAD_BALANCE = YES)
+    (CONNECT_DATA = 
+      (SERVICE_NAME = MARPROD.INTACT.NET)
+      (FAILOVER_MODE = 
+        (TYPE = SELECT)
+        (METHOD = BASIC)
+      )
+    )
+  )
+
+
+PPLPREP10g = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64454)
+      (PORT = 1521)
+    )
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64455)
+      (PORT = 1521)
+    )
+    (LOAD_BALANCE = YES)
+    (CONNECT_DATA = 
+      (SERVICE_NAME = PPLPREP.INTACT.NET)
+      (FAILOVER_MODE = 
+        (TYPE = SELECT)
+        (METHOD = BASIC)
+      )
+    )
+  )
+
+
+AUSPREP = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64454)
+      (PORT = 1521)
+    )
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64455)
+      (PORT = 1521)
+    )
+    (LOAD_BALANCE = YES)
+    (CONNECT_DATA = 
+      (SERVICE_NAME = AUSPREP.INTACT.NET)
+      (FAILOVER_MODE = 
+        (TYPE = SELECT)
+        (METHOD = BASIC)
+      )
+    )
+  )
+
+
+AUSPRP2 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64454)
+      (PORT = 1521)
+    )
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64455)
+      (PORT = 1521)
+    )
+    (LOAD_BALANCE = YES)
+    (CONNECT_DATA = 
+      (SERVICE_NAME = AUSPRP2.INTACT.NET)
+      (FAILOVER_MODE = 
+        (TYPE = SELECT)
+        (METHOD = BASIC)
+      )
+    )
+  )
+
+
+CSMADEV10G = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha24041)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = CSMADEV.INTACT.NET)
+    )
+  )
+
+
+WSLPROD10 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha64458)
+      (PORT = 1521)
+    )
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha64459)
+      (PORT = 1521)
+    )
+    (LOAD_BALANCE = YES)
+    (CONNECT_DATA = 
+      (SERVICE_NAME = WSLPROD.INTACT.NET)
+      (FAILOVER_MODE = 
+        (TYPE = SELECT)
+        (METHOD = BASIC)
+      )
+    )
+  )
+
+
+CSMATEST10G = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha24042)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = CSMATEST.INTACT.NET)
+    )
+  )
+
+
+RATPREP10G = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha64454)
+      (PORT = 1521)
+    )
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha64455)
+      (PORT = 1521)
+    )
+    (LOAD_BALANCE = yes)
+    (CONNECT_DATA = 
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = RATPREP.INTACT.NET)
+      (FAILOVER_MODE = 
+        (TYPE = SELECT)
+        (METHOD = BASIC)
+      )
+    )
+  )
+
+
+CSMPREP10g = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha64454)
+      (PORT = 1521)
+    )
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha64455)
+      (PORT = 1521)
+    )
+    (LOAD_BALANCE = yes)
+    (CONNECT_DATA = 
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = CSMPREP.INTACT.NET)
+      (FAILOVER_MODE = 
+        (TYPE = SELECT)
+        (METHOD = BASIC)
+      )
+    )
+  )
+
+
+WMTTRNG10G = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha64454)
+      (PORT = 1521)
+    )
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha64455)
+      (PORT = 1521)
+    )
+    (LOAD_BALANCE = yes)
+    (CONNECT_DATA = 
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = WMTTRNG.INTACT.NET)
+      (FAILOVER_MODE = 
+        (TYPE = SELECT)
+        (METHOD = BASIC)
+      )
+    )
+  )
+
+
+AUSQA310g = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24042)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = ausqa3.intact.net)
+    )
+  )
+
+
+CSMPROD10G = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64458)
+      (PORT = 1521)
+    )
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64459)
+      (PORT = 1521)
+    )
+    (LOAD_BALANCE = YES)
+    (CONNECT_DATA = 
+      (SERVICE_NAME = CSMPROD.INTACT.NET)
+      (FAILOVER_MODE = 
+        (TYPE = SELECT)
+        (METHOD = BASIC)
+      )
+    )
+  )
+
+
+PPLPROD10G = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64458)
+      (PORT = 1521)
+    )
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64459)
+      (PORT = 1521)
+    )
+    (LOAD_BALANCE = yes)
+    (CONNECT_DATA = 
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = PPLPROD.INTACT.NET)
+      (FAILOVER_MODE = 
+        (TYPE = SELECT)
+        (METHOD = BASIC)
+      )
+    )
+  )
+
+
+RATPROD10G = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64458)
+      (PORT = 1521)
+    )
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64459)
+      (PORT = 1521)
+    )
+    (LOAD_BALANCE = yes)
+    (CONNECT_DATA = 
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = RATPROD.INTACT.NET)
+      (FAILOVER_MODE = 
+        (TYPE = SELECT)
+        (METHOD = BASIC)
+      )
+    )
+  )
+
+
+BREPROD10G = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64458)
+      (PORT = 1521)
+    )
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64459)
+      (PORT = 1521)
+    )
+    (LOAD_BALANCE = yes)
+    (CONNECT_DATA = 
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = BREPROD.INTACT.NET)
+      (FAILOVER_MODE = 
+        (TYPE = SELECT)
+        (METHOD = BASIC)
+      )
+    )
+  )
+
+
+ACCPROD10G = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64458)
+      (PORT = 1521)
+    )
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64459)
+      (PORT = 1521)
+    )
+    (LOAD_BALANCE = yes)
+    (CONNECT_DATA = 
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = ACCPROD.INTACT.NET)
+      (FAILOVER_MODE = 
+        (TYPE = SELECT)
+        (METHOD = BASIC)
+      )
+    )
+  )
+
+
+FW35CERT = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24506)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = fw35cert.world)
+    )
+  )
+
+
+UTLPREP_10G = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64454)
+      (PORT = 1521)
+    )
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64455)
+      (PORT = 1521)
+    )
+    (LOAD_BALANCE = YES)
+    (CONNECT_DATA = 
+      (SERVICE_NAME = UTLPREP.INTACT.NET)
+      (FAILOVER_MODE = 
+        (TYPE = SELECT)
+        (METHOD = BASIC)
+      )
+    )
+  )
+
+
+UTLPREP1_10G = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = STHA64454)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SID = UTLPREP1)
+    )
+  )
+
+
+UTLPREP2_10G = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = STHA64455)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (SID = UTLPREP2)
+    )
+  )
+
+
+FW35ADW = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24522)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = FW35ADW.INGCANADA.COM)
+    )
+  )
+#stha24470
+
+
+OPDEXTA.WORLD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24470)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = opdexta.world)
+    )
+  )
+
+
+OPDEXTB.WORLD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24470)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = opdextb.world)
+    )
+  )
+
+
+OPDEXTE.WORLD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24470)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = opdexte.world)
+    )
+  )
+
+
+OPDEXTF.WORLD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24470)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = opdextf.world)
+    )
+  )
+
+
+OPDEXTG.WORLD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24470)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = opdextg.world)
+    )
+  )
+
+
+OPDEXTH.WORLD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24470)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = opdexth.world)
+    )
+  )
+
+
+OPDEXTI.WORLD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24470)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = opdexti.world)
+    )
+  )
+
+
+OPDEXTJ.WORLD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24470)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = opdextj.world)
+    )
+  )
+
+
+OPDEXTK.WORLD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24470)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = opdextk.world)
+    )
+  )
+
+
+OPDEXTL.WORLD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24470)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = opdextl.world)
+    )
+  )
+
+
+OPDEXTM.WORLD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24470)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = opdextm.world)
+    )
+  )
+
+
+OPDEXTN.WORLD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24470)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = opdextn.world)
+    )
+  )
+
+
+OTGDEVA.WORLD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24470)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = otgdeva.world)
+    )
+  )
+
+
+OTGDEVB.WORLD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24470)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = otgdevb.world)
+    )
+  )
+
+
+OTGINTB.WORLD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24470)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = otgintb.world)
+    )
+  )
+
+
+OTGSTGA.WORLD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24470)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = otgstga.world)
+    )
+  )
+
+
+OTGSTGB.WORLD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24470)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = otgstgb.world)
+    )
+  )
+
+
+CLMDEV11.WORLD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24040)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = clmdev11.world)
+    )
+  )
+
+
+CLMDEV12.WORLD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24040)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = clmdev12.world)
+    )
+  )
+
+
+CLMDEV14.WORLD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24040)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = clmdev14.world)
+    )
+  )
+
+
+CLMDEV2.WORLD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24040)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = clmdev2.world)
+    )
+  )
+
+
+CLMDEV3.WORLD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24040)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = clmdev3.world)
+    )
+  )
+
+
+CLMDEV5.WORLD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24040)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = clmdev5.world)
+    )
+  )
+
+
+CLMDEV6.WORLD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24040)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = clmdev6.world)
+    )
+  )
+
+
+CLMDEV7.WORLD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24040)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = clmdev7.world)
+    )
+  )
+
+
+CLMDEV8.WORLD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24040)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = clmdev8.world)
+    )
+  )
+
+
+CLMDEV9.WORLD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24040)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = clmdev9.world)
+    )
+  )
+
+
+FNLDEV1.WORLD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24040)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = fnldev1.world)
+    )
+  )
+
+
+OPTDEV.WORLD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24040)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = optdev.world)
+    )
+  )
+
+
+OSRDEVA.WORLD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24040)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = osrdeva.world)
+    )
+  )
+
+
+OSRDEVB.WORLD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24040)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = osrdevb.world)
+    )
+  )
+
+
+OSRINTB.WORLD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24040)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = osrintb.world)
+    )
+  )
+
+
+OSRSTGA.WORLD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24040)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = osrstga.world)
+    )
+  )
+
+
+OSRSTGB.WORLD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24040)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = osrstgb.world)
+    )
+  )
+
+
+OSRSTGC.WORLD = 
+  (DESCRIPTION = 
+    (ADDRESS_LIST = 
+      (ADDRESS = 
+        (PROTOCOL = TCP)
+        (HOST = stha24040)
+        (PORT = 1521)
+      )
+    )
+    (CONNECT_DATA = 
+      (SERVICE_NAME = osrstgc.world)
+    )
+  )
+
+
+FRMDEV1.WORLD = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha24525)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (INSTANCE_NAME = FRMDEV1)
+      (SERVICE_NAME = FRMDEV1.INTACT.NET)
+    )
+  )
+#stha24525 end
+
+
+DPSTEMP10g1 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha64454)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = DPSTEMP.INTACT.NET)
+      (INSTANCE_NAME = DPSTEMP1)
+    )
+  )
+
+
+DPSTEMP10g2 = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = stha64454)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = DPSTMP1.INTACT.NET)
+      (INSTANCE_NAME = DPSTMP1)
+    )
+  )
+
+
+EDWQA5 =
+  (DESCRIPTION =
+    (ADDRESS = (PROTOCOL = TCP)(HOST = stha24476)(PORT = 1521))
+    (CONNECT_DATA =
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = edwqa5.ingcanada.com)
+    )
+  )

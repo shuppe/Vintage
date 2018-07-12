@@ -1,0 +1,17 @@
+delete from equipes;
+INSERT INTO `equipes`(`nom`, `ville`, `abbrev`) VALUES ('Canadiens','Montreal','MTL');
+INSERT INTO `equipes`(`nom`, `ville`, `abbrev`) VALUES ('Senateurs','Ottawa','OTT');
+INSERT INTO `equipes`(`nom`, `ville`, `abbrev`) VALUES ('Rangers','New York','NYR');
+INSERT INTO `equipes`(`nom`, `ville`, `abbrev`) VALUES ('Pingouins','Pittsburg','PIT');
+INSERT INTO `equipes`(`nom`, `ville`, `abbrev`) VALUES ('Red Wings','Detroit','DET');
+INSERT INTO `equipes`(`nom`, `ville`, `abbrev`) VALUES ('Lightning','Tampa Bay','TB');
+INSERT INTO `equipes`(`nom`, `ville`, `abbrev`) VALUES ('Capitals','Washington','WAS');
+INSERT INTO `equipes`(`nom`, `ville`, `abbrev`) VALUES ('Islanders','New York','NYI');
+INSERT INTO `equipes`(`nom`, `ville`, `abbrev`) VALUES ('Predateurs','Nashville','NAS');
+INSERT INTO `equipes`(`nom`, `ville`, `abbrev`) VALUES ('Black Hawks','Chicago','CHI');
+INSERT INTO `equipes`(`nom`, `ville`, `abbrev`) VALUES ('Ducks','Anaheim','ANA');
+INSERT INTO `equipes`(`nom`, `ville`, `abbrev`) VALUES ('Jets','Winnipeg','WPG');
+INSERT INTO `equipes`(`nom`, `ville`, `abbrev`) VALUES ('Wild','Minessota','MIN');
+INSERT INTO `equipes`(`nom`, `ville`, `abbrev`) VALUES ('Blues','St-Louis','STL');
+INSERT INTO `equipes`(`nom`, `ville`, `abbrev`) VALUES ('Canucks','Vancouver','VAN');
+INSERT INTO `equipes`(`nom`, `ville`, `abbrev`) VALUES ('Flames','Calgary','CGY');

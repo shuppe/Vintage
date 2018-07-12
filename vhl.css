@@ -1,0 +1,208 @@
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+	position: relative;
+	min-height: 100%;
+}
+
+body {
+	/* Margin bottom by footer height */
+	margin-bottom: 60px;
+}
+
+.footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	/* Set the fixed height of the footer here */
+	height: 60px;
+	background-color: #f5f5f5;
+}
+
+/* Custom page CSS
+-------------------------------------------------- */
+/* Not required for template or sticky footer method. */
+body>.container {
+	padding: 60px 15px 0;
+}
+
+ul.nav li:hover {
+	cursor: pointer;
+}
+
+.container .text-muted {
+	margin: 20px 0;
+}
+
+th {
+	width: 150px
+}
+
+td {
+	border-width: thin;
+	border-style: solid;
+	border-color: #DDD;
+}
+
+table {
+	border-width: thin;
+	border-style: solid;
+	border-color: #DDD;
+}
+
+.liste-joueurs>tbody>tr>td, .liste-joueurs>tbody>tr>th {
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.comp-equipe {
+	text-align: center;
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
+.comp-eq-j {
+	margin-bottom: 3px;
+}
+
+.resultats>tbody>tr>td, .resultats>tbody>tr>th {
+	text-align: center;
+}
+
+.predict-gagnant {
+	background-color: #DFF0D8;
+}
+
+.predict-matches {
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+.predict-grille {
+	text-align: center;
+	border-left-width: thin;
+	border-left-style: solid;
+	border-left-color: #DDD;
+}
+
+.predict-grille-e1 {
+	text-align: center;
+	border-left-width: thin;
+	border-left-style: solid;
+	border-left-color: #DDD;
+}
+
+.predict-grille-e2 {
+	text-align: center;
+}
+
+.predict-grille-pts {
+	text-align: center;
+	border-left-width: thin;
+	border-left-style: solid;
+	border-left-color: #DDD;
+	border-right-width: thin;
+	border-right-style: solid;
+	border-right-color: #DDD;
+}
+
+.sommaire-total {
+	font-weight: bold;
+	background-color: #2865A8;
+	color: #FFF;
+}
+
+.courriel {
+	width: 350px
+}
+
+.footer>.container {
+	padding-right: 15px;
+	padding-left: 15px;
+}
+
+code {
+	font-size: 80%;
+}
+
+#ronde2Div {
+	position: relative;
+	height: 128px;
+}
+
+/* navbar */
+.navbar-default {
+	background-color: #F8F8F8;
+	border-color: #E7E7E7;
+}
+/* title */
+.navbar-default .navbar-brand {
+	color: #777;
+}
+
+.navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus
+	{
+	color: #5E5E5E;
+}
+/* link */
+.navbar-default .navbar-nav>li>a {
+	color: #777;
+}
+
+.navbar-default .navbar-nav>li>a:hover, .navbar-default .navbar-nav>li>a:focus
+	{
+	color: #333;
+	background-color: #E7E7E7;
+}
+
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:hover,
+	.navbar-default .navbar-nav>.active>a:focus {
+	color: #555;
+	background-color: #E7E7E7;
+}
+
+.navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:hover,
+	.navbar-default .navbar-nav>.open>a:focus {
+	color: #555;
+	background-color: #D5D5D5;
+}
+/* caret */
+.navbar-default .navbar-nav>.dropdown>a .caret {
+	border-top-color: #777;
+	border-bottom-color: #777;
+}
+
+.navbar-default .navbar-nav>.dropdown>a:hover .caret, .navbar-default .navbar-nav>.dropdown>a:focus .caret
+	{
+	border-top-color: #333;
+	border-bottom-color: #333;
+}
+
+.navbar-default .navbar-nav>.open>a .caret, .navbar-default .navbar-nav>.open>a:hover .caret,
+	.navbar-default .navbar-nav>.open>a:focus .caret {
+	border-top-color: #555;
+	border-bottom-color: #555;
+}
+/* mobile version */
+.navbar-default .navbar-toggle {
+	border-color: #DDD;
+}
+
+.navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus
+	{
+	background-color: #DDD;
+}
+
+.navbar-default .navbar-toggle .icon-bar {
+	background-color: #CCC;
+}
+
+@media ( max-width : 767px) {
+	.navbar-default .navbar-nav .open .dropdown-menu>li>a {
+		color: #777;
+	}
+	.navbar-default .navbar-nav .open .dropdown-menu>li>a:hover,
+		.navbar-default .navbar-nav .open .dropdown-menu>li>a:focus {
+		color: #333;
+	}
+}
