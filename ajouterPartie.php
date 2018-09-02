@@ -7,11 +7,25 @@ $phDB = new dbConnectMySQL();
 $phDB->connect();
 
 //joueurs
-$joueurs = $phDB->liendb->query("SELECT * FROM Joueur");
-$option_joueurs = "<option value=\"\" disabled selected hidden>&nbsp;</option>\n";
+$joueurs = $phDB->liendb->query("SELECT j.*, pj.position FROM Joueur j, PositionJoueur pj where pj.idJoueur = j.id");
+
+$option_avants = "<option value=\"\" disabled selected hidden>&nbsp;</option>\n";
+$option_defs = "<option value=\"\" disabled selected hidden>&nbsp;</option>\n";
+$option_gardiens = "<option value=\"\" disabled selected hidden>&nbsp;</option>\n";
+
 if ($joueurs !== FALSE && $joueurs->rowCount() > 0) {
     while ($joueur = $joueurs->fetch()) {
-        $option_joueurs .= "<option value='" . $joueur['id'] . "'>" . $joueur['prenom'] . " " . $joueur['nom'] . "</option>\n";
+    	switch ($joueur['position']) {
+		    case "A":
+		        $option_avants .= "<option value='" . $joueur['id'] . "'>" . $joueur['prenom'] . " " . $joueur['nom'] . "</option>\n";
+		        break;
+		    case "D":
+		        $option_defs .= "<option value='" . $joueur['id'] . "'>" . $joueur['prenom'] . " " . $joueur['nom'] . "</option>\n";
+		        break;
+		    case "G":
+		        $option_gardiens .= "<option value='" . $joueur['id'] . "'>" . $joueur['prenom'] . " " . $joueur['nom'] . "</option>\n";
+		        break;
+		}
     }
 }
 
@@ -84,7 +98,7 @@ $j_init = 0;
     while (++ $j_pos <= 1) {
         echo "<select class=\"comp-eq-j form-control\" id=\"e1-j" . $j_pos . "\" name=\"e1-j" . $j_pos . "\" data-equipe=\"1\" data-joueur=\""
         		. $j_pos ."\" data-pos=\"G\">\n";
-        echo $option_joueurs;
+        echo $option_gardiens;
         echo "</select>" . "\n";
     }
     ?>
@@ -95,7 +109,7 @@ $j_init = 0;
     while (++ $j_pos <= 1) {
         echo "<select class=\"comp-eq-j form-control\" id=\"e2-j" . $j_pos . "\" name=\"e2-j" . $j_pos . "\" data-equipe=\"2\" data-joueur=\""
         		. $j_pos ."\" data-pos=\"G\">\n";
-        echo $option_joueurs;
+        echo $option_gardiens;
         echo "</select>" . "\n";
     }
     ?>
@@ -111,7 +125,7 @@ $j_init = 0;
     $j_init = $j_pos;
     while (++ $j_pos <= 8) {
         echo "<select class=\"comp-eq-j form-control\" id=\"e1-j" . $j_pos . "\" name=\"e1-j" . $j_pos . "\">\n";
-        echo $option_joueurs;
+        echo $option_avants;
         echo "</select>" . "\n";
     }
     ?>
@@ -122,7 +136,7 @@ $j_init = 0;
     $j_pos = $j_init;
     while (++ $j_pos <= 8) {
         echo "<select class=\"comp-eq-j form-control\" id=\"e2-j" . $j_pos . "\" name=\"e2-j" . $j_pos . "\">\n";
-        echo $option_joueurs;
+        echo $option_avants;
         echo "</select>" . "\n";
     }
     ?>
@@ -138,7 +152,7 @@ $j_init = 0;
     $j_init = $j_pos;
     while (++ $j_pos <= 13) {
         echo "<select class=\"comp-eq-j form-control\" id=\"e1-j" . $j_pos . "\" name=\"e1-j" . $j_pos . "\">\n";
-        echo $option_joueurs;
+        echo $option_defs;
         echo "</select>" . "\n";
     }
     ?>
@@ -149,7 +163,7 @@ $j_init = 0;
     $j_pos = $j_init;
     while (++ $j_pos <= 13) {
         echo "<select class=\"comp-eq-j form-control\" id=\"e2-j" . $j_pos . "\" name=\"e2-j" . $j_pos . "\">\n";
-        echo $option_joueurs;
+        echo $option_defs;
         echo "</select>" . "\n";
     }
     ?>
