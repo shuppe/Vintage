@@ -52,11 +52,11 @@ if ($result !== FALSE) {
             ?>
 			<tr class="joueur">
 						<td>
-							<a href="modifJoueur.php?id=<?php print htmlspecialchars($row['id']); ?>"><?php print htmlspecialchars($row['prenom']." ".$row['nom']); ?></a>
+							<a href="#" class="joueurUpdate"><?php print htmlspecialchars($row['prenom']." ".$row['nom']); ?></a>
 							<!--  -->
 						</td>
 						<td class="courriel"><a
-							href="mailto:<?php print htmlspecialchars($row['courriel']); ?> bla"> <?php print htmlspecialchars($row['courriel']); ?> </a>
+							href="mailto:<?php print htmlspecialchars($row['courriel']); ?>"> <?php print htmlspecialchars($row['courriel']); ?> </a>
 						</td>
 						<td> <?php print htmlspecialchars(format_phone('canada', $row['telephone'])); ?> </td>
 						<td> <?php print htmlspecialchars($presence); ?> </td>
@@ -85,4 +85,30 @@ if ($result !== FALSE) {
 ?>
 </div>
 </div>
+<script type="text/javascript">
+
+$(".joueurUpdate").click(function(e){ 
+
+	e.preventDefault();
+  $.post( "modifJoueur.php", {id:1},
+ /*{
+  	nom: $('#nom').val(),
+  	prenom: 	$('#prenom').val(),
+  	email: 	$('#email').val(),
+  	positions: $('#positions').val()
+  },*/
+    function(data)
+     {
+        //if success then just output the text to the status div then clear the form inputs to prepare for new data
+        $("#dataContainer").empty().append(data);
+        
+    		$("#success-alert").fadeTo(2000, 500).slideUp(500, function(){
+            $("#success-alert").slideUp(500);
+        });
+        
+      });
+
+}); 
+
+</script>
 <?php  $phDB->disconnect(); ?>
