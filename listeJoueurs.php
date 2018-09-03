@@ -51,10 +51,12 @@ if ($result !== FALSE) {
             $positions = $phDB->liendb->query("SELECT p.* FROM Position p, PositionJoueur pj where pj.idJoueur=" . $row['id'] . " and p.abbr = pj.position");
             ?>
 			<tr class="joueur">
-						<td><a href="#"> <?php print htmlspecialchars($row['prenom']." ".$row['nom']); ?></a>
+						<td>
+							<a href="modifJoueur.php?id=<?php print htmlspecialchars($row['id']); ?>"><?php print htmlspecialchars($row['prenom']." ".$row['nom']); ?></a>
+							<!--  -->
 						</td>
 						<td class="courriel"><a
-							href="mailto:<?php print htmlspecialchars($row['courriel']); ?>"> <?php print htmlspecialchars($row['courriel']); ?> </a>
+							href="mailto:<?php print htmlspecialchars($row['courriel']); ?> bla"> <?php print htmlspecialchars($row['courriel']); ?> </a>
 						</td>
 						<td> <?php print htmlspecialchars(format_phone('canada', $row['telephone'])); ?> </td>
 						<td> <?php print htmlspecialchars($presence); ?> </td>
