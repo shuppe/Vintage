@@ -30,12 +30,18 @@
 
 <!-- <script type="text/javascript" src="poolDesSeries.js"></script> -->
 	<?php
+    require __DIR__.'/vendor/autoload.php';
+    echo "ALL OK";
+    use Propel\Runtime\Propel;
+	include "generated-conf/config.php";
+    // use \vintage\hockey\pickup\JoueurQuery;
+    // use \JoueurQuery;
 // header('Content-type: text/html; charset=utf-8');
-$rondeDeSelection = 1;
-require (str_replace('//', '/', dirname(__FILE__) . '/') . "includes/cfgMySQL.inc.php");
-require (str_replace('//', '/', dirname(__FILE__) . '/') . "includes/cl_connect_mysql.inc.php");
-$phDB = new dbConnectMySQL();
-$cdBD = $phDB->connect();
+// $rondeDeSelection = 1;
+// require (str_replace('//', '/', dirname(__FILE__) . '/') . "includes/cfgMySQL.inc.php");
+// require (str_replace('//', '/', dirname(__FILE__) . '/') . "includes/cl_connect_mysql.inc.php");
+// $phDB = new dbConnectMySQL();
+// $cdBD = $phDB->connect();
 
 // require_once("./includes/config_core.inc.php");
 /*
@@ -60,6 +66,8 @@ $cdBD = $phDB->connect();
  * die();
  * }
  */
+$joueur = JoueurQuery::create()->findPK(35);
+echo "Joueur: ".$joueur->getPrenom()." ".$joueur->getNom();
 ?>
 
 </head>

@@ -52,7 +52,7 @@ if ($result !== FALSE) {
             ?>
 			<tr class="joueur">
 						<td>
-							<a href="#" class="joueurUpdate"><?php print htmlspecialchars($row['prenom']." ".$row['nom']); ?></a>
+							<a href="#" class="joueurUpdate" data-id="<?php print ($row['id']); ?>"><?php print htmlspecialchars($row['prenom']." ".$row['nom']); ?></a>
 							<!--  -->
 						</td>
 						<td class="courriel"><a
@@ -90,7 +90,8 @@ if ($result !== FALSE) {
 $(".joueurUpdate").click(function(e){ 
 
 	e.preventDefault();
-  $.post( "modifJoueur.php", {id:1},
+	var $elem = $(this);
+  $.post( "modifJoueur.php", { id: $elem.data("id") },
  /*{
   	nom: $('#nom').val(),
   	prenom: 	$('#prenom').val(),

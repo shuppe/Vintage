@@ -1,61 +1,59 @@
     <?php
-    require (str_replace('//', '/', dirname(__FILE__) . '/') . "includes/cfgMySQL.inc.php");
-    require (str_replace('//', '/', dirname(__FILE__) . '/') . "includes/cl_connect_mysql.inc.php");
-    require (str_replace('//', '/', dirname(__FILE__) . '/') . "includes/functions.php");
-    $phDB = new dbConnectMySQL();
-    $cdBD = $phDB->connect();
+    require __DIR__.'/vendor/autoload.php';
+    use Propel\Runtime\Propel;
+    include "generated-conf/config.php";
     
     if (isset($_POST['nom'])) {
-        $nom = htmlspecialchars($_POST['nom']);
-        $prenom = htmlspecialchars($_POST['prenom']);
-        $email = htmlspecialchars($_POST['email']);
-        $phone = $_POST['phone'];
+
+        if (isset($_POST['id'])) {
+            $joueur = JoueurQuery::create()->findPk($_POST['id']);
+        }
+        else {
+            $joueur = new Joueur();
+        }
         
+        $joueur->setNom(htmlspecialchars($_POST['nom']));
+        $joueur->setPrenom(htmlspecialchars($_POST['prenom']));
+        $joueur->setCourriel(htmlspecialchars($_POST['email']));
+        $joueur->setTelephone(htmlspecialchars($_POST['phone']));
+        $joueur->setStatut($_POST['statut']);
+        $joueur->save();
+
         $positions = $_POST['positions'];
-        $statut = $_POST['statut'];
-        // $POSITIONS=$_POST['POSITIONS'];
-        
-        $query = "INSERT INTO `Joueur`
-         (`nom`,`prenom`,`courriel`,`telephone`)
-         VALUES
-         ('$nom','$prenom','$email','$phone');";
-        
-        if ($phDB->liendb->query($query)) {
-            $last_id = $phDB->liendb->lastInsertId();
             
-            $pos_query = "" . $pos_query;
-            foreach ($_POST['positions'] as $pos) {
-                $pos_parms .= " ($last_id, '$pos'),";
-            }
-            if ($pos_parms !== '') {
-                $pos_query = "Insert INTO `PositionJoueur` (`idJoueur`,`position`) values " . substr($pos_parms, 0, - 1) . ";";
-                $phDB->liendb->query($pos_query);
-            }
-            ?>
-<div class="alert alert-success fade in" id="success-alert">
-	<button type="button" class="close" data-dismiss="alert">x</button>
-	<strong>Succès!</strong> Le joueur a été ajouté.
-</div>
-<div id="nouveauJoueur" class="panel panel-primary">
-	<div class="panel-heading">
-		<h3 class="panel-title">Ajout de joueur</h3>
-	</div>
-	<div class="panel-body">
-          		<?php
-            print "Le joueur" . $prenom . " " . $nom . " a été ajouté avec l'ID: \"" . $last_id . "\"<BR><BR><BR>";
-            ?>
-        		</div>
-</div>
-<?php
+        foreach ($_POST['positions'] as $pos) {
+            $position = PositionQuery::create()->findPk($pos);
+
+            $posJoueur = new Positionjoueur();
+            $posJoueur->setPosition($position);
+            $posJoueur->setJoueur($joueur);
+            $posJoueur->save();
+        }
+
+        ?>
+        <div id="nouveauJoueur" class="panel panel-primary">
+        	<div class="panel-heading">
+        		<h3 class="panel-title">Ajout de joueur</h3>
+        	</div>
+        	<div class="panel-body">
+                  		<?php
+                    print $joueur->getPrenom() . " " . $joueur->getNom() . " a été ajouté avec l'ID: \"" . $joueur->getId() . "\"<BR><BR><BR>";
+                    ?>
+                		</div>
+        </div>
+        <div class="alert alert-success fade in" id="success-alert">
+            <button type="button" class="close" data-dismiss="alert">x</button>
+            <strong>Succès!</strong> Le joueur a été ajouté.
+        </div>
+        <?php
+            // } else {
+            //     echo "Erreur:" . $phDB->liendb->errorInfo();
+            // }
         } else {
-            echo "Erreur:" . $phDB->liendb->errorInfo();
+            
+            print "Size: " . count($_POST);
+            foreach ($_POST as $key => $$value) {
+                echo $key . " has the value" . $value;
+            }
         }
-    } else {
-        
-        print "Size: " . count($_POST);
-        foreach ($_POST as $key => $$value) {
-            echo $key . " has the value" . $value;
-        }
-    }
-    $phDB->disconnect();
     ?>

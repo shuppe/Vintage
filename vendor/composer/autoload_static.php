@@ -83,12 +83,51 @@ class ComposerStaticInitbda2079712ddc674c49aad6e46bf91f2
         ),
     );
 
+    public static $classMap = array (
+        'Arena' => __DIR__ . '/../..' . '/model/vintage/hockey/pickup/Arena.php',
+        'ArenaQuery' => __DIR__ . '/../..' . '/model/vintage/hockey/pickup/ArenaQuery.php',
+        'Base\\Arena' => __DIR__ . '/../..' . '/model/vintage/hockey/pickup/Base/Arena.php',
+        'Base\\ArenaQuery' => __DIR__ . '/../..' . '/model/vintage/hockey/pickup/Base/ArenaQuery.php',
+        'Base\\Compositionequipe' => __DIR__ . '/../..' . '/model/vintage/hockey/pickup/Base/Compositionequipe.php',
+        'Base\\CompositionequipeQuery' => __DIR__ . '/../..' . '/model/vintage/hockey/pickup/Base/CompositionequipeQuery.php',
+        'Base\\Equipe' => __DIR__ . '/../..' . '/model/vintage/hockey/pickup/Base/Equipe.php',
+        'Base\\EquipeQuery' => __DIR__ . '/../..' . '/model/vintage/hockey/pickup/Base/EquipeQuery.php',
+        'Base\\Joueur' => __DIR__ . '/../..' . '/model/vintage/hockey/pickup/Base/Joueur.php',
+        'Base\\JoueurQuery' => __DIR__ . '/../..' . '/model/vintage/hockey/pickup/Base/JoueurQuery.php',
+        'Base\\Partie' => __DIR__ . '/../..' . '/model/vintage/hockey/pickup/Base/Partie.php',
+        'Base\\PartieQuery' => __DIR__ . '/../..' . '/model/vintage/hockey/pickup/Base/PartieQuery.php',
+        'Base\\Position' => __DIR__ . '/../..' . '/model/vintage/hockey/pickup/Base/Position.php',
+        'Base\\PositionQuery' => __DIR__ . '/../..' . '/model/vintage/hockey/pickup/Base/PositionQuery.php',
+        'Base\\Positionjoueur' => __DIR__ . '/../..' . '/model/vintage/hockey/pickup/Base/Positionjoueur.php',
+        'Base\\PositionjoueurQuery' => __DIR__ . '/../..' . '/model/vintage/hockey/pickup/Base/PositionjoueurQuery.php',
+        'Compositionequipe' => __DIR__ . '/../..' . '/model/vintage/hockey/pickup/Compositionequipe.php',
+        'CompositionequipeQuery' => __DIR__ . '/../..' . '/model/vintage/hockey/pickup/CompositionequipeQuery.php',
+        'Equipe' => __DIR__ . '/../..' . '/model/vintage/hockey/pickup/Equipe.php',
+        'EquipeQuery' => __DIR__ . '/../..' . '/model/vintage/hockey/pickup/EquipeQuery.php',
+        'Joueur' => __DIR__ . '/../..' . '/model/vintage/hockey/pickup/Joueur.php',
+        'JoueurQuery' => __DIR__ . '/../..' . '/model/vintage/hockey/pickup/JoueurQuery.php',
+        'Map\\ArenaTableMap' => __DIR__ . '/../..' . '/model/vintage/hockey/pickup/Map/ArenaTableMap.php',
+        'Map\\CompositionequipeTableMap' => __DIR__ . '/../..' . '/model/vintage/hockey/pickup/Map/CompositionequipeTableMap.php',
+        'Map\\EquipeTableMap' => __DIR__ . '/../..' . '/model/vintage/hockey/pickup/Map/EquipeTableMap.php',
+        'Map\\JoueurTableMap' => __DIR__ . '/../..' . '/model/vintage/hockey/pickup/Map/JoueurTableMap.php',
+        'Map\\PartieTableMap' => __DIR__ . '/../..' . '/model/vintage/hockey/pickup/Map/PartieTableMap.php',
+        'Map\\PositionTableMap' => __DIR__ . '/../..' . '/model/vintage/hockey/pickup/Map/PositionTableMap.php',
+        'Map\\PositionjoueurTableMap' => __DIR__ . '/../..' . '/model/vintage/hockey/pickup/Map/PositionjoueurTableMap.php',
+        'Partie' => __DIR__ . '/../..' . '/model/vintage/hockey/pickup/Partie.php',
+        'PartieQuery' => __DIR__ . '/../..' . '/model/vintage/hockey/pickup/PartieQuery.php',
+        'Position' => __DIR__ . '/../..' . '/model/vintage/hockey/pickup/Position.php',
+        'PositionQuery' => __DIR__ . '/../..' . '/model/vintage/hockey/pickup/PositionQuery.php',
+        'Positionjoueur' => __DIR__ . '/../..' . '/model/vintage/hockey/pickup/Positionjoueur.php',
+        'PositionjoueurQuery' => __DIR__ . '/../..' . '/model/vintage/hockey/pickup/PositionjoueurQuery.php',
+    );
+
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInitbda2079712ddc674c49aad6e46bf91f2::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInitbda2079712ddc674c49aad6e46bf91f2::$prefixDirsPsr4;
             $loader->prefixesPsr0 = ComposerStaticInitbda2079712ddc674c49aad6e46bf91f2::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInitbda2079712ddc674c49aad6e46bf91f2::$classMap;
 
         }, null, ClassLoader::class);
     }
