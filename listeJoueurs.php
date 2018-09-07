@@ -1,11 +1,10 @@
 <?php
-header('Content-type: text/html; charset=utf-8');
-require (str_replace('//', '/', dirname(__FILE__) . '/') . "includes/cfgMySQL.inc.php");
-require (str_replace('//', '/', dirname(__FILE__) . '/') . "includes/cl_connect_mysql.inc.php");
-require (str_replace('//', '/', dirname(__FILE__) . '/') . "includes/functions.php");
-$phDB = new dbConnectMySQL();
-$phDB->connect();
-$result = $phDB->liendb->query("SELECT * FROM Joueur order by nom");
+	header('Content-type: text/html; charset=utf-8');
+    require __DIR__.'/vendor/autoload.php';
+    use Propel\Runtime\Propel;
+	use Propel\Runtime\Map\TableMap;
+    include "generated-conf/config.php";
+    include "includes/functions.php"
 ?>
 <div class="page-header">
 	<h1>Joueurs</h1>
@@ -16,9 +15,8 @@ $result = $phDB->liendb->query("SELECT * FROM Joueur order by nom");
 	</div>
 	<div class="panel-body">
 	<?php
-if ($result !== FALSE) {
-    if ($result->rowCount() > 0) {
-        ?>
+	if (JoueurQuery::create()->count() > 0) {
+	?>
 	<div class="table-responsive">
 			<table class="table-hover table-striped liste-joueurs">
 				<colgroup>
@@ -38,38 +36,33 @@ if ($result !== FALSE) {
 						<th>Numéro</th>
 						<th>Positions</th>
 					</tr>
-		<?php
-        $i = 0;
-        while ($row = $result->fetch()) {
-            if ($row['statut'] == 'R')
-                $presence = 'Régulier';
-            else if ($row['statut'] == 'S')
-                $presence = 'Réserviste';
-            else
-                $presence = 'Indéterminé';
+	<?php
+        $joueurs = JoueurQuery::create()->orderByNom()->find();
+	foreach ($joueurs as $joueur) {
+        $joueurArray = $joueur->toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = true);
             
-            $positions = $phDB->liendb->query("SELECT p.* FROM Position p, PositionJoueur pj where pj.idJoueur=" . $row['id'] . " and p.abbr = pj.position");
             ?>
 			<tr class="joueur">
 						<td>
-							<a href="#" class="joueurUpdate" data-id="<?php print ($row['id']); ?>"><?php print htmlspecialchars($row['prenom']." ".$row['nom']); ?></a>
+							<a href="#" class="joueurUpdate" data-id="<?php print ($joueur->getId()); ?>"><?php print htmlspecialchars($joueurArray['Prenom']." ".$joueurArray['Nom']); ?></a>
 							<!--  -->
 						</td>
 						<td class="courriel"><a
-							href="mailto:<?php print htmlspecialchars($row['courriel']); ?>"> <?php print htmlspecialchars($row['courriel']); ?> </a>
+							href="mailto:<?php print htmlspecialchars($joueur->getCourriel()); ?>"> <?php print htmlspecialchars($joueur->getCourriel()); ?> </a>
 						</td>
-						<td> <?php print htmlspecialchars(format_phone('canada', $row['telephone'])); ?> </td>
-						<td> <?php print htmlspecialchars($presence); ?> </td>
-						<td style='text-align: center;'> <?php print htmlspecialchars($row['numero']); ?> </td>
+						<td> <?php print htmlspecialchars(format_phone('canada', $joueur->getTelephone())); ?> </td>
+						<td> <?php print htmlspecialchars($joueur->getNomStatut()); ?> </td> 
+						<td style='text-align: center;'> <?php print htmlspecialchars($joueur->getNumero()); ?> </td>
 						<td>
-					<?php
-            while ($positions !== FALSE && $positions->rowCount() > 0 && $posJoueur = $positions->fetch()) {
-                print $posJoueur['abbr'] . " ";
-            }
-            ?>
-				</td>
+						<?php
+			            $positions = $joueur->getPositionJoueurs();
+			            foreach ($positions as $pos) {
+			                print "<span class=\"badge badge-pill\">".$pos->getAbbrpos()."</span>";
+			            }
+			            ?>
+ 				</td>
 				<td>
-					<span class="oi oi-delete" title="delete" aria-hidden="true">x</span>
+					<a href="#" class="joueurUpdate" data-id="<?php print ($joueur->getId()); ?>"><span class="oi oi-delete" title="delete" aria-hidden="true"></span></a>
 					<!-- <button type="button" class="btn btn-danger"></button> -->
 				</td>
 					</tr>
@@ -83,9 +76,7 @@ if ($result !== FALSE) {
     } else {
         print "Aucun joueur inscrit.";
     }
-} else {
-    print "Erreur de script";
-}
+
 ?>
 </div>
 </div>
@@ -116,4 +107,3 @@ $(".joueurUpdate").click(function(e){
 }); 
 
 </script>
-<?php  $phDB->disconnect(); ?>

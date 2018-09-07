@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="CA-fr">
+<html lang="fr">
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -33,7 +33,6 @@
 <!-- <script type="text/javascript" src="poolDesSeries.js"></script> -->
 	<?php
     require __DIR__.'/vendor/autoload.php';
-    echo "ALL OK";
     use Propel\Runtime\Propel;
 	include "generated-conf/config.php";
     // use \vintage\hockey\pickup\JoueurQuery;
@@ -68,8 +67,6 @@
  * die();
  * }
  */
-$joueur = JoueurQuery::create()->findPK(35);
-echo "Joueur: ".$joueur->getPrenom()." ".$joueur->getNom();
 ?>
 
 </head>
@@ -101,6 +98,7 @@ echo "Joueur: ".$joueur->getPrenom()." ".$joueur->getNom();
 						<ul class="dropdown-menu">
 							<li><a id="menuCalNext" class="navbar-leaf">Prochain match</a></li>
 							<li><a id="menuCalNew" class="navbar-leaf">Nouveau match</a></li>
+							<li><a id="menuCalNew2" class="navbar-leaf">Modif match</a></li>
 							<li><a id="menuCalList" class="navbar-leaf">Liste des matches</a></li>
 						</ul></li>
 					<li><a id="menuJoueur" class="dropdown-toggle"
@@ -171,6 +169,11 @@ echo "Joueur: ".$joueur->getPrenom()." ".$joueur->getNom();
         	});
     	});
 
+       	$("#menuCalNew2").click(function() {
+	   	    	$("#dataContainer").load("modifPartie.php", function(responseTxt, statusTxt, xhr){
+        	});
+    	});
+
        	$("#menuListeJoueur").click(function(){
 	    	    	$("#dataContainer").load("listeJoueurs.php", function(responseTxt, statusTxt, xhr){
 	            	});
@@ -188,7 +191,7 @@ echo "Joueur: ".$joueur->getPrenom()." ".$joueur->getNom();
         	  }
         	  e.preventDefault();
         	});
-    	$("#dataContainer").load("ajouterPartie.php", function(responseTxt, statusTxt, xhr){
+    	$("#dataContainer").load("modifPartie.php", function(responseTxt, statusTxt, xhr){
         	});
     	$(".navbar-leaf").click(function() {
             if($('.navbar-toggle').css('display') !='none'){

@@ -130,6 +130,13 @@ code {
 	height: 128px;
 }
 
+.partieDiv {
+    width: 350px;
+    height: 280px;
+    padding: 10px;
+    border: 1px solid #aaaaaa;
+}
+
 /* navbar */
 .navbar-default {
 	background-color: #F8F8F8;

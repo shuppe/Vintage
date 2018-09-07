@@ -7,7 +7,7 @@
 
     $pos = array();
     if (isset($_POST['id'])) {
-        $joueur = JoueurQuery::create()->joinWith('Positionjoueur')->findPk($_POST['id']);
+        $joueur = JoueurQuery::create()->findPk($_POST['id']);
         $joueurArray = $joueur->toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = true);
         // $joueurArray = $joueur->toArray();
         echo "<BR><BR>joueurArray: ";

@@ -15,4 +15,18 @@ use Base\Joueur as BaseJoueur;
 class Joueur extends BaseJoueur
 {
 
+    public function getNomStatut()
+    {
+    	$nomStatut = 'Indéterminé';
+    	switch ($this->statut) {
+    		case 'R':
+    			$nomStatut = 'Régulier';
+    			break;
+    		case 'S':
+    			$nomStatut = 'Réserviste';
+    			break;
+    	}
+        return $nomStatut;
+    }
+
 }
