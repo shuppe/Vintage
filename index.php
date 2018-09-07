@@ -14,6 +14,8 @@
 
 <!-- Bootstrap core CSS -->
 <link href="./dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="./assets/icons/iconic/font/css/open-iconic-bootstrap.css" rel="stylesheet">
+
 
 <!-- Custom styles for this template -->
 <link href="vhl.css" rel="stylesheet">

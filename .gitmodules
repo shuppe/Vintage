@@ -1,3 +1,6 @@
 [submodule "vendor/propel/propel"]
 	path = vendor/propel/propel
 	url = git://github.com/propelorm/Propel2
+[submodule "assets/icons/iconic"]
+	path = assets/icons/iconic
+	url = https://github.com/iconic/open-iconic.git

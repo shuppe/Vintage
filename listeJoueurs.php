@@ -68,6 +68,10 @@ if ($result !== FALSE) {
             }
             ?>
 				</td>
+				<td>
+					<span class="oi oi-delete" title="delete" aria-hidden="true">x</span>
+					<!-- <button type="button" class="btn btn-danger"></button> -->
+				</td>
 					</tr>
 			<?php
         }
