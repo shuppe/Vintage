@@ -9,37 +9,113 @@
 <div class="page-header">
 	<h1>Partie</h1>
 </div>
-<div class="panel panel-primary">
-	<div class="panel-heading">
-		<h3 class="panel-title">Joueurs</h3>
+<div class="card">
+	<div class="card-header text-white bg-vintage">
+		<h3 class="card-title  bg-vintage">Joueurs</h3>
 	</div>
-	<div class="panel-body">
+	<div class="card-body">
 		<?php
-		if (JoueurQuery::create()->count() > 0) {
+		if (JoueurQuery::create()->count() > 10) {
 		?>
-			<div class="card">
-		  		<div class="card-header">
-		    		Disponibles
-		  		</div>
-		  		<div class="card-body partieDiv" id="jDispo" ondrop="drop(event, this)" ondragover="allowDrop(event)" >
-		  				<?php
-					        $joueurs = JoueurQuery::create()->orderByNom()->find();
-							foreach ($joueurs as $joueur) {
-				                print "<span class=\"badge bg-info\" id=\"j".$joueur->getId()."\" draggable=\"true\" ondragstart=\"drag(event)\" ondrop=\"\" ondragover=\"\" >".htmlspecialchars($joueur->getPrenom()." ".$joueur->getNom())."</span>";
-		            		}
-		        		?>
+			<div class="row groupe-partie">
+				<div class="col">
+					<div class="card">
+				  		<div class="card-header">
+				    		Réguliers
+				  		</div>
+				  		<div class="card-body partieDiv" id="jDispo" ondrop="drop(event, this)" ondragover="allowDrop(event)" >
+				  				<?php
+							        $joueurs = JoueurQuery::create()->orderByNom()->find();
+									foreach ($joueurs as $joueur) {
+										if ($joueur->getStatut() == 'R') { 
+							                print "<span class=\"badge bg-vintage text-white nom-joueur\" id=\"j".$joueur->getId()."\" draggable=\"true\" ondragstart=\"drag(event)\" ondrop=\"\" ondragover=\"\" margin-left=\"5 !important\">".htmlspecialchars($joueur->getPrenom()." ".$joueur->getNom())."</span>";
+						               }
+				            		}
+				        		?>
 
-		  		</div>
+				  		</div>
+			  		</div>
+			  	</div>	
+			  	<div class="col">
+					<div class="card">
+				  		<div class="card-header">
+				    		Réservistes
+				  		</div>
+				  		<div class="card-body partieDiv" id="jDispo" ondrop="drop(event, this)" ondragover="allowDrop(event)" >
+				  				<?php
+							        // $joueurs = JoueurQuery::create()->orderByNom()->find();
+									foreach ($joueurs as $joueur) {
+										if ($joueur->getStatut() != 'R') { 
+							                print "<span class=\"badge bg-vintage text-white nom-joueur\" id=\"j".$joueur->getId()."\" draggable=\"true\" ondragstart=\"drag(event)\" ondrop=\"\" ondragover=\"\" margin-left=\"5 !important\">".htmlspecialchars($joueur->getPrenom()." ".$joueur->getNom())."</span>";
+										}						               
+				            		}
+				        		?>
+
+				  		</div>
+			  		</div>
+				</div>
 			</div>
-			<div class="card">
-		  		<div class="card-header">
-		    		Avants
-		  		</div>
-		  		<div class="card-body partieDiv" id="jAvant" ondrop="drop(event,this)" ondragover="allowDrop(event)">
-		  			&nbsp;
-		  			&nbsp;
-		  			&nbsp;
-		  		</div>
+			<div class="row groupe-partie">
+				<div class="col">
+					<h3 align="center">Équipe 1</h3>
+					<div class="card">
+				  		<div class="card-header">
+				    		Gardiens
+				  		</div>
+				  		<div class="card-body partieDiv" id="E1gardien" ondrop="drop(event,this)" ondragover="allowDrop(event)">
+				  		</div>
+					</div>
+				</div>
+				<div class="col">
+					<h3 align="center">Équipe 2</h3>
+					<div class="card">
+				  		<div class="card-header">
+				    		Gardiens
+				  		</div>
+				  		<div class="card-body partieDiv" id="E2gardien" ondrop="drop(event,this)" ondragover="allowDrop(event)">
+				  		</div>
+					</div>
+				</div>
+			</div>
+			<div class="row groupe-partie">
+				<div class="col">
+					<div class="card">
+				  		<div class="card-header">
+				    		Défenseurs
+				  		</div>
+				  		<div class="card-body partieDiv" id="E1Def" ondrop="drop(event,this)" ondragover="allowDrop(event)">
+				  		</div>
+					</div>
+				</div>
+				<div class="col">
+					<div class="card">
+				  		<div class="card-header">
+				    		Défenseurs
+				  		</div>
+				  		<div class="card-body partieDiv" id="E2Def" ondrop="drop(event,this)" ondragover="allowDrop(event)">
+				  		</div>
+					</div>
+				</div>
+			</div>
+			<div class="row groupe-partie">
+				<div class="col">
+					<div class="card">
+				  		<div class="card-header">
+				    		Avants
+				  		</div>
+				  		<div class="card-body partieDiv" id="E1Avant" ondrop="drop(event,this)" ondragover="allowDrop(event)">
+				  		</div>
+					</div>
+				</div>
+				<div class="col">
+					<div class="card">
+				  		<div class="card-header">
+				    		Avants
+				  		</div>
+				  		<div class="card-body partieDiv" id="E2Avant" ondrop="drop(event,this)" ondragover="allowDrop(event)">
+				  		</div>
+					</div>
+				</div>
 			</div>
 		<?php
 	    } else {

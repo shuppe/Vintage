@@ -4,7 +4,7 @@
 	use Propel\Runtime\Map\TableMap;
     include "generated-conf/config.php";
 
-
+	$joueurArray=[];
     $pos = array();
     if (isset($_POST['id'])) {
         $joueur = JoueurQuery::create()->findPk($_POST['id']);
@@ -28,11 +28,11 @@
 <div class="page-header">
 	<h1>Joueur</h1>
 </div>
-<div class="panel panel-primary">
-	<div class="panel-heading">
-		<h3 class="panel-title">Ajout de joueur</h3>
+<div class="card card-primary">
+	<div class="card-header">
+		<h3 class="card-title">Ajout de joueur</h3>
 	</div>
-	<div class="panel-body">
+	<div class="card-body">
 		<form id="form-joueur" data-changed="false">
 			<input type="hidden" class="form-control" id="id" name="id" value="<?php print $joueurArray['Id'] ?>">
 

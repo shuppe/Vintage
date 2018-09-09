@@ -5,10 +5,6 @@ html {
 	min-height: 100%;
 }
 
-body {
-	/* Margin bottom by footer height */
-	margin-bottom: 60px;
-}
 
 .footer {
 	position: absolute;
@@ -22,8 +18,26 @@ body {
 /* Custom page CSS
 -------------------------------------------------- */
 /* Not required for template or sticky footer method. */
-body>.container {
-	padding: 60px 15px 0;
+body > .container {
+	padding-top: 90px;
+	padding-bottom: 90px;
+}
+
+.nom-joueur {
+	margin-left: 1px;	
+	margin-right: 1px;	
+}
+
+.groupe-partie {
+	margin-top: 5px;	
+}
+
+.bg-vintage {
+	background-color:#75263D !important;
+}
+
+.bg-primary {
+	background-color:#75263D;
 }
 
 ul.nav li:hover {
@@ -130,12 +144,12 @@ code {
 	height: 128px;
 }
 
-.partieDiv {
-    width: 350px;
+/*.partieDiv {
+    width: 500px;
     height: 280px;
     padding: 10px;
     border: 1px solid #aaaaaa;
-}
+}*/
 
 /* navbar */
 .navbar-default {

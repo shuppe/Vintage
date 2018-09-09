@@ -12,10 +12,10 @@
 
 <title>VHL - Vintage Hockey League</title>
 
+
 <!-- Bootstrap core CSS -->
 <link href="./dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="./assets/icons/iconic/font/css/open-iconic-bootstrap.css" rel="stylesheet">
-
 
 <!-- Custom styles for this template -->
 <link href="vhl.css" rel="stylesheet">
@@ -72,56 +72,53 @@
 </head>
 
 <body>
-
+<header>
 	<!-- Fixed navbar -->
-	<nav class="navbar navbar-default navbar-fixed-top">
-		<div class="container">
-			<div class="navbar-header">
-				<button id="BTmenu" type="button" class="navbar-toggle collapsed"
-					data-toggle="collapse" data-target="#navbar" aria-expanded="false"
-					aria-controls="navbar">
-					<span class="sr-only">Toggle navigation</span> <span
-						class="icon-bar"></span> <span class="icon-bar"></span> <span
-						class="icon-bar"></span>
+	<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-vintage">
+				<a class="navbar-brand" href="#">
+					<img alt="Vieux Patins" src="./assets/img/patins.png" width="60" height="60" class="d-inline-block">
+					Ligue de Hockey Vintage
+				</a>
+				<button id="BTmenu" type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span>
 				</button>
-				<img class="navbar-brand" alt="Vieux Patins"
-					src="./assets/img/patins.png"> <a class="navbar-brand">Ligue de
-					Hockey Vintage</a>
-			</div>
-			<div id="navbar" class="collapse navbar-collapse">
-				<ul class="menu nav navbar-nav">
-					<li class="active"><a id="menuHome" class="navbar-leaf"
-						data-topmenu="1"><span class="glyphicon glyphicon-home"></span></a>
+			<div id="navbarSupportedContent" class="collapse navbar-collapse">
+				<ul class="menu navbar-nav mr-auto mt-2 mt-lg-0">
+					<li class="active nav-item">
+						<a id="menuHome" class="nav-link" href="" data-topmenu="1">Home
+							<span class="glyphicon glyphicon-home"></span>
+						</a>
 					</li>
-					<li><a id="menuCal" class="dropdown-toggle" data-toggle="dropdown"
-						data-topmenu="2">Calendrier<span class="caret"></span></a>
+					<li class="nav-item dropdown">
+						<a id="menuCal" class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-topmenu="2">Calendrier<span class="caret"></span>
+						</a>
 						<ul class="dropdown-menu">
-							<li><a id="menuCalNext" class="navbar-leaf">Prochain match</a></li>
-							<li><a id="menuCalNew" class="navbar-leaf">Nouveau match</a></li>
-							<li><a id="menuCalNew2" class="navbar-leaf">Modif match</a></li>
-							<li><a id="menuCalList" class="navbar-leaf">Liste des matches</a></li>
+							<li><a id="menuCalNext" class="dropdown-item" href="">Prochain match</a></li>
+							<li><a id="menuCalNew" class="dropdown-item" href="">Nouveau match</a></li>
+							<li><a id="menuCalNew2" class="dropdown-item">Modif match</a></li>
+							<li><a id="menuCalList" class="dropdown-item">Liste des matches</a></li>
 						</ul></li>
-					<li><a id="menuJoueur" class="dropdown-toggle"
-						data-toggle="dropdown" data-topmenu="3">Joueurs<span class="caret" /></span></a>
+					<li class="nav-item dropdown">
+						<a id="menuJoueur" class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-topmenu="3">Joueurs<span class="caret" /></span></a>
 						<ul class="dropdown-menu">
-							<li><a id="menuListeJoueur" class="navbar-leaf">Liste des Joueurs</a></li>
-							<li><a id="menuNouveauJoueur" class="navbar-leaf">Nouveau Joueur</a></li>
-						</ul></li>
-					<li><a class="menuStats" class="navbar-leaf" data-topmenu="4">Stats</a>
+							<li><a id="menuListeJoueur" class="dropdown-item">Liste des Joueurs</a></li>
+							<li><a id="menuNouveauJoueur" class="dropdown-item">Nouveau Joueur</a></li>
+						</ul>
 					</li>
-					<li><a class="menuDivers dropdown-toggle" data-toggle="dropdown"
-						data-topmenu="5">Divers<span class="caret" /></span></a>
+					<li class="nav-item">
+						<a class="menuStats nav-link" data-topmenu="4">Stats</a>
+					</li>
+					<li class="nav-item dropdown">
+						<a class="menuDivers nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-topmenu="5">Divers</a>
 						<ul class="dropdown-menu">
-							<li><a id="menuArenas" class="navbar-leaf">Arénas</a></li>
-						</ul></li>
-					<li><a href="#" class="navbar-leaf"><span
-							class="glyphicon glyphicon-log-in"></span> Login</a></li>
+							<li><a id="menuArenas" class="dropdown-item">Arénas</a></li>
+						</ul>
+					</li class="nav-item">
+					<li><a href="#" class="nav-link">Login</a></li>
 				</ul>
 			</div>
-			<!--/.nav-collapse -->
-		</div>
 	</nav>
-
+</header>
+<main class="container" role="main">
 	<!-- Begin page content -->
 	<div class="container">
 
@@ -129,6 +126,7 @@
 		<div class="donnees" id="dataContainer"></div>
 		<div class="messagesBas" id="msgContainerBottom"></div>
 	</div>
+</main>
 	<footer class="footer">
 		<div class="container">
 			<p class="text-muted">

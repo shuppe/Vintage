@@ -6,14 +6,12 @@
     include "generated-conf/config.php";
     include "includes/functions.php"
 ?>
-<div class="page-header">
-	<h1>Joueurs</h1>
-</div>
-<div class="panel panel-primary">
-	<div class="panel-heading">
-		<h3 class="panel-title">Joueurs</h3>
+
+<div class="card card-primary">
+	<div class="card-header">
+		<h3 class="card-title">Joueurs</h3>
 	</div>
-	<div class="panel-body">
+	<div class="card-body">
 	<?php
 	if (JoueurQuery::create()->count() > 0) {
 	?>
@@ -57,7 +55,7 @@
 						<?php
 			            $positions = $joueur->getPositionJoueurs();
 			            foreach ($positions as $pos) {
-			                print "<span class=\"badge badge-pill\">".$pos->getAbbrpos()."</span>";
+			                print "<span class=\"badge badge-Primary\">".$pos->getAbbrpos()."</span>";
 			            }
 			            ?>
  				</td>
