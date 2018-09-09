@@ -17,6 +17,8 @@
 <link href="./dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="./assets/icons/iconic/font/css/open-iconic-bootstrap.css" rel="stylesheet">
 
+<!-- Fontawsome core CSS -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 <!-- Custom styles for this template -->
 <link href="vhl.css" rel="stylesheet">
 
@@ -84,8 +86,9 @@
 			<div id="navbarSupportedContent" class="collapse navbar-collapse">
 				<ul class="menu navbar-nav mr-auto mt-2 mt-lg-0">
 					<li class="active nav-item">
-						<a id="menuHome" class="nav-link" href="" data-topmenu="1">Home
-							<span class="glyphicon glyphicon-home"></span>
+						<a id="menuHome" class="nav-link" href="" data-topmenu="1">
+							<i class="fas fa-home"></i>
+							<!-- <span class="glyphicon glyphicon-home"></span> -->
 						</a>
 					</li>
 					<li class="nav-item dropdown">

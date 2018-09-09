@@ -57,7 +57,7 @@
 			</div>
 			<div class="row groupe-partie">
 				<div class="col">
-					<h3 align="center">Équipe 1</h3>
+					<h3 class="bg-dark text-white" align="center">Foncés</h3>
 					<div class="card">
 				  		<div class="card-header">
 				    		Gardiens
@@ -67,7 +67,7 @@
 					</div>
 				</div>
 				<div class="col">
-					<h3 align="center">Équipe 2</h3>
+					<h3 align="center" style="border:1px">Pâles</h3>
 					<div class="card">
 				  		<div class="card-header">
 				    		Gardiens
