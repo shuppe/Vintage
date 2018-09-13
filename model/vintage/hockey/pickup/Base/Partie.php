@@ -2,6 +2,8 @@
 
 namespace Base;
 
+use \Alignement as ChildAlignement;
+use \AlignementQuery as ChildAlignementQuery;
 use \Arena as ChildArena;
 use \ArenaQuery as ChildArenaQuery;
 use \PartieQuery as ChildPartieQuery;
@@ -85,18 +87,18 @@ abstract class Partie implements ActiveRecordInterface
     protected $heure;
 
     /**
-     * The value for the idarena field.
+     * The value for the arenano field.
      *
      * @var        int
      */
-    protected $idarena;
+    protected $arenano;
 
     /**
-     * The value for the idequipelocale field.
+     * The value for the equipelocale field.
      *
      * @var        int
      */
-    protected $idequipelocale;
+    protected $equipelocale;
 
     /**
      * The value for the ptsequipelocale field.
@@ -106,11 +108,11 @@ abstract class Partie implements ActiveRecordInterface
     protected $ptsequipelocale;
 
     /**
-     * The value for the idequipevisite field.
+     * The value for the equipevisite field.
      *
      * @var        int
      */
-    protected $idequipevisite;
+    protected $equipevisite;
 
     /**
      * The value for the ptsequipevisite field.
@@ -123,6 +125,16 @@ abstract class Partie implements ActiveRecordInterface
      * @var        ChildArena
      */
     protected $aArena;
+
+    /**
+     * @var        ChildAlignement
+     */
+    protected $aAlignementRelatedByEquipelocale;
+
+    /**
+     * @var        ChildAlignement
+     */
+    protected $aAlignementRelatedByEquipevisite;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -408,23 +420,23 @@ abstract class Partie implements ActiveRecordInterface
     }
 
     /**
-     * Get the [idarena] column value.
+     * Get the [arenano] column value.
      *
      * @return int
      */
-    public function getIdarena()
+    public function getArenano()
     {
-        return $this->idarena;
+        return $this->arenano;
     }
 
     /**
-     * Get the [idequipelocale] column value.
+     * Get the [equipelocale] column value.
      *
      * @return int
      */
-    public function getIdequipelocale()
+    public function getEquipelocale()
     {
-        return $this->idequipelocale;
+        return $this->equipelocale;
     }
 
     /**
@@ -438,13 +450,13 @@ abstract class Partie implements ActiveRecordInterface
     }
 
     /**
-     * Get the [idequipevisite] column value.
+     * Get the [equipevisite] column value.
      *
      * @return int
      */
-    public function getIdequipevisite()
+    public function getEquipevisite()
     {
-        return $this->idequipevisite;
+        return $this->equipevisite;
     }
 
     /**
@@ -518,20 +530,20 @@ abstract class Partie implements ActiveRecordInterface
     } // setHeure()
 
     /**
-     * Set the value of [idarena] column.
+     * Set the value of [arenano] column.
      *
      * @param int $v new value
      * @return $this|\Partie The current object (for fluent API support)
      */
-    public function setIdarena($v)
+    public function setArenano($v)
     {
         if ($v !== null) {
             $v = (int) $v;
         }
 
-        if ($this->idarena !== $v) {
-            $this->idarena = $v;
-            $this->modifiedColumns[PartieTableMap::COL_IDARENA] = true;
+        if ($this->arenano !== $v) {
+            $this->arenano = $v;
+            $this->modifiedColumns[PartieTableMap::COL_ARENANO] = true;
         }
 
         if ($this->aArena !== null && $this->aArena->getId() !== $v) {
@@ -539,27 +551,31 @@ abstract class Partie implements ActiveRecordInterface
         }
 
         return $this;
-    } // setIdarena()
+    } // setArenano()
 
     /**
-     * Set the value of [idequipelocale] column.
+     * Set the value of [equipelocale] column.
      *
      * @param int $v new value
      * @return $this|\Partie The current object (for fluent API support)
      */
-    public function setIdequipelocale($v)
+    public function setEquipelocale($v)
     {
         if ($v !== null) {
             $v = (int) $v;
         }
 
-        if ($this->idequipelocale !== $v) {
-            $this->idequipelocale = $v;
-            $this->modifiedColumns[PartieTableMap::COL_IDEQUIPELOCALE] = true;
+        if ($this->equipelocale !== $v) {
+            $this->equipelocale = $v;
+            $this->modifiedColumns[PartieTableMap::COL_EQUIPELOCALE] = true;
+        }
+
+        if ($this->aAlignementRelatedByEquipelocale !== null && $this->aAlignementRelatedByEquipelocale->getId() !== $v) {
+            $this->aAlignementRelatedByEquipelocale = null;
         }
 
         return $this;
-    } // setIdequipelocale()
+    } // setEquipelocale()
 
     /**
      * Set the value of [ptsequipelocale] column.
@@ -582,24 +598,28 @@ abstract class Partie implements ActiveRecordInterface
     } // setPtsequipelocale()
 
     /**
-     * Set the value of [idequipevisite] column.
+     * Set the value of [equipevisite] column.
      *
      * @param int $v new value
      * @return $this|\Partie The current object (for fluent API support)
      */
-    public function setIdequipevisite($v)
+    public function setEquipevisite($v)
     {
         if ($v !== null) {
             $v = (int) $v;
         }
 
-        if ($this->idequipevisite !== $v) {
-            $this->idequipevisite = $v;
-            $this->modifiedColumns[PartieTableMap::COL_IDEQUIPEVISITE] = true;
+        if ($this->equipevisite !== $v) {
+            $this->equipevisite = $v;
+            $this->modifiedColumns[PartieTableMap::COL_EQUIPEVISITE] = true;
+        }
+
+        if ($this->aAlignementRelatedByEquipevisite !== null && $this->aAlignementRelatedByEquipevisite->getId() !== $v) {
+            $this->aAlignementRelatedByEquipevisite = null;
         }
 
         return $this;
-    } // setIdequipevisite()
+    } // setEquipevisite()
 
     /**
      * Set the value of [ptsequipevisite] column.
@@ -669,17 +689,17 @@ abstract class Partie implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : PartieTableMap::translateFieldName('Heure', TableMap::TYPE_PHPNAME, $indexType)];
             $this->heure = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : PartieTableMap::translateFieldName('Idarena', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->idarena = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : PartieTableMap::translateFieldName('Arenano', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->arenano = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : PartieTableMap::translateFieldName('Idequipelocale', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->idequipelocale = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : PartieTableMap::translateFieldName('Equipelocale', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->equipelocale = (null !== $col) ? (int) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : PartieTableMap::translateFieldName('Ptsequipelocale', TableMap::TYPE_PHPNAME, $indexType)];
             $this->ptsequipelocale = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : PartieTableMap::translateFieldName('Idequipevisite', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->idequipevisite = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : PartieTableMap::translateFieldName('Equipevisite', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->equipevisite = (null !== $col) ? (int) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : PartieTableMap::translateFieldName('Ptsequipevisite', TableMap::TYPE_PHPNAME, $indexType)];
             $this->ptsequipevisite = (null !== $col) ? (int) $col : null;
@@ -713,8 +733,14 @@ abstract class Partie implements ActiveRecordInterface
      */
     public function ensureConsistency()
     {
-        if ($this->aArena !== null && $this->idarena !== $this->aArena->getId()) {
+        if ($this->aArena !== null && $this->arenano !== $this->aArena->getId()) {
             $this->aArena = null;
+        }
+        if ($this->aAlignementRelatedByEquipelocale !== null && $this->equipelocale !== $this->aAlignementRelatedByEquipelocale->getId()) {
+            $this->aAlignementRelatedByEquipelocale = null;
+        }
+        if ($this->aAlignementRelatedByEquipevisite !== null && $this->equipevisite !== $this->aAlignementRelatedByEquipevisite->getId()) {
+            $this->aAlignementRelatedByEquipevisite = null;
         }
     } // ensureConsistency
 
@@ -756,6 +782,8 @@ abstract class Partie implements ActiveRecordInterface
         if ($deep) {  // also de-associate any related objects?
 
             $this->aArena = null;
+            $this->aAlignementRelatedByEquipelocale = null;
+            $this->aAlignementRelatedByEquipevisite = null;
         } // if (deep)
     }
 
@@ -871,6 +899,20 @@ abstract class Partie implements ActiveRecordInterface
                 $this->setArena($this->aArena);
             }
 
+            if ($this->aAlignementRelatedByEquipelocale !== null) {
+                if ($this->aAlignementRelatedByEquipelocale->isModified() || $this->aAlignementRelatedByEquipelocale->isNew()) {
+                    $affectedRows += $this->aAlignementRelatedByEquipelocale->save($con);
+                }
+                $this->setAlignementRelatedByEquipelocale($this->aAlignementRelatedByEquipelocale);
+            }
+
+            if ($this->aAlignementRelatedByEquipevisite !== null) {
+                if ($this->aAlignementRelatedByEquipevisite->isModified() || $this->aAlignementRelatedByEquipevisite->isNew()) {
+                    $affectedRows += $this->aAlignementRelatedByEquipevisite->save($con);
+                }
+                $this->setAlignementRelatedByEquipevisite($this->aAlignementRelatedByEquipevisite);
+            }
+
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
                 if ($this->isNew()) {
@@ -917,17 +959,17 @@ abstract class Partie implements ActiveRecordInterface
         if ($this->isColumnModified(PartieTableMap::COL_HEURE)) {
             $modifiedColumns[':p' . $index++]  = 'Heure';
         }
-        if ($this->isColumnModified(PartieTableMap::COL_IDARENA)) {
-            $modifiedColumns[':p' . $index++]  = 'idArena';
+        if ($this->isColumnModified(PartieTableMap::COL_ARENANO)) {
+            $modifiedColumns[':p' . $index++]  = 'ArenaNo';
         }
-        if ($this->isColumnModified(PartieTableMap::COL_IDEQUIPELOCALE)) {
-            $modifiedColumns[':p' . $index++]  = 'idEquipeLocale';
+        if ($this->isColumnModified(PartieTableMap::COL_EQUIPELOCALE)) {
+            $modifiedColumns[':p' . $index++]  = 'EquipeLocale';
         }
         if ($this->isColumnModified(PartieTableMap::COL_PTSEQUIPELOCALE)) {
             $modifiedColumns[':p' . $index++]  = 'ptsEquipeLocale';
         }
-        if ($this->isColumnModified(PartieTableMap::COL_IDEQUIPEVISITE)) {
-            $modifiedColumns[':p' . $index++]  = 'idEquipeVisite';
+        if ($this->isColumnModified(PartieTableMap::COL_EQUIPEVISITE)) {
+            $modifiedColumns[':p' . $index++]  = 'EquipeVisite';
         }
         if ($this->isColumnModified(PartieTableMap::COL_PTSEQUIPEVISITE)) {
             $modifiedColumns[':p' . $index++]  = 'ptsEquipeVisite';
@@ -952,17 +994,17 @@ abstract class Partie implements ActiveRecordInterface
                     case 'Heure':
                         $stmt->bindValue($identifier, $this->heure ? $this->heure->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
-                    case 'idArena':
-                        $stmt->bindValue($identifier, $this->idarena, PDO::PARAM_INT);
+                    case 'ArenaNo':
+                        $stmt->bindValue($identifier, $this->arenano, PDO::PARAM_INT);
                         break;
-                    case 'idEquipeLocale':
-                        $stmt->bindValue($identifier, $this->idequipelocale, PDO::PARAM_INT);
+                    case 'EquipeLocale':
+                        $stmt->bindValue($identifier, $this->equipelocale, PDO::PARAM_INT);
                         break;
                     case 'ptsEquipeLocale':
                         $stmt->bindValue($identifier, $this->ptsequipelocale, PDO::PARAM_INT);
                         break;
-                    case 'idEquipeVisite':
-                        $stmt->bindValue($identifier, $this->idequipevisite, PDO::PARAM_INT);
+                    case 'EquipeVisite':
+                        $stmt->bindValue($identifier, $this->equipevisite, PDO::PARAM_INT);
                         break;
                     case 'ptsEquipeVisite':
                         $stmt->bindValue($identifier, $this->ptsequipevisite, PDO::PARAM_INT);
@@ -1039,16 +1081,16 @@ abstract class Partie implements ActiveRecordInterface
                 return $this->getHeure();
                 break;
             case 3:
-                return $this->getIdarena();
+                return $this->getArenano();
                 break;
             case 4:
-                return $this->getIdequipelocale();
+                return $this->getEquipelocale();
                 break;
             case 5:
                 return $this->getPtsequipelocale();
                 break;
             case 6:
-                return $this->getIdequipevisite();
+                return $this->getEquipevisite();
                 break;
             case 7:
                 return $this->getPtsequipevisite();
@@ -1086,10 +1128,10 @@ abstract class Partie implements ActiveRecordInterface
             $keys[0] => $this->getId(),
             $keys[1] => $this->getDatepartie(),
             $keys[2] => $this->getHeure(),
-            $keys[3] => $this->getIdarena(),
-            $keys[4] => $this->getIdequipelocale(),
+            $keys[3] => $this->getArenano(),
+            $keys[4] => $this->getEquipelocale(),
             $keys[5] => $this->getPtsequipelocale(),
-            $keys[6] => $this->getIdequipevisite(),
+            $keys[6] => $this->getEquipevisite(),
             $keys[7] => $this->getPtsequipevisite(),
         );
         if ($result[$keys[1]] instanceof \DateTimeInterface) {
@@ -1120,6 +1162,36 @@ abstract class Partie implements ActiveRecordInterface
                 }
 
                 $result[$key] = $this->aArena->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aAlignementRelatedByEquipelocale) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'alignement';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'Alignement';
+                        break;
+                    default:
+                        $key = 'Alignement';
+                }
+
+                $result[$key] = $this->aAlignementRelatedByEquipelocale->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aAlignementRelatedByEquipevisite) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'alignement';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'Alignement';
+                        break;
+                    default:
+                        $key = 'Alignement';
+                }
+
+                $result[$key] = $this->aAlignementRelatedByEquipevisite->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
 
@@ -1165,16 +1237,16 @@ abstract class Partie implements ActiveRecordInterface
                 $this->setHeure($value);
                 break;
             case 3:
-                $this->setIdarena($value);
+                $this->setArenano($value);
                 break;
             case 4:
-                $this->setIdequipelocale($value);
+                $this->setEquipelocale($value);
                 break;
             case 5:
                 $this->setPtsequipelocale($value);
                 break;
             case 6:
-                $this->setIdequipevisite($value);
+                $this->setEquipevisite($value);
                 break;
             case 7:
                 $this->setPtsequipevisite($value);
@@ -1215,16 +1287,16 @@ abstract class Partie implements ActiveRecordInterface
             $this->setHeure($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setIdarena($arr[$keys[3]]);
+            $this->setArenano($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setIdequipelocale($arr[$keys[4]]);
+            $this->setEquipelocale($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
             $this->setPtsequipelocale($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setIdequipevisite($arr[$keys[6]]);
+            $this->setEquipevisite($arr[$keys[6]]);
         }
         if (array_key_exists($keys[7], $arr)) {
             $this->setPtsequipevisite($arr[$keys[7]]);
@@ -1279,17 +1351,17 @@ abstract class Partie implements ActiveRecordInterface
         if ($this->isColumnModified(PartieTableMap::COL_HEURE)) {
             $criteria->add(PartieTableMap::COL_HEURE, $this->heure);
         }
-        if ($this->isColumnModified(PartieTableMap::COL_IDARENA)) {
-            $criteria->add(PartieTableMap::COL_IDARENA, $this->idarena);
+        if ($this->isColumnModified(PartieTableMap::COL_ARENANO)) {
+            $criteria->add(PartieTableMap::COL_ARENANO, $this->arenano);
         }
-        if ($this->isColumnModified(PartieTableMap::COL_IDEQUIPELOCALE)) {
-            $criteria->add(PartieTableMap::COL_IDEQUIPELOCALE, $this->idequipelocale);
+        if ($this->isColumnModified(PartieTableMap::COL_EQUIPELOCALE)) {
+            $criteria->add(PartieTableMap::COL_EQUIPELOCALE, $this->equipelocale);
         }
         if ($this->isColumnModified(PartieTableMap::COL_PTSEQUIPELOCALE)) {
             $criteria->add(PartieTableMap::COL_PTSEQUIPELOCALE, $this->ptsequipelocale);
         }
-        if ($this->isColumnModified(PartieTableMap::COL_IDEQUIPEVISITE)) {
-            $criteria->add(PartieTableMap::COL_IDEQUIPEVISITE, $this->idequipevisite);
+        if ($this->isColumnModified(PartieTableMap::COL_EQUIPEVISITE)) {
+            $criteria->add(PartieTableMap::COL_EQUIPEVISITE, $this->equipevisite);
         }
         if ($this->isColumnModified(PartieTableMap::COL_PTSEQUIPEVISITE)) {
             $criteria->add(PartieTableMap::COL_PTSEQUIPEVISITE, $this->ptsequipevisite);
@@ -1382,10 +1454,10 @@ abstract class Partie implements ActiveRecordInterface
     {
         $copyObj->setDatepartie($this->getDatepartie());
         $copyObj->setHeure($this->getHeure());
-        $copyObj->setIdarena($this->getIdarena());
-        $copyObj->setIdequipelocale($this->getIdequipelocale());
+        $copyObj->setArenano($this->getArenano());
+        $copyObj->setEquipelocale($this->getEquipelocale());
         $copyObj->setPtsequipelocale($this->getPtsequipelocale());
-        $copyObj->setIdequipevisite($this->getIdequipevisite());
+        $copyObj->setEquipevisite($this->getEquipevisite());
         $copyObj->setPtsequipevisite($this->getPtsequipevisite());
         if ($makeNew) {
             $copyObj->setNew(true);
@@ -1425,9 +1497,9 @@ abstract class Partie implements ActiveRecordInterface
     public function setArena(ChildArena $v = null)
     {
         if ($v === null) {
-            $this->setIdarena(NULL);
+            $this->setArenano(NULL);
         } else {
-            $this->setIdarena($v->getId());
+            $this->setArenano($v->getId());
         }
 
         $this->aArena = $v;
@@ -1452,8 +1524,8 @@ abstract class Partie implements ActiveRecordInterface
      */
     public function getArena(ConnectionInterface $con = null)
     {
-        if ($this->aArena === null && ($this->idarena != 0)) {
-            $this->aArena = ChildArenaQuery::create()->findPk($this->idarena, $con);
+        if ($this->aArena === null && ($this->arenano != 0)) {
+            $this->aArena = ChildArenaQuery::create()->findPk($this->arenano, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
@@ -1467,6 +1539,108 @@ abstract class Partie implements ActiveRecordInterface
     }
 
     /**
+     * Declares an association between this object and a ChildAlignement object.
+     *
+     * @param  ChildAlignement $v
+     * @return $this|\Partie The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setAlignementRelatedByEquipelocale(ChildAlignement $v = null)
+    {
+        if ($v === null) {
+            $this->setEquipelocale(NULL);
+        } else {
+            $this->setEquipelocale($v->getId());
+        }
+
+        $this->aAlignementRelatedByEquipelocale = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildAlignement object, it will not be re-added.
+        if ($v !== null) {
+            $v->addPartieRelatedByEquipelocale($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildAlignement object
+     *
+     * @param  ConnectionInterface $con Optional Connection object.
+     * @return ChildAlignement The associated ChildAlignement object.
+     * @throws PropelException
+     */
+    public function getAlignementRelatedByEquipelocale(ConnectionInterface $con = null)
+    {
+        if ($this->aAlignementRelatedByEquipelocale === null && ($this->equipelocale != 0)) {
+            $this->aAlignementRelatedByEquipelocale = ChildAlignementQuery::create()->findPk($this->equipelocale, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aAlignementRelatedByEquipelocale->addPartiesRelatedByEquipelocale($this);
+             */
+        }
+
+        return $this->aAlignementRelatedByEquipelocale;
+    }
+
+    /**
+     * Declares an association between this object and a ChildAlignement object.
+     *
+     * @param  ChildAlignement $v
+     * @return $this|\Partie The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setAlignementRelatedByEquipevisite(ChildAlignement $v = null)
+    {
+        if ($v === null) {
+            $this->setEquipevisite(NULL);
+        } else {
+            $this->setEquipevisite($v->getId());
+        }
+
+        $this->aAlignementRelatedByEquipevisite = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildAlignement object, it will not be re-added.
+        if ($v !== null) {
+            $v->addPartieRelatedByEquipevisite($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildAlignement object
+     *
+     * @param  ConnectionInterface $con Optional Connection object.
+     * @return ChildAlignement The associated ChildAlignement object.
+     * @throws PropelException
+     */
+    public function getAlignementRelatedByEquipevisite(ConnectionInterface $con = null)
+    {
+        if ($this->aAlignementRelatedByEquipevisite === null && ($this->equipevisite != 0)) {
+            $this->aAlignementRelatedByEquipevisite = ChildAlignementQuery::create()->findPk($this->equipevisite, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aAlignementRelatedByEquipevisite->addPartiesRelatedByEquipevisite($this);
+             */
+        }
+
+        return $this->aAlignementRelatedByEquipevisite;
+    }
+
+    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
@@ -1476,13 +1650,19 @@ abstract class Partie implements ActiveRecordInterface
         if (null !== $this->aArena) {
             $this->aArena->removePartie($this);
         }
+        if (null !== $this->aAlignementRelatedByEquipelocale) {
+            $this->aAlignementRelatedByEquipelocale->removePartieRelatedByEquipelocale($this);
+        }
+        if (null !== $this->aAlignementRelatedByEquipevisite) {
+            $this->aAlignementRelatedByEquipevisite->removePartieRelatedByEquipevisite($this);
+        }
         $this->id = null;
         $this->datepartie = null;
         $this->heure = null;
-        $this->idarena = null;
-        $this->idequipelocale = null;
+        $this->arenano = null;
+        $this->equipelocale = null;
         $this->ptsequipelocale = null;
-        $this->idequipevisite = null;
+        $this->equipevisite = null;
         $this->ptsequipevisite = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
@@ -1505,6 +1685,8 @@ abstract class Partie implements ActiveRecordInterface
         } // if ($deep)
 
         $this->aArena = null;
+        $this->aAlignementRelatedByEquipelocale = null;
+        $this->aAlignementRelatedByEquipevisite = null;
     }
 
     /**

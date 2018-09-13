@@ -1,9 +1,9 @@
 <?php
 
-use Base\CompositionequipeQuery as BaseCompositionequipeQuery;
+use Base\AlignementQuery as BaseAlignementQuery;
 
 /**
- * Skeleton subclass for performing query and update operations on the 'CompositionEquipe' table.
+ * Skeleton subclass for performing query and update operations on the 'Alignement' table.
  *
  *
  *
@@ -12,7 +12,7 @@ use Base\CompositionequipeQuery as BaseCompositionequipeQuery;
  * long as it does not already exist in the output directory.
  *
  */
-class CompositionequipeQuery extends BaseCompositionequipeQuery
+class AlignementQuery extends BaseAlignementQuery
 {
 
 }

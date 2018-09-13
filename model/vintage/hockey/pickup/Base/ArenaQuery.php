@@ -477,7 +477,7 @@ abstract class ArenaQuery extends ModelCriteria
     {
         if ($partie instanceof \Partie) {
             return $this
-                ->addUsingAlias(ArenaTableMap::COL_ID, $partie->getIdarena(), $comparison);
+                ->addUsingAlias(ArenaTableMap::COL_ID, $partie->getArenano(), $comparison);
         } elseif ($partie instanceof ObjectCollection) {
             return $this
                 ->usePartieQuery()

@@ -23,19 +23,19 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPartieQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     ChildPartieQuery orderByDatepartie($order = Criteria::ASC) Order by the datePartie column
  * @method     ChildPartieQuery orderByHeure($order = Criteria::ASC) Order by the Heure column
- * @method     ChildPartieQuery orderByIdarena($order = Criteria::ASC) Order by the idArena column
- * @method     ChildPartieQuery orderByIdequipelocale($order = Criteria::ASC) Order by the idEquipeLocale column
+ * @method     ChildPartieQuery orderByArenano($order = Criteria::ASC) Order by the ArenaNo column
+ * @method     ChildPartieQuery orderByEquipelocale($order = Criteria::ASC) Order by the EquipeLocale column
  * @method     ChildPartieQuery orderByPtsequipelocale($order = Criteria::ASC) Order by the ptsEquipeLocale column
- * @method     ChildPartieQuery orderByIdequipevisite($order = Criteria::ASC) Order by the idEquipeVisite column
+ * @method     ChildPartieQuery orderByEquipevisite($order = Criteria::ASC) Order by the EquipeVisite column
  * @method     ChildPartieQuery orderByPtsequipevisite($order = Criteria::ASC) Order by the ptsEquipeVisite column
  *
  * @method     ChildPartieQuery groupById() Group by the id column
  * @method     ChildPartieQuery groupByDatepartie() Group by the datePartie column
  * @method     ChildPartieQuery groupByHeure() Group by the Heure column
- * @method     ChildPartieQuery groupByIdarena() Group by the idArena column
- * @method     ChildPartieQuery groupByIdequipelocale() Group by the idEquipeLocale column
+ * @method     ChildPartieQuery groupByArenano() Group by the ArenaNo column
+ * @method     ChildPartieQuery groupByEquipelocale() Group by the EquipeLocale column
  * @method     ChildPartieQuery groupByPtsequipelocale() Group by the ptsEquipeLocale column
- * @method     ChildPartieQuery groupByIdequipevisite() Group by the idEquipeVisite column
+ * @method     ChildPartieQuery groupByEquipevisite() Group by the EquipeVisite column
  * @method     ChildPartieQuery groupByPtsequipevisite() Group by the ptsEquipeVisite column
  *
  * @method     ChildPartieQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
@@ -56,7 +56,27 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPartieQuery rightJoinWithArena() Adds a RIGHT JOIN clause and with to the query using the Arena relation
  * @method     ChildPartieQuery innerJoinWithArena() Adds a INNER JOIN clause and with to the query using the Arena relation
  *
- * @method     \ArenaQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     ChildPartieQuery leftJoinAlignementRelatedByEquipelocale($relationAlias = null) Adds a LEFT JOIN clause to the query using the AlignementRelatedByEquipelocale relation
+ * @method     ChildPartieQuery rightJoinAlignementRelatedByEquipelocale($relationAlias = null) Adds a RIGHT JOIN clause to the query using the AlignementRelatedByEquipelocale relation
+ * @method     ChildPartieQuery innerJoinAlignementRelatedByEquipelocale($relationAlias = null) Adds a INNER JOIN clause to the query using the AlignementRelatedByEquipelocale relation
+ *
+ * @method     ChildPartieQuery joinWithAlignementRelatedByEquipelocale($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the AlignementRelatedByEquipelocale relation
+ *
+ * @method     ChildPartieQuery leftJoinWithAlignementRelatedByEquipelocale() Adds a LEFT JOIN clause and with to the query using the AlignementRelatedByEquipelocale relation
+ * @method     ChildPartieQuery rightJoinWithAlignementRelatedByEquipelocale() Adds a RIGHT JOIN clause and with to the query using the AlignementRelatedByEquipelocale relation
+ * @method     ChildPartieQuery innerJoinWithAlignementRelatedByEquipelocale() Adds a INNER JOIN clause and with to the query using the AlignementRelatedByEquipelocale relation
+ *
+ * @method     ChildPartieQuery leftJoinAlignementRelatedByEquipevisite($relationAlias = null) Adds a LEFT JOIN clause to the query using the AlignementRelatedByEquipevisite relation
+ * @method     ChildPartieQuery rightJoinAlignementRelatedByEquipevisite($relationAlias = null) Adds a RIGHT JOIN clause to the query using the AlignementRelatedByEquipevisite relation
+ * @method     ChildPartieQuery innerJoinAlignementRelatedByEquipevisite($relationAlias = null) Adds a INNER JOIN clause to the query using the AlignementRelatedByEquipevisite relation
+ *
+ * @method     ChildPartieQuery joinWithAlignementRelatedByEquipevisite($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the AlignementRelatedByEquipevisite relation
+ *
+ * @method     ChildPartieQuery leftJoinWithAlignementRelatedByEquipevisite() Adds a LEFT JOIN clause and with to the query using the AlignementRelatedByEquipevisite relation
+ * @method     ChildPartieQuery rightJoinWithAlignementRelatedByEquipevisite() Adds a RIGHT JOIN clause and with to the query using the AlignementRelatedByEquipevisite relation
+ * @method     ChildPartieQuery innerJoinWithAlignementRelatedByEquipevisite() Adds a INNER JOIN clause and with to the query using the AlignementRelatedByEquipevisite relation
+ *
+ * @method     \ArenaQuery|\AlignementQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildPartie findOne(ConnectionInterface $con = null) Return the first ChildPartie matching the query
  * @method     ChildPartie findOneOrCreate(ConnectionInterface $con = null) Return the first ChildPartie matching the query, or a new ChildPartie object populated from the query conditions when no match is found
@@ -64,10 +84,10 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPartie findOneById(int $id) Return the first ChildPartie filtered by the id column
  * @method     ChildPartie findOneByDatepartie(string $datePartie) Return the first ChildPartie filtered by the datePartie column
  * @method     ChildPartie findOneByHeure(string $Heure) Return the first ChildPartie filtered by the Heure column
- * @method     ChildPartie findOneByIdarena(int $idArena) Return the first ChildPartie filtered by the idArena column
- * @method     ChildPartie findOneByIdequipelocale(int $idEquipeLocale) Return the first ChildPartie filtered by the idEquipeLocale column
+ * @method     ChildPartie findOneByArenano(int $ArenaNo) Return the first ChildPartie filtered by the ArenaNo column
+ * @method     ChildPartie findOneByEquipelocale(int $EquipeLocale) Return the first ChildPartie filtered by the EquipeLocale column
  * @method     ChildPartie findOneByPtsequipelocale(int $ptsEquipeLocale) Return the first ChildPartie filtered by the ptsEquipeLocale column
- * @method     ChildPartie findOneByIdequipevisite(int $idEquipeVisite) Return the first ChildPartie filtered by the idEquipeVisite column
+ * @method     ChildPartie findOneByEquipevisite(int $EquipeVisite) Return the first ChildPartie filtered by the EquipeVisite column
  * @method     ChildPartie findOneByPtsequipevisite(int $ptsEquipeVisite) Return the first ChildPartie filtered by the ptsEquipeVisite column *
 
  * @method     ChildPartie requirePk($key, ConnectionInterface $con = null) Return the ChildPartie by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -76,20 +96,20 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPartie requireOneById(int $id) Return the first ChildPartie filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPartie requireOneByDatepartie(string $datePartie) Return the first ChildPartie filtered by the datePartie column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPartie requireOneByHeure(string $Heure) Return the first ChildPartie filtered by the Heure column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPartie requireOneByIdarena(int $idArena) Return the first ChildPartie filtered by the idArena column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPartie requireOneByIdequipelocale(int $idEquipeLocale) Return the first ChildPartie filtered by the idEquipeLocale column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildPartie requireOneByArenano(int $ArenaNo) Return the first ChildPartie filtered by the ArenaNo column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildPartie requireOneByEquipelocale(int $EquipeLocale) Return the first ChildPartie filtered by the EquipeLocale column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPartie requireOneByPtsequipelocale(int $ptsEquipeLocale) Return the first ChildPartie filtered by the ptsEquipeLocale column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPartie requireOneByIdequipevisite(int $idEquipeVisite) Return the first ChildPartie filtered by the idEquipeVisite column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildPartie requireOneByEquipevisite(int $EquipeVisite) Return the first ChildPartie filtered by the EquipeVisite column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPartie requireOneByPtsequipevisite(int $ptsEquipeVisite) Return the first ChildPartie filtered by the ptsEquipeVisite column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildPartie[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildPartie objects based on current ModelCriteria
  * @method     ChildPartie[]|ObjectCollection findById(int $id) Return ChildPartie objects filtered by the id column
  * @method     ChildPartie[]|ObjectCollection findByDatepartie(string $datePartie) Return ChildPartie objects filtered by the datePartie column
  * @method     ChildPartie[]|ObjectCollection findByHeure(string $Heure) Return ChildPartie objects filtered by the Heure column
- * @method     ChildPartie[]|ObjectCollection findByIdarena(int $idArena) Return ChildPartie objects filtered by the idArena column
- * @method     ChildPartie[]|ObjectCollection findByIdequipelocale(int $idEquipeLocale) Return ChildPartie objects filtered by the idEquipeLocale column
+ * @method     ChildPartie[]|ObjectCollection findByArenano(int $ArenaNo) Return ChildPartie objects filtered by the ArenaNo column
+ * @method     ChildPartie[]|ObjectCollection findByEquipelocale(int $EquipeLocale) Return ChildPartie objects filtered by the EquipeLocale column
  * @method     ChildPartie[]|ObjectCollection findByPtsequipelocale(int $ptsEquipeLocale) Return ChildPartie objects filtered by the ptsEquipeLocale column
- * @method     ChildPartie[]|ObjectCollection findByIdequipevisite(int $idEquipeVisite) Return ChildPartie objects filtered by the idEquipeVisite column
+ * @method     ChildPartie[]|ObjectCollection findByEquipevisite(int $EquipeVisite) Return ChildPartie objects filtered by the EquipeVisite column
  * @method     ChildPartie[]|ObjectCollection findByPtsequipevisite(int $ptsEquipeVisite) Return ChildPartie objects filtered by the ptsEquipeVisite column
  * @method     ChildPartie[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -189,7 +209,7 @@ abstract class PartieQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, datePartie, Heure, idArena, idEquipeLocale, ptsEquipeLocale, idEquipeVisite, ptsEquipeVisite FROM Partie WHERE id = :p0';
+        $sql = 'SELECT id, datePartie, Heure, ArenaNo, EquipeLocale, ptsEquipeLocale, EquipeVisite, ptsEquipeVisite FROM Partie WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -407,18 +427,18 @@ abstract class PartieQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the idArena column
+     * Filter the query on the ArenaNo column
      *
      * Example usage:
      * <code>
-     * $query->filterByIdarena(1234); // WHERE idArena = 1234
-     * $query->filterByIdarena(array(12, 34)); // WHERE idArena IN (12, 34)
-     * $query->filterByIdarena(array('min' => 12)); // WHERE idArena > 12
+     * $query->filterByArenano(1234); // WHERE ArenaNo = 1234
+     * $query->filterByArenano(array(12, 34)); // WHERE ArenaNo IN (12, 34)
+     * $query->filterByArenano(array('min' => 12)); // WHERE ArenaNo > 12
      * </code>
      *
      * @see       filterByArena()
      *
-     * @param     mixed $idarena The value to use as filter.
+     * @param     mixed $arenano The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -426,16 +446,16 @@ abstract class PartieQuery extends ModelCriteria
      *
      * @return $this|ChildPartieQuery The current query, for fluid interface
      */
-    public function filterByIdarena($idarena = null, $comparison = null)
+    public function filterByArenano($arenano = null, $comparison = null)
     {
-        if (is_array($idarena)) {
+        if (is_array($arenano)) {
             $useMinMax = false;
-            if (isset($idarena['min'])) {
-                $this->addUsingAlias(PartieTableMap::COL_IDARENA, $idarena['min'], Criteria::GREATER_EQUAL);
+            if (isset($arenano['min'])) {
+                $this->addUsingAlias(PartieTableMap::COL_ARENANO, $arenano['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($idarena['max'])) {
-                $this->addUsingAlias(PartieTableMap::COL_IDARENA, $idarena['max'], Criteria::LESS_EQUAL);
+            if (isset($arenano['max'])) {
+                $this->addUsingAlias(PartieTableMap::COL_ARENANO, $arenano['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -446,20 +466,22 @@ abstract class PartieQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PartieTableMap::COL_IDARENA, $idarena, $comparison);
+        return $this->addUsingAlias(PartieTableMap::COL_ARENANO, $arenano, $comparison);
     }
 
     /**
-     * Filter the query on the idEquipeLocale column
+     * Filter the query on the EquipeLocale column
      *
      * Example usage:
      * <code>
-     * $query->filterByIdequipelocale(1234); // WHERE idEquipeLocale = 1234
-     * $query->filterByIdequipelocale(array(12, 34)); // WHERE idEquipeLocale IN (12, 34)
-     * $query->filterByIdequipelocale(array('min' => 12)); // WHERE idEquipeLocale > 12
+     * $query->filterByEquipelocale(1234); // WHERE EquipeLocale = 1234
+     * $query->filterByEquipelocale(array(12, 34)); // WHERE EquipeLocale IN (12, 34)
+     * $query->filterByEquipelocale(array('min' => 12)); // WHERE EquipeLocale > 12
      * </code>
      *
-     * @param     mixed $idequipelocale The value to use as filter.
+     * @see       filterByAlignementRelatedByEquipelocale()
+     *
+     * @param     mixed $equipelocale The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -467,16 +489,16 @@ abstract class PartieQuery extends ModelCriteria
      *
      * @return $this|ChildPartieQuery The current query, for fluid interface
      */
-    public function filterByIdequipelocale($idequipelocale = null, $comparison = null)
+    public function filterByEquipelocale($equipelocale = null, $comparison = null)
     {
-        if (is_array($idequipelocale)) {
+        if (is_array($equipelocale)) {
             $useMinMax = false;
-            if (isset($idequipelocale['min'])) {
-                $this->addUsingAlias(PartieTableMap::COL_IDEQUIPELOCALE, $idequipelocale['min'], Criteria::GREATER_EQUAL);
+            if (isset($equipelocale['min'])) {
+                $this->addUsingAlias(PartieTableMap::COL_EQUIPELOCALE, $equipelocale['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($idequipelocale['max'])) {
-                $this->addUsingAlias(PartieTableMap::COL_IDEQUIPELOCALE, $idequipelocale['max'], Criteria::LESS_EQUAL);
+            if (isset($equipelocale['max'])) {
+                $this->addUsingAlias(PartieTableMap::COL_EQUIPELOCALE, $equipelocale['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -487,7 +509,7 @@ abstract class PartieQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PartieTableMap::COL_IDEQUIPELOCALE, $idequipelocale, $comparison);
+        return $this->addUsingAlias(PartieTableMap::COL_EQUIPELOCALE, $equipelocale, $comparison);
     }
 
     /**
@@ -532,16 +554,18 @@ abstract class PartieQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the idEquipeVisite column
+     * Filter the query on the EquipeVisite column
      *
      * Example usage:
      * <code>
-     * $query->filterByIdequipevisite(1234); // WHERE idEquipeVisite = 1234
-     * $query->filterByIdequipevisite(array(12, 34)); // WHERE idEquipeVisite IN (12, 34)
-     * $query->filterByIdequipevisite(array('min' => 12)); // WHERE idEquipeVisite > 12
+     * $query->filterByEquipevisite(1234); // WHERE EquipeVisite = 1234
+     * $query->filterByEquipevisite(array(12, 34)); // WHERE EquipeVisite IN (12, 34)
+     * $query->filterByEquipevisite(array('min' => 12)); // WHERE EquipeVisite > 12
      * </code>
      *
-     * @param     mixed $idequipevisite The value to use as filter.
+     * @see       filterByAlignementRelatedByEquipevisite()
+     *
+     * @param     mixed $equipevisite The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -549,16 +573,16 @@ abstract class PartieQuery extends ModelCriteria
      *
      * @return $this|ChildPartieQuery The current query, for fluid interface
      */
-    public function filterByIdequipevisite($idequipevisite = null, $comparison = null)
+    public function filterByEquipevisite($equipevisite = null, $comparison = null)
     {
-        if (is_array($idequipevisite)) {
+        if (is_array($equipevisite)) {
             $useMinMax = false;
-            if (isset($idequipevisite['min'])) {
-                $this->addUsingAlias(PartieTableMap::COL_IDEQUIPEVISITE, $idequipevisite['min'], Criteria::GREATER_EQUAL);
+            if (isset($equipevisite['min'])) {
+                $this->addUsingAlias(PartieTableMap::COL_EQUIPEVISITE, $equipevisite['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($idequipevisite['max'])) {
-                $this->addUsingAlias(PartieTableMap::COL_IDEQUIPEVISITE, $idequipevisite['max'], Criteria::LESS_EQUAL);
+            if (isset($equipevisite['max'])) {
+                $this->addUsingAlias(PartieTableMap::COL_EQUIPEVISITE, $equipevisite['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -569,7 +593,7 @@ abstract class PartieQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PartieTableMap::COL_IDEQUIPEVISITE, $idequipevisite, $comparison);
+        return $this->addUsingAlias(PartieTableMap::COL_EQUIPEVISITE, $equipevisite, $comparison);
     }
 
     /**
@@ -627,14 +651,14 @@ abstract class PartieQuery extends ModelCriteria
     {
         if ($arena instanceof \Arena) {
             return $this
-                ->addUsingAlias(PartieTableMap::COL_IDARENA, $arena->getId(), $comparison);
+                ->addUsingAlias(PartieTableMap::COL_ARENANO, $arena->getId(), $comparison);
         } elseif ($arena instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             return $this
-                ->addUsingAlias(PartieTableMap::COL_IDARENA, $arena->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(PartieTableMap::COL_ARENANO, $arena->toKeyValue('PrimaryKey', 'Id'), $comparison);
         } else {
             throw new PropelException('filterByArena() only accepts arguments of type \Arena or Collection');
         }
@@ -688,6 +712,160 @@ abstract class PartieQuery extends ModelCriteria
         return $this
             ->joinArena($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Arena', '\ArenaQuery');
+    }
+
+    /**
+     * Filter the query by a related \Alignement object
+     *
+     * @param \Alignement|ObjectCollection $alignement The related object(s) to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return ChildPartieQuery The current query, for fluid interface
+     */
+    public function filterByAlignementRelatedByEquipelocale($alignement, $comparison = null)
+    {
+        if ($alignement instanceof \Alignement) {
+            return $this
+                ->addUsingAlias(PartieTableMap::COL_EQUIPELOCALE, $alignement->getId(), $comparison);
+        } elseif ($alignement instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(PartieTableMap::COL_EQUIPELOCALE, $alignement->toKeyValue('PrimaryKey', 'Id'), $comparison);
+        } else {
+            throw new PropelException('filterByAlignementRelatedByEquipelocale() only accepts arguments of type \Alignement or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the AlignementRelatedByEquipelocale relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildPartieQuery The current query, for fluid interface
+     */
+    public function joinAlignementRelatedByEquipelocale($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('AlignementRelatedByEquipelocale');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'AlignementRelatedByEquipelocale');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the AlignementRelatedByEquipelocale relation Alignement object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \AlignementQuery A secondary query class using the current class as primary query
+     */
+    public function useAlignementRelatedByEquipelocaleQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinAlignementRelatedByEquipelocale($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'AlignementRelatedByEquipelocale', '\AlignementQuery');
+    }
+
+    /**
+     * Filter the query by a related \Alignement object
+     *
+     * @param \Alignement|ObjectCollection $alignement The related object(s) to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return ChildPartieQuery The current query, for fluid interface
+     */
+    public function filterByAlignementRelatedByEquipevisite($alignement, $comparison = null)
+    {
+        if ($alignement instanceof \Alignement) {
+            return $this
+                ->addUsingAlias(PartieTableMap::COL_EQUIPEVISITE, $alignement->getId(), $comparison);
+        } elseif ($alignement instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(PartieTableMap::COL_EQUIPEVISITE, $alignement->toKeyValue('PrimaryKey', 'Id'), $comparison);
+        } else {
+            throw new PropelException('filterByAlignementRelatedByEquipevisite() only accepts arguments of type \Alignement or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the AlignementRelatedByEquipevisite relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildPartieQuery The current query, for fluid interface
+     */
+    public function joinAlignementRelatedByEquipevisite($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('AlignementRelatedByEquipevisite');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'AlignementRelatedByEquipevisite');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the AlignementRelatedByEquipevisite relation Alignement object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \AlignementQuery A secondary query class using the current class as primary query
+     */
+    public function useAlignementRelatedByEquipevisiteQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinAlignementRelatedByEquipevisite($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'AlignementRelatedByEquipevisite', '\AlignementQuery');
     }
 
     /**

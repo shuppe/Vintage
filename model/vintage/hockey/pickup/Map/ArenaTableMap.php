@@ -173,7 +173,7 @@ class ArenaTableMap extends TableMap
         $this->addRelation('Partie', '\\Partie', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
-    0 => ':idArena',
+    0 => ':ArenaNo',
     1 => ':id',
   ),
 ), null, null, 'Parties', false);

@@ -140,6 +140,13 @@ class PositionTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Alignement', '\\Alignement', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':PosAbbr',
+    1 => ':abbr',
+  ),
+), null, null, 'Alignements', false);
         $this->addRelation('Positionjoueur', '\\Positionjoueur', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (

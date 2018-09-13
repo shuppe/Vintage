@@ -59,7 +59,7 @@ class JoueurTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 7;
+    const NUM_COLUMNS = 8;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class JoueurTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 7;
+    const NUM_HYDRATE_COLUMNS = 8;
 
     /**
      * the column name for the id field
@@ -102,6 +102,11 @@ class JoueurTableMap extends TableMap
     const COL_STATUT = 'Joueur.statut';
 
     /**
+     * the column name for the Cote field
+     */
+    const COL_COTE = 'Joueur.Cote';
+
+    /**
      * the column name for the numero field
      */
     const COL_NUMERO = 'Joueur.numero';
@@ -118,11 +123,11 @@ class JoueurTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Nom', 'Prenom', 'Courriel', 'Telephone', 'Statut', 'Numero', ),
-        self::TYPE_CAMELNAME     => array('id', 'nom', 'prenom', 'courriel', 'telephone', 'statut', 'numero', ),
-        self::TYPE_COLNAME       => array(JoueurTableMap::COL_ID, JoueurTableMap::COL_NOM, JoueurTableMap::COL_PRENOM, JoueurTableMap::COL_COURRIEL, JoueurTableMap::COL_TELEPHONE, JoueurTableMap::COL_STATUT, JoueurTableMap::COL_NUMERO, ),
-        self::TYPE_FIELDNAME     => array('id', 'nom', 'prenom', 'courriel', 'telephone', 'statut', 'numero', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
+        self::TYPE_PHPNAME       => array('Id', 'Nom', 'Prenom', 'Courriel', 'Telephone', 'Statut', 'Cote', 'Numero', ),
+        self::TYPE_CAMELNAME     => array('id', 'nom', 'prenom', 'courriel', 'telephone', 'statut', 'cote', 'numero', ),
+        self::TYPE_COLNAME       => array(JoueurTableMap::COL_ID, JoueurTableMap::COL_NOM, JoueurTableMap::COL_PRENOM, JoueurTableMap::COL_COURRIEL, JoueurTableMap::COL_TELEPHONE, JoueurTableMap::COL_STATUT, JoueurTableMap::COL_COTE, JoueurTableMap::COL_NUMERO, ),
+        self::TYPE_FIELDNAME     => array('id', 'nom', 'prenom', 'courriel', 'telephone', 'statut', 'Cote', 'numero', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -132,11 +137,11 @@ class JoueurTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Nom' => 1, 'Prenom' => 2, 'Courriel' => 3, 'Telephone' => 4, 'Statut' => 5, 'Numero' => 6, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'nom' => 1, 'prenom' => 2, 'courriel' => 3, 'telephone' => 4, 'statut' => 5, 'numero' => 6, ),
-        self::TYPE_COLNAME       => array(JoueurTableMap::COL_ID => 0, JoueurTableMap::COL_NOM => 1, JoueurTableMap::COL_PRENOM => 2, JoueurTableMap::COL_COURRIEL => 3, JoueurTableMap::COL_TELEPHONE => 4, JoueurTableMap::COL_STATUT => 5, JoueurTableMap::COL_NUMERO => 6, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'nom' => 1, 'prenom' => 2, 'courriel' => 3, 'telephone' => 4, 'statut' => 5, 'numero' => 6, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Nom' => 1, 'Prenom' => 2, 'Courriel' => 3, 'Telephone' => 4, 'Statut' => 5, 'Cote' => 6, 'Numero' => 7, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'nom' => 1, 'prenom' => 2, 'courriel' => 3, 'telephone' => 4, 'statut' => 5, 'cote' => 6, 'numero' => 7, ),
+        self::TYPE_COLNAME       => array(JoueurTableMap::COL_ID => 0, JoueurTableMap::COL_NOM => 1, JoueurTableMap::COL_PRENOM => 2, JoueurTableMap::COL_COURRIEL => 3, JoueurTableMap::COL_TELEPHONE => 4, JoueurTableMap::COL_STATUT => 5, JoueurTableMap::COL_COTE => 6, JoueurTableMap::COL_NUMERO => 7, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'nom' => 1, 'prenom' => 2, 'courriel' => 3, 'telephone' => 4, 'statut' => 5, 'Cote' => 6, 'numero' => 7, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -162,6 +167,7 @@ class JoueurTableMap extends TableMap
         $this->addColumn('courriel', 'Courriel', 'VARCHAR', false, 100, null);
         $this->addColumn('telephone', 'Telephone', 'VARCHAR', false, 15, null);
         $this->addColumn('statut', 'Statut', 'VARCHAR', false, 1, null);
+        $this->addColumn('Cote', 'Cote', 'LONGVARCHAR', true, null, null);
         $this->addColumn('numero', 'Numero', 'INTEGER', false, 3, null);
     } // initialize()
 
@@ -170,6 +176,13 @@ class JoueurTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Alignement', '\\Alignement', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':JoueurNo',
+    1 => ':id',
+  ),
+), null, null, 'Alignements', false);
         $this->addRelation('Positionjoueur', '\\Positionjoueur', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
@@ -326,6 +339,7 @@ class JoueurTableMap extends TableMap
             $criteria->addSelectColumn(JoueurTableMap::COL_COURRIEL);
             $criteria->addSelectColumn(JoueurTableMap::COL_TELEPHONE);
             $criteria->addSelectColumn(JoueurTableMap::COL_STATUT);
+            $criteria->addSelectColumn(JoueurTableMap::COL_COTE);
             $criteria->addSelectColumn(JoueurTableMap::COL_NUMERO);
         } else {
             $criteria->addSelectColumn($alias . '.id');
@@ -334,6 +348,7 @@ class JoueurTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.courriel');
             $criteria->addSelectColumn($alias . '.telephone');
             $criteria->addSelectColumn($alias . '.statut');
+            $criteria->addSelectColumn($alias . '.Cote');
             $criteria->addSelectColumn($alias . '.numero');
         }
     }

@@ -26,6 +26,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildJoueurQuery orderByCourriel($order = Criteria::ASC) Order by the courriel column
  * @method     ChildJoueurQuery orderByTelephone($order = Criteria::ASC) Order by the telephone column
  * @method     ChildJoueurQuery orderByStatut($order = Criteria::ASC) Order by the statut column
+ * @method     ChildJoueurQuery orderByCote($order = Criteria::ASC) Order by the Cote column
  * @method     ChildJoueurQuery orderByNumero($order = Criteria::ASC) Order by the numero column
  *
  * @method     ChildJoueurQuery groupById() Group by the id column
@@ -34,6 +35,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildJoueurQuery groupByCourriel() Group by the courriel column
  * @method     ChildJoueurQuery groupByTelephone() Group by the telephone column
  * @method     ChildJoueurQuery groupByStatut() Group by the statut column
+ * @method     ChildJoueurQuery groupByCote() Group by the Cote column
  * @method     ChildJoueurQuery groupByNumero() Group by the numero column
  *
  * @method     ChildJoueurQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
@@ -43,6 +45,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildJoueurQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
  * @method     ChildJoueurQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildJoueurQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ *
+ * @method     ChildJoueurQuery leftJoinAlignement($relationAlias = null) Adds a LEFT JOIN clause to the query using the Alignement relation
+ * @method     ChildJoueurQuery rightJoinAlignement($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Alignement relation
+ * @method     ChildJoueurQuery innerJoinAlignement($relationAlias = null) Adds a INNER JOIN clause to the query using the Alignement relation
+ *
+ * @method     ChildJoueurQuery joinWithAlignement($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Alignement relation
+ *
+ * @method     ChildJoueurQuery leftJoinWithAlignement() Adds a LEFT JOIN clause and with to the query using the Alignement relation
+ * @method     ChildJoueurQuery rightJoinWithAlignement() Adds a RIGHT JOIN clause and with to the query using the Alignement relation
+ * @method     ChildJoueurQuery innerJoinWithAlignement() Adds a INNER JOIN clause and with to the query using the Alignement relation
  *
  * @method     ChildJoueurQuery leftJoinPositionjoueur($relationAlias = null) Adds a LEFT JOIN clause to the query using the Positionjoueur relation
  * @method     ChildJoueurQuery rightJoinPositionjoueur($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Positionjoueur relation
@@ -54,7 +66,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildJoueurQuery rightJoinWithPositionjoueur() Adds a RIGHT JOIN clause and with to the query using the Positionjoueur relation
  * @method     ChildJoueurQuery innerJoinWithPositionjoueur() Adds a INNER JOIN clause and with to the query using the Positionjoueur relation
  *
- * @method     \PositionjoueurQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \AlignementQuery|\PositionjoueurQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildJoueur findOne(ConnectionInterface $con = null) Return the first ChildJoueur matching the query
  * @method     ChildJoueur findOneOrCreate(ConnectionInterface $con = null) Return the first ChildJoueur matching the query, or a new ChildJoueur object populated from the query conditions when no match is found
@@ -65,6 +77,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildJoueur findOneByCourriel(string $courriel) Return the first ChildJoueur filtered by the courriel column
  * @method     ChildJoueur findOneByTelephone(string $telephone) Return the first ChildJoueur filtered by the telephone column
  * @method     ChildJoueur findOneByStatut(string $statut) Return the first ChildJoueur filtered by the statut column
+ * @method     ChildJoueur findOneByCote(string $Cote) Return the first ChildJoueur filtered by the Cote column
  * @method     ChildJoueur findOneByNumero(int $numero) Return the first ChildJoueur filtered by the numero column *
 
  * @method     ChildJoueur requirePk($key, ConnectionInterface $con = null) Return the ChildJoueur by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -76,6 +89,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildJoueur requireOneByCourriel(string $courriel) Return the first ChildJoueur filtered by the courriel column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildJoueur requireOneByTelephone(string $telephone) Return the first ChildJoueur filtered by the telephone column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildJoueur requireOneByStatut(string $statut) Return the first ChildJoueur filtered by the statut column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildJoueur requireOneByCote(string $Cote) Return the first ChildJoueur filtered by the Cote column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildJoueur requireOneByNumero(int $numero) Return the first ChildJoueur filtered by the numero column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildJoueur[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildJoueur objects based on current ModelCriteria
@@ -85,6 +99,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildJoueur[]|ObjectCollection findByCourriel(string $courriel) Return ChildJoueur objects filtered by the courriel column
  * @method     ChildJoueur[]|ObjectCollection findByTelephone(string $telephone) Return ChildJoueur objects filtered by the telephone column
  * @method     ChildJoueur[]|ObjectCollection findByStatut(string $statut) Return ChildJoueur objects filtered by the statut column
+ * @method     ChildJoueur[]|ObjectCollection findByCote(string $Cote) Return ChildJoueur objects filtered by the Cote column
  * @method     ChildJoueur[]|ObjectCollection findByNumero(int $numero) Return ChildJoueur objects filtered by the numero column
  * @method     ChildJoueur[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -184,7 +199,7 @@ abstract class JoueurQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, nom, prenom, courriel, telephone, statut, numero FROM Joueur WHERE id = :p0';
+        $sql = 'SELECT id, nom, prenom, courriel, telephone, statut, Cote, numero FROM Joueur WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -441,6 +456,31 @@ abstract class JoueurQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the Cote column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByCote('fooValue');   // WHERE Cote = 'fooValue'
+     * $query->filterByCote('%fooValue%', Criteria::LIKE); // WHERE Cote LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $cote The value to use as filter.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildJoueurQuery The current query, for fluid interface
+     */
+    public function filterByCote($cote = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($cote)) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(JoueurTableMap::COL_COTE, $cote, $comparison);
+    }
+
+    /**
      * Filter the query on the numero column
      *
      * Example usage:
@@ -479,6 +519,79 @@ abstract class JoueurQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(JoueurTableMap::COL_NUMERO, $numero, $comparison);
+    }
+
+    /**
+     * Filter the query by a related \Alignement object
+     *
+     * @param \Alignement|ObjectCollection $alignement the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildJoueurQuery The current query, for fluid interface
+     */
+    public function filterByAlignement($alignement, $comparison = null)
+    {
+        if ($alignement instanceof \Alignement) {
+            return $this
+                ->addUsingAlias(JoueurTableMap::COL_ID, $alignement->getJoueurno(), $comparison);
+        } elseif ($alignement instanceof ObjectCollection) {
+            return $this
+                ->useAlignementQuery()
+                ->filterByPrimaryKeys($alignement->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByAlignement() only accepts arguments of type \Alignement or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Alignement relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildJoueurQuery The current query, for fluid interface
+     */
+    public function joinAlignement($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Alignement');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Alignement');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Alignement relation Alignement object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \AlignementQuery A secondary query class using the current class as primary query
+     */
+    public function useAlignementQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinAlignement($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Alignement', '\AlignementQuery');
     }
 
     /**

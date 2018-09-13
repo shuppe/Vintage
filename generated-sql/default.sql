@@ -4,6 +4,36 @@
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ---------------------------------------------------------------------
+-- Alignement
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `Alignement`;
+
+CREATE TABLE `Alignement`
+(
+    `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+    `EquipeNo` int(10) unsigned NOT NULL,
+    `JoueurNo` int(10) unsigned NOT NULL,
+    `PosAbbr` VARCHAR(3) NOT NULL,
+    `But` INTEGER(2) NOT NULL,
+    `Passe` INTEGER NOT NULL,
+    `Blanchissage` INTEGER NOT NULL,
+    PRIMARY KEY (`Id`),
+    INDEX `Align_Eqfk` (`EquipeNo`),
+    INDEX `Align_Joufk` (`JoueurNo`),
+    INDEX `Align_Posfk` (`PosAbbr`),
+    CONSTRAINT `Align_Eqfk`
+        FOREIGN KEY (`EquipeNo`)
+        REFERENCES `Equipe` (`id`),
+    CONSTRAINT `Align_Joufk`
+        FOREIGN KEY (`JoueurNo`)
+        REFERENCES `Joueur` (`id`),
+    CONSTRAINT `Align_Posfk`
+        FOREIGN KEY (`PosAbbr`)
+        REFERENCES `Position` (`abbr`)
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
 -- Arena
 -- ---------------------------------------------------------------------
 
@@ -22,24 +52,6 @@ CREATE TABLE `Arena`
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
--- CompositionEquipe
--- ---------------------------------------------------------------------
-
-DROP TABLE IF EXISTS `CompositionEquipe`;
-
-CREATE TABLE `CompositionEquipe`
-(
-    `id` int(10) unsigned NOT NULL,
-    `idEquipe` int(10) unsigned NOT NULL,
-    `idJoueur` int(10) unsigned NOT NULL,
-    `position` VARCHAR(1) NOT NULL,
-    PRIMARY KEY (`id`,`idEquipe`,`idJoueur`),
-    UNIQUE INDEX `composition` (`id`, `idEquipe`, `idJoueur`),
-    INDEX `idEquipe` (`idEquipe`),
-    INDEX `idJoueur` (`idJoueur`)
-) ENGINE=InnoDB;
-
--- ---------------------------------------------------------------------
 -- Equipe
 -- ---------------------------------------------------------------------
 
@@ -47,10 +59,8 @@ DROP TABLE IF EXISTS `Equipe`;
 
 CREATE TABLE `Equipe`
 (
-    `id` int(10) unsigned NOT NULL,
-    `nom` VARCHAR(50) NOT NULL,
-    `couleur` VARCHAR(50) NOT NULL,
-    `abbrev` VARCHAR(3) NOT NULL,
+    `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+    `nom` TEXT,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -68,6 +78,7 @@ CREATE TABLE `Joueur`
     `courriel` VARCHAR(100),
     `telephone` VARCHAR(15),
     `statut` VARCHAR(1),
+    `Cote` TEXT NOT NULL,
     `numero` INTEGER(3),
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
@@ -83,16 +94,24 @@ CREATE TABLE `Partie`
     `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
     `datePartie` DATE NOT NULL,
     `Heure` TIME,
-    `idArena` int(10) unsigned,
-    `idEquipeLocale` int(10) unsigned NOT NULL,
+    `ArenaNo` int(10) unsigned,
+    `EquipeLocale` int(10) unsigned NOT NULL,
     `ptsEquipeLocale` int(3) unsigned,
-    `idEquipeVisite` int(10) unsigned NOT NULL,
+    `EquipeVisite` int(10) unsigned NOT NULL,
     `ptsEquipeVisite` int(3) unsigned,
     PRIMARY KEY (`id`),
-    INDEX `idArena` (`idArena`),
-    CONSTRAINT `Partie_ibfk_1`
-        FOREIGN KEY (`idArena`)
-        REFERENCES `Arena` (`id`)
+    INDEX `idArena` (`ArenaNo`),
+    INDEX `Partie_eqLocFk` (`EquipeLocale`),
+    INDEX `Partie_eqVisFk` (`EquipeVisite`),
+    CONSTRAINT `Partie_arenafk`
+        FOREIGN KEY (`ArenaNo`)
+        REFERENCES `Arena` (`id`),
+    CONSTRAINT `Partie_eqLocFk`
+        FOREIGN KEY (`EquipeLocale`)
+        REFERENCES `Alignement` (`Id`),
+    CONSTRAINT `Partie_eqVisFk`
+        FOREIGN KEY (`EquipeVisite`)
+        REFERENCES `Alignement` (`Id`)
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------

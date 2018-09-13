@@ -10,6 +10,7 @@ use Map\EquipeTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
+use Propel\Runtime\ActiveQuery\ModelJoin;
 use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
@@ -21,13 +22,9 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildEquipeQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     ChildEquipeQuery orderByNom($order = Criteria::ASC) Order by the nom column
- * @method     ChildEquipeQuery orderByCouleur($order = Criteria::ASC) Order by the couleur column
- * @method     ChildEquipeQuery orderByAbbrev($order = Criteria::ASC) Order by the abbrev column
  *
  * @method     ChildEquipeQuery groupById() Group by the id column
  * @method     ChildEquipeQuery groupByNom() Group by the nom column
- * @method     ChildEquipeQuery groupByCouleur() Group by the couleur column
- * @method     ChildEquipeQuery groupByAbbrev() Group by the abbrev column
  *
  * @method     ChildEquipeQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildEquipeQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -37,27 +34,33 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEquipeQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildEquipeQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
+ * @method     ChildEquipeQuery leftJoinAlignement($relationAlias = null) Adds a LEFT JOIN clause to the query using the Alignement relation
+ * @method     ChildEquipeQuery rightJoinAlignement($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Alignement relation
+ * @method     ChildEquipeQuery innerJoinAlignement($relationAlias = null) Adds a INNER JOIN clause to the query using the Alignement relation
+ *
+ * @method     ChildEquipeQuery joinWithAlignement($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Alignement relation
+ *
+ * @method     ChildEquipeQuery leftJoinWithAlignement() Adds a LEFT JOIN clause and with to the query using the Alignement relation
+ * @method     ChildEquipeQuery rightJoinWithAlignement() Adds a RIGHT JOIN clause and with to the query using the Alignement relation
+ * @method     ChildEquipeQuery innerJoinWithAlignement() Adds a INNER JOIN clause and with to the query using the Alignement relation
+ *
+ * @method     \AlignementQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ *
  * @method     ChildEquipe findOne(ConnectionInterface $con = null) Return the first ChildEquipe matching the query
  * @method     ChildEquipe findOneOrCreate(ConnectionInterface $con = null) Return the first ChildEquipe matching the query, or a new ChildEquipe object populated from the query conditions when no match is found
  *
  * @method     ChildEquipe findOneById(int $id) Return the first ChildEquipe filtered by the id column
- * @method     ChildEquipe findOneByNom(string $nom) Return the first ChildEquipe filtered by the nom column
- * @method     ChildEquipe findOneByCouleur(string $couleur) Return the first ChildEquipe filtered by the couleur column
- * @method     ChildEquipe findOneByAbbrev(string $abbrev) Return the first ChildEquipe filtered by the abbrev column *
+ * @method     ChildEquipe findOneByNom(string $nom) Return the first ChildEquipe filtered by the nom column *
 
  * @method     ChildEquipe requirePk($key, ConnectionInterface $con = null) Return the ChildEquipe by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildEquipe requireOne(ConnectionInterface $con = null) Return the first ChildEquipe matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildEquipe requireOneById(int $id) Return the first ChildEquipe filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildEquipe requireOneByNom(string $nom) Return the first ChildEquipe filtered by the nom column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildEquipe requireOneByCouleur(string $couleur) Return the first ChildEquipe filtered by the couleur column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildEquipe requireOneByAbbrev(string $abbrev) Return the first ChildEquipe filtered by the abbrev column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildEquipe[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildEquipe objects based on current ModelCriteria
  * @method     ChildEquipe[]|ObjectCollection findById(int $id) Return ChildEquipe objects filtered by the id column
  * @method     ChildEquipe[]|ObjectCollection findByNom(string $nom) Return ChildEquipe objects filtered by the nom column
- * @method     ChildEquipe[]|ObjectCollection findByCouleur(string $couleur) Return ChildEquipe objects filtered by the couleur column
- * @method     ChildEquipe[]|ObjectCollection findByAbbrev(string $abbrev) Return ChildEquipe objects filtered by the abbrev column
  * @method     ChildEquipe[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
@@ -156,7 +159,7 @@ abstract class EquipeQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, nom, couleur, abbrev FROM Equipe WHERE id = :p0';
+        $sql = 'SELECT id, nom FROM Equipe WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -313,53 +316,76 @@ abstract class EquipeQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the couleur column
+     * Filter the query by a related \Alignement object
      *
-     * Example usage:
-     * <code>
-     * $query->filterByCouleur('fooValue');   // WHERE couleur = 'fooValue'
-     * $query->filterByCouleur('%fooValue%', Criteria::LIKE); // WHERE couleur LIKE '%fooValue%'
-     * </code>
+     * @param \Alignement|ObjectCollection $alignement the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @param     string $couleur The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildEquipeQuery The current query, for fluid interface
+     * @return ChildEquipeQuery The current query, for fluid interface
      */
-    public function filterByCouleur($couleur = null, $comparison = null)
+    public function filterByAlignement($alignement, $comparison = null)
     {
-        if (null === $comparison) {
-            if (is_array($couleur)) {
-                $comparison = Criteria::IN;
-            }
+        if ($alignement instanceof \Alignement) {
+            return $this
+                ->addUsingAlias(EquipeTableMap::COL_ID, $alignement->getEquipeno(), $comparison);
+        } elseif ($alignement instanceof ObjectCollection) {
+            return $this
+                ->useAlignementQuery()
+                ->filterByPrimaryKeys($alignement->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByAlignement() only accepts arguments of type \Alignement or Collection');
         }
-
-        return $this->addUsingAlias(EquipeTableMap::COL_COULEUR, $couleur, $comparison);
     }
 
     /**
-     * Filter the query on the abbrev column
+     * Adds a JOIN clause to the query using the Alignement relation
      *
-     * Example usage:
-     * <code>
-     * $query->filterByAbbrev('fooValue');   // WHERE abbrev = 'fooValue'
-     * $query->filterByAbbrev('%fooValue%', Criteria::LIKE); // WHERE abbrev LIKE '%fooValue%'
-     * </code>
-     *
-     * @param     string $abbrev The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildEquipeQuery The current query, for fluid interface
      */
-    public function filterByAbbrev($abbrev = null, $comparison = null)
+    public function joinAlignement($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
-        if (null === $comparison) {
-            if (is_array($abbrev)) {
-                $comparison = Criteria::IN;
-            }
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Alignement');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
         }
 
-        return $this->addUsingAlias(EquipeTableMap::COL_ABBREV, $abbrev, $comparison);
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Alignement');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Alignement relation Alignement object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \AlignementQuery A secondary query class using the current class as primary query
+     */
+    public function useAlignementQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinAlignement($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Alignement', '\AlignementQuery');
     }
 
     /**

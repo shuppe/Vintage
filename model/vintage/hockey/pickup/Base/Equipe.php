@@ -2,15 +2,20 @@
 
 namespace Base;
 
+use \Alignement as ChildAlignement;
+use \AlignementQuery as ChildAlignementQuery;
+use \Equipe as ChildEquipe;
 use \EquipeQuery as ChildEquipeQuery;
 use \Exception;
 use \PDO;
+use Map\AlignementTableMap;
 use Map\EquipeTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Propel\Runtime\ActiveRecord\ActiveRecordInterface;
 use Propel\Runtime\Collection\Collection;
+use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\BadMethodCallException;
 use Propel\Runtime\Exception\LogicException;
@@ -74,18 +79,10 @@ abstract class Equipe implements ActiveRecordInterface
     protected $nom;
 
     /**
-     * The value for the couleur field.
-     *
-     * @var        string
+     * @var        ObjectCollection|ChildAlignement[] Collection to store aggregation of ChildAlignement objects.
      */
-    protected $couleur;
-
-    /**
-     * The value for the abbrev field.
-     *
-     * @var        string
-     */
-    protected $abbrev;
+    protected $collAlignements;
+    protected $collAlignementsPartial;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -94,6 +91,12 @@ abstract class Equipe implements ActiveRecordInterface
      * @var boolean
      */
     protected $alreadyInSave = false;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildAlignement[]
+     */
+    protected $alignementsScheduledForDeletion = null;
 
     /**
      * Initializes internal state of Base\Equipe object.
@@ -341,26 +344,6 @@ abstract class Equipe implements ActiveRecordInterface
     }
 
     /**
-     * Get the [couleur] column value.
-     *
-     * @return string
-     */
-    public function getCouleur()
-    {
-        return $this->couleur;
-    }
-
-    /**
-     * Get the [abbrev] column value.
-     *
-     * @return string
-     */
-    public function getAbbrev()
-    {
-        return $this->abbrev;
-    }
-
-    /**
      * Set the value of [id] column.
      *
      * @param int $v new value
@@ -399,46 +382,6 @@ abstract class Equipe implements ActiveRecordInterface
 
         return $this;
     } // setNom()
-
-    /**
-     * Set the value of [couleur] column.
-     *
-     * @param string $v new value
-     * @return $this|\Equipe The current object (for fluent API support)
-     */
-    public function setCouleur($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->couleur !== $v) {
-            $this->couleur = $v;
-            $this->modifiedColumns[EquipeTableMap::COL_COULEUR] = true;
-        }
-
-        return $this;
-    } // setCouleur()
-
-    /**
-     * Set the value of [abbrev] column.
-     *
-     * @param string $v new value
-     * @return $this|\Equipe The current object (for fluent API support)
-     */
-    public function setAbbrev($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->abbrev !== $v) {
-            $this->abbrev = $v;
-            $this->modifiedColumns[EquipeTableMap::COL_ABBREV] = true;
-        }
-
-        return $this;
-    } // setAbbrev()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -481,12 +424,6 @@ abstract class Equipe implements ActiveRecordInterface
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : EquipeTableMap::translateFieldName('Nom', TableMap::TYPE_PHPNAME, $indexType)];
             $this->nom = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : EquipeTableMap::translateFieldName('Couleur', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->couleur = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : EquipeTableMap::translateFieldName('Abbrev', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->abbrev = (null !== $col) ? (string) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -495,7 +432,7 @@ abstract class Equipe implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 4; // 4 = EquipeTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 2; // 2 = EquipeTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Equipe'), 0, $e);
@@ -555,6 +492,8 @@ abstract class Equipe implements ActiveRecordInterface
         $this->hydrate($row, 0, true, $dataFetcher->getIndexType()); // rehydrate
 
         if ($deep) {  // also de-associate any related objects?
+
+            $this->collAlignements = null;
 
         } // if (deep)
     }
@@ -670,6 +609,23 @@ abstract class Equipe implements ActiveRecordInterface
                 $this->resetModified();
             }
 
+            if ($this->alignementsScheduledForDeletion !== null) {
+                if (!$this->alignementsScheduledForDeletion->isEmpty()) {
+                    \AlignementQuery::create()
+                        ->filterByPrimaryKeys($this->alignementsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->alignementsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collAlignements !== null) {
+                foreach ($this->collAlignements as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
             $this->alreadyInSave = false;
 
         }
@@ -690,6 +646,10 @@ abstract class Equipe implements ActiveRecordInterface
         $modifiedColumns = array();
         $index = 0;
 
+        $this->modifiedColumns[EquipeTableMap::COL_ID] = true;
+        if (null !== $this->id) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . EquipeTableMap::COL_ID . ')');
+        }
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(EquipeTableMap::COL_ID)) {
@@ -697,12 +657,6 @@ abstract class Equipe implements ActiveRecordInterface
         }
         if ($this->isColumnModified(EquipeTableMap::COL_NOM)) {
             $modifiedColumns[':p' . $index++]  = 'nom';
-        }
-        if ($this->isColumnModified(EquipeTableMap::COL_COULEUR)) {
-            $modifiedColumns[':p' . $index++]  = 'couleur';
-        }
-        if ($this->isColumnModified(EquipeTableMap::COL_ABBREV)) {
-            $modifiedColumns[':p' . $index++]  = 'abbrev';
         }
 
         $sql = sprintf(
@@ -721,12 +675,6 @@ abstract class Equipe implements ActiveRecordInterface
                     case 'nom':
                         $stmt->bindValue($identifier, $this->nom, PDO::PARAM_STR);
                         break;
-                    case 'couleur':
-                        $stmt->bindValue($identifier, $this->couleur, PDO::PARAM_STR);
-                        break;
-                    case 'abbrev':
-                        $stmt->bindValue($identifier, $this->abbrev, PDO::PARAM_STR);
-                        break;
                 }
             }
             $stmt->execute();
@@ -734,6 +682,13 @@ abstract class Equipe implements ActiveRecordInterface
             Propel::log($e->getMessage(), Propel::LOG_ERR);
             throw new PropelException(sprintf('Unable to execute INSERT statement [%s]', $sql), 0, $e);
         }
+
+        try {
+            $pk = $con->lastInsertId();
+        } catch (Exception $e) {
+            throw new PropelException('Unable to get autoincrement id.', 0, $e);
+        }
+        $this->setId($pk);
 
         $this->setNew(false);
     }
@@ -788,12 +743,6 @@ abstract class Equipe implements ActiveRecordInterface
             case 1:
                 return $this->getNom();
                 break;
-            case 2:
-                return $this->getCouleur();
-                break;
-            case 3:
-                return $this->getAbbrev();
-                break;
             default:
                 return null;
                 break;
@@ -811,10 +760,11 @@ abstract class Equipe implements ActiveRecordInterface
      *                    Defaults to TableMap::TYPE_PHPNAME.
      * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
      * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
+     * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
      *
      * @return array an associative array containing the field names (as keys) and field values
      */
-    public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array())
+    public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
 
         if (isset($alreadyDumpedObjects['Equipe'][$this->hashCode()])) {
@@ -825,14 +775,29 @@ abstract class Equipe implements ActiveRecordInterface
         $result = array(
             $keys[0] => $this->getId(),
             $keys[1] => $this->getNom(),
-            $keys[2] => $this->getCouleur(),
-            $keys[3] => $this->getAbbrev(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
 
+        if ($includeForeignObjects) {
+            if (null !== $this->collAlignements) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'alignements';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'Alignements';
+                        break;
+                    default:
+                        $key = 'Alignements';
+                }
+
+                $result[$key] = $this->collAlignements->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+        }
 
         return $result;
     }
@@ -872,12 +837,6 @@ abstract class Equipe implements ActiveRecordInterface
             case 1:
                 $this->setNom($value);
                 break;
-            case 2:
-                $this->setCouleur($value);
-                break;
-            case 3:
-                $this->setAbbrev($value);
-                break;
         } // switch()
 
         return $this;
@@ -909,12 +868,6 @@ abstract class Equipe implements ActiveRecordInterface
         }
         if (array_key_exists($keys[1], $arr)) {
             $this->setNom($arr[$keys[1]]);
-        }
-        if (array_key_exists($keys[2], $arr)) {
-            $this->setCouleur($arr[$keys[2]]);
-        }
-        if (array_key_exists($keys[3], $arr)) {
-            $this->setAbbrev($arr[$keys[3]]);
         }
     }
 
@@ -962,12 +915,6 @@ abstract class Equipe implements ActiveRecordInterface
         }
         if ($this->isColumnModified(EquipeTableMap::COL_NOM)) {
             $criteria->add(EquipeTableMap::COL_NOM, $this->nom);
-        }
-        if ($this->isColumnModified(EquipeTableMap::COL_COULEUR)) {
-            $criteria->add(EquipeTableMap::COL_COULEUR, $this->couleur);
-        }
-        if ($this->isColumnModified(EquipeTableMap::COL_ABBREV)) {
-            $criteria->add(EquipeTableMap::COL_ABBREV, $this->abbrev);
         }
 
         return $criteria;
@@ -1055,12 +1002,24 @@ abstract class Equipe implements ActiveRecordInterface
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setId($this->getId());
         $copyObj->setNom($this->getNom());
-        $copyObj->setCouleur($this->getCouleur());
-        $copyObj->setAbbrev($this->getAbbrev());
+
+        if ($deepCopy) {
+            // important: temporarily setNew(false) because this affects the behavior of
+            // the getter/setter methods for fkey referrer objects.
+            $copyObj->setNew(false);
+
+            foreach ($this->getAlignements() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addAlignement($relObj->copy($deepCopy));
+                }
+            }
+
+        } // if ($deepCopy)
+
         if ($makeNew) {
             $copyObj->setNew(true);
+            $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
         }
     }
 
@@ -1086,6 +1045,298 @@ abstract class Equipe implements ActiveRecordInterface
         return $copyObj;
     }
 
+
+    /**
+     * Initializes a collection based on the name of a relation.
+     * Avoids crafting an 'init[$relationName]s' method name
+     * that wouldn't work when StandardEnglishPluralizer is used.
+     *
+     * @param      string $relationName The name of the relation to initialize
+     * @return void
+     */
+    public function initRelation($relationName)
+    {
+        if ('Alignement' == $relationName) {
+            $this->initAlignements();
+            return;
+        }
+    }
+
+    /**
+     * Clears out the collAlignements collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addAlignements()
+     */
+    public function clearAlignements()
+    {
+        $this->collAlignements = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collAlignements collection loaded partially.
+     */
+    public function resetPartialAlignements($v = true)
+    {
+        $this->collAlignementsPartial = $v;
+    }
+
+    /**
+     * Initializes the collAlignements collection.
+     *
+     * By default this just sets the collAlignements collection to an empty array (like clearcollAlignements());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initAlignements($overrideExisting = true)
+    {
+        if (null !== $this->collAlignements && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = AlignementTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collAlignements = new $collectionClassName;
+        $this->collAlignements->setModel('\Alignement');
+    }
+
+    /**
+     * Gets an array of ChildAlignement objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildEquipe is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildAlignement[] List of ChildAlignement objects
+     * @throws PropelException
+     */
+    public function getAlignements(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collAlignementsPartial && !$this->isNew();
+        if (null === $this->collAlignements || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collAlignements) {
+                // return empty collection
+                $this->initAlignements();
+            } else {
+                $collAlignements = ChildAlignementQuery::create(null, $criteria)
+                    ->filterByEquipe($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collAlignementsPartial && count($collAlignements)) {
+                        $this->initAlignements(false);
+
+                        foreach ($collAlignements as $obj) {
+                            if (false == $this->collAlignements->contains($obj)) {
+                                $this->collAlignements->append($obj);
+                            }
+                        }
+
+                        $this->collAlignementsPartial = true;
+                    }
+
+                    return $collAlignements;
+                }
+
+                if ($partial && $this->collAlignements) {
+                    foreach ($this->collAlignements as $obj) {
+                        if ($obj->isNew()) {
+                            $collAlignements[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collAlignements = $collAlignements;
+                $this->collAlignementsPartial = false;
+            }
+        }
+
+        return $this->collAlignements;
+    }
+
+    /**
+     * Sets a collection of ChildAlignement objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $alignements A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildEquipe The current object (for fluent API support)
+     */
+    public function setAlignements(Collection $alignements, ConnectionInterface $con = null)
+    {
+        /** @var ChildAlignement[] $alignementsToDelete */
+        $alignementsToDelete = $this->getAlignements(new Criteria(), $con)->diff($alignements);
+
+
+        $this->alignementsScheduledForDeletion = $alignementsToDelete;
+
+        foreach ($alignementsToDelete as $alignementRemoved) {
+            $alignementRemoved->setEquipe(null);
+        }
+
+        $this->collAlignements = null;
+        foreach ($alignements as $alignement) {
+            $this->addAlignement($alignement);
+        }
+
+        $this->collAlignements = $alignements;
+        $this->collAlignementsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Alignement objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related Alignement objects.
+     * @throws PropelException
+     */
+    public function countAlignements(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collAlignementsPartial && !$this->isNew();
+        if (null === $this->collAlignements || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collAlignements) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getAlignements());
+            }
+
+            $query = ChildAlignementQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByEquipe($this)
+                ->count($con);
+        }
+
+        return count($this->collAlignements);
+    }
+
+    /**
+     * Method called to associate a ChildAlignement object to this object
+     * through the ChildAlignement foreign key attribute.
+     *
+     * @param  ChildAlignement $l ChildAlignement
+     * @return $this|\Equipe The current object (for fluent API support)
+     */
+    public function addAlignement(ChildAlignement $l)
+    {
+        if ($this->collAlignements === null) {
+            $this->initAlignements();
+            $this->collAlignementsPartial = true;
+        }
+
+        if (!$this->collAlignements->contains($l)) {
+            $this->doAddAlignement($l);
+
+            if ($this->alignementsScheduledForDeletion and $this->alignementsScheduledForDeletion->contains($l)) {
+                $this->alignementsScheduledForDeletion->remove($this->alignementsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildAlignement $alignement The ChildAlignement object to add.
+     */
+    protected function doAddAlignement(ChildAlignement $alignement)
+    {
+        $this->collAlignements[]= $alignement;
+        $alignement->setEquipe($this);
+    }
+
+    /**
+     * @param  ChildAlignement $alignement The ChildAlignement object to remove.
+     * @return $this|ChildEquipe The current object (for fluent API support)
+     */
+    public function removeAlignement(ChildAlignement $alignement)
+    {
+        if ($this->getAlignements()->contains($alignement)) {
+            $pos = $this->collAlignements->search($alignement);
+            $this->collAlignements->remove($pos);
+            if (null === $this->alignementsScheduledForDeletion) {
+                $this->alignementsScheduledForDeletion = clone $this->collAlignements;
+                $this->alignementsScheduledForDeletion->clear();
+            }
+            $this->alignementsScheduledForDeletion[]= clone $alignement;
+            $alignement->setEquipe(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Equipe is new, it will return
+     * an empty collection; or if this Equipe has previously
+     * been saved, it will retrieve related Alignements from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Equipe.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildAlignement[] List of ChildAlignement objects
+     */
+    public function getAlignementsJoinJoueur(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildAlignementQuery::create(null, $criteria);
+        $query->joinWith('Joueur', $joinBehavior);
+
+        return $this->getAlignements($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Equipe is new, it will return
+     * an empty collection; or if this Equipe has previously
+     * been saved, it will retrieve related Alignements from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Equipe.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildAlignement[] List of ChildAlignement objects
+     */
+    public function getAlignementsJoinPosition(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildAlignementQuery::create(null, $criteria);
+        $query->joinWith('Position', $joinBehavior);
+
+        return $this->getAlignements($query, $con);
+    }
+
     /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
@@ -1095,8 +1346,6 @@ abstract class Equipe implements ActiveRecordInterface
     {
         $this->id = null;
         $this->nom = null;
-        $this->couleur = null;
-        $this->abbrev = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();
@@ -1115,8 +1364,14 @@ abstract class Equipe implements ActiveRecordInterface
     public function clearAllReferences($deep = false)
     {
         if ($deep) {
+            if ($this->collAlignements) {
+                foreach ($this->collAlignements as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
         } // if ($deep)
 
+        $this->collAlignements = null;
     }
 
     /**

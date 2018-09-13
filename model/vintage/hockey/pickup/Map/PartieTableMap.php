@@ -87,14 +87,14 @@ class PartieTableMap extends TableMap
     const COL_HEURE = 'Partie.Heure';
 
     /**
-     * the column name for the idArena field
+     * the column name for the ArenaNo field
      */
-    const COL_IDARENA = 'Partie.idArena';
+    const COL_ARENANO = 'Partie.ArenaNo';
 
     /**
-     * the column name for the idEquipeLocale field
+     * the column name for the EquipeLocale field
      */
-    const COL_IDEQUIPELOCALE = 'Partie.idEquipeLocale';
+    const COL_EQUIPELOCALE = 'Partie.EquipeLocale';
 
     /**
      * the column name for the ptsEquipeLocale field
@@ -102,9 +102,9 @@ class PartieTableMap extends TableMap
     const COL_PTSEQUIPELOCALE = 'Partie.ptsEquipeLocale';
 
     /**
-     * the column name for the idEquipeVisite field
+     * the column name for the EquipeVisite field
      */
-    const COL_IDEQUIPEVISITE = 'Partie.idEquipeVisite';
+    const COL_EQUIPEVISITE = 'Partie.EquipeVisite';
 
     /**
      * the column name for the ptsEquipeVisite field
@@ -123,10 +123,10 @@ class PartieTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Datepartie', 'Heure', 'Idarena', 'Idequipelocale', 'Ptsequipelocale', 'Idequipevisite', 'Ptsequipevisite', ),
-        self::TYPE_CAMELNAME     => array('id', 'datepartie', 'heure', 'idarena', 'idequipelocale', 'ptsequipelocale', 'idequipevisite', 'ptsequipevisite', ),
-        self::TYPE_COLNAME       => array(PartieTableMap::COL_ID, PartieTableMap::COL_DATEPARTIE, PartieTableMap::COL_HEURE, PartieTableMap::COL_IDARENA, PartieTableMap::COL_IDEQUIPELOCALE, PartieTableMap::COL_PTSEQUIPELOCALE, PartieTableMap::COL_IDEQUIPEVISITE, PartieTableMap::COL_PTSEQUIPEVISITE, ),
-        self::TYPE_FIELDNAME     => array('id', 'datePartie', 'Heure', 'idArena', 'idEquipeLocale', 'ptsEquipeLocale', 'idEquipeVisite', 'ptsEquipeVisite', ),
+        self::TYPE_PHPNAME       => array('Id', 'Datepartie', 'Heure', 'Arenano', 'Equipelocale', 'Ptsequipelocale', 'Equipevisite', 'Ptsequipevisite', ),
+        self::TYPE_CAMELNAME     => array('id', 'datepartie', 'heure', 'arenano', 'equipelocale', 'ptsequipelocale', 'equipevisite', 'ptsequipevisite', ),
+        self::TYPE_COLNAME       => array(PartieTableMap::COL_ID, PartieTableMap::COL_DATEPARTIE, PartieTableMap::COL_HEURE, PartieTableMap::COL_ARENANO, PartieTableMap::COL_EQUIPELOCALE, PartieTableMap::COL_PTSEQUIPELOCALE, PartieTableMap::COL_EQUIPEVISITE, PartieTableMap::COL_PTSEQUIPEVISITE, ),
+        self::TYPE_FIELDNAME     => array('id', 'datePartie', 'Heure', 'ArenaNo', 'EquipeLocale', 'ptsEquipeLocale', 'EquipeVisite', 'ptsEquipeVisite', ),
         self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
@@ -137,10 +137,10 @@ class PartieTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Datepartie' => 1, 'Heure' => 2, 'Idarena' => 3, 'Idequipelocale' => 4, 'Ptsequipelocale' => 5, 'Idequipevisite' => 6, 'Ptsequipevisite' => 7, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'datepartie' => 1, 'heure' => 2, 'idarena' => 3, 'idequipelocale' => 4, 'ptsequipelocale' => 5, 'idequipevisite' => 6, 'ptsequipevisite' => 7, ),
-        self::TYPE_COLNAME       => array(PartieTableMap::COL_ID => 0, PartieTableMap::COL_DATEPARTIE => 1, PartieTableMap::COL_HEURE => 2, PartieTableMap::COL_IDARENA => 3, PartieTableMap::COL_IDEQUIPELOCALE => 4, PartieTableMap::COL_PTSEQUIPELOCALE => 5, PartieTableMap::COL_IDEQUIPEVISITE => 6, PartieTableMap::COL_PTSEQUIPEVISITE => 7, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'datePartie' => 1, 'Heure' => 2, 'idArena' => 3, 'idEquipeLocale' => 4, 'ptsEquipeLocale' => 5, 'idEquipeVisite' => 6, 'ptsEquipeVisite' => 7, ),
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Datepartie' => 1, 'Heure' => 2, 'Arenano' => 3, 'Equipelocale' => 4, 'Ptsequipelocale' => 5, 'Equipevisite' => 6, 'Ptsequipevisite' => 7, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'datepartie' => 1, 'heure' => 2, 'arenano' => 3, 'equipelocale' => 4, 'ptsequipelocale' => 5, 'equipevisite' => 6, 'ptsequipevisite' => 7, ),
+        self::TYPE_COLNAME       => array(PartieTableMap::COL_ID => 0, PartieTableMap::COL_DATEPARTIE => 1, PartieTableMap::COL_HEURE => 2, PartieTableMap::COL_ARENANO => 3, PartieTableMap::COL_EQUIPELOCALE => 4, PartieTableMap::COL_PTSEQUIPELOCALE => 5, PartieTableMap::COL_EQUIPEVISITE => 6, PartieTableMap::COL_PTSEQUIPEVISITE => 7, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'datePartie' => 1, 'Heure' => 2, 'ArenaNo' => 3, 'EquipeLocale' => 4, 'ptsEquipeLocale' => 5, 'EquipeVisite' => 6, 'ptsEquipeVisite' => 7, ),
         self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
@@ -164,10 +164,10 @@ class PartieTableMap extends TableMap
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, 10, null);
         $this->addColumn('datePartie', 'Datepartie', 'DATE', true, null, null);
         $this->addColumn('Heure', 'Heure', 'TIME', false, null, null);
-        $this->addForeignKey('idArena', 'Idarena', 'INTEGER', 'Arena', 'id', false, 10, null);
-        $this->addColumn('idEquipeLocale', 'Idequipelocale', 'INTEGER', true, 10, null);
+        $this->addForeignKey('ArenaNo', 'Arenano', 'INTEGER', 'Arena', 'id', false, 10, null);
+        $this->addForeignKey('EquipeLocale', 'Equipelocale', 'INTEGER', 'Alignement', 'Id', true, 10, null);
         $this->addColumn('ptsEquipeLocale', 'Ptsequipelocale', 'INTEGER', false, 3, null);
-        $this->addColumn('idEquipeVisite', 'Idequipevisite', 'INTEGER', true, 10, null);
+        $this->addForeignKey('EquipeVisite', 'Equipevisite', 'INTEGER', 'Alignement', 'Id', true, 10, null);
         $this->addColumn('ptsEquipeVisite', 'Ptsequipevisite', 'INTEGER', false, 3, null);
     } // initialize()
 
@@ -179,8 +179,22 @@ class PartieTableMap extends TableMap
         $this->addRelation('Arena', '\\Arena', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
-    0 => ':idArena',
+    0 => ':ArenaNo',
     1 => ':id',
+  ),
+), null, null, null, false);
+        $this->addRelation('AlignementRelatedByEquipelocale', '\\Alignement', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':EquipeLocale',
+    1 => ':Id',
+  ),
+), null, null, null, false);
+        $this->addRelation('AlignementRelatedByEquipevisite', '\\Alignement', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':EquipeVisite',
+    1 => ':Id',
   ),
 ), null, null, null, false);
     } // buildRelations()
@@ -329,19 +343,19 @@ class PartieTableMap extends TableMap
             $criteria->addSelectColumn(PartieTableMap::COL_ID);
             $criteria->addSelectColumn(PartieTableMap::COL_DATEPARTIE);
             $criteria->addSelectColumn(PartieTableMap::COL_HEURE);
-            $criteria->addSelectColumn(PartieTableMap::COL_IDARENA);
-            $criteria->addSelectColumn(PartieTableMap::COL_IDEQUIPELOCALE);
+            $criteria->addSelectColumn(PartieTableMap::COL_ARENANO);
+            $criteria->addSelectColumn(PartieTableMap::COL_EQUIPELOCALE);
             $criteria->addSelectColumn(PartieTableMap::COL_PTSEQUIPELOCALE);
-            $criteria->addSelectColumn(PartieTableMap::COL_IDEQUIPEVISITE);
+            $criteria->addSelectColumn(PartieTableMap::COL_EQUIPEVISITE);
             $criteria->addSelectColumn(PartieTableMap::COL_PTSEQUIPEVISITE);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.datePartie');
             $criteria->addSelectColumn($alias . '.Heure');
-            $criteria->addSelectColumn($alias . '.idArena');
-            $criteria->addSelectColumn($alias . '.idEquipeLocale');
+            $criteria->addSelectColumn($alias . '.ArenaNo');
+            $criteria->addSelectColumn($alias . '.EquipeLocale');
             $criteria->addSelectColumn($alias . '.ptsEquipeLocale');
-            $criteria->addSelectColumn($alias . '.idEquipeVisite');
+            $criteria->addSelectColumn($alias . '.EquipeVisite');
             $criteria->addSelectColumn($alias . '.ptsEquipeVisite');
         }
     }

@@ -1,5 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<database name="default" defaultIdMethod="native" namespace="vintage.hockey.pickup" defaultPhpNamingMethod="underscore">
+<database name="default" defaultIdMethod="native" namespace="vintage\hockey\pickup" defaultPhpNamingMethod="underscore">
+  <table name="Alignement" idMethod="native" phpName="Alignement">
+    <column name="Id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="EquipeNo" phpName="Equipeno" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" required="true"/>
+    <column name="JoueurNo" phpName="Joueurno" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" required="true"/>
+    <column name="PosAbbr" phpName="Posabbr" type="VARCHAR" size="3" required="true"/>
+    <column name="But" phpName="But" type="INTEGER" size="2" required="true"/>
+    <column name="Passe" phpName="Passe" type="INTEGER" required="true"/>
+    <column name="Blanchissage" phpName="Blanchissage" type="INTEGER" required="true"/>
+    <foreign-key foreignTable="Equipe" name="Align_Eqfk">
+      <reference local="EquipeNo" foreign="id"/>
+    </foreign-key>
+    <foreign-key foreignTable="Joueur" name="Align_Joufk">
+      <reference local="JoueurNo" foreign="id"/>
+    </foreign-key>
+    <foreign-key foreignTable="Position" name="Align_Posfk">
+      <reference local="PosAbbr" foreign="abbr"/>
+    </foreign-key>
+    <index name="Align_Eqfk">
+      <index-column name="EquipeNo"/>
+    </index>
+    <index name="Align_Joufk">
+      <index-column name="JoueurNo"/>
+    </index>
+    <index name="Align_Posfk">
+      <index-column name="PosAbbr"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
   <table name="Arena" idMethod="native" phpName="Arena">
     <column name="id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="Nom" phpName="Nom" type="VARCHAR" size="100" required="true"/>
@@ -12,31 +42,9 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="CompositionEquipe" idMethod="native" phpName="Compositionequipe">
-    <column name="id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" required="true"/>
-    <column name="idEquipe" phpName="Idequipe" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" required="true"/>
-    <column name="idJoueur" phpName="Idjoueur" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" required="true"/>
-    <column name="position" phpName="Position" type="VARCHAR" size="1" required="true"/>
-    <index name="idEquipe">
-      <index-column name="idEquipe"/>
-    </index>
-    <index name="idJoueur">
-      <index-column name="idJoueur"/>
-    </index>
-    <unique name="composition">
-      <unique-column name="id"/>
-      <unique-column name="idEquipe"/>
-      <unique-column name="idJoueur"/>
-    </unique>
-    <vendor type="mysql">
-      <parameter name="Engine" value="InnoDB"/>
-    </vendor>
-  </table>
   <table name="Equipe" idMethod="native" phpName="Equipe">
-    <column name="id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" required="true"/>
-    <column name="nom" phpName="Nom" type="VARCHAR" size="50" required="true"/>
-    <column name="couleur" phpName="Couleur" type="VARCHAR" size="50" required="true"/>
-    <column name="abbrev" phpName="Abbrev" type="VARCHAR" size="3" required="true"/>
+    <column name="id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="nom" phpName="Nom" type="LONGVARCHAR"/>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
@@ -48,6 +56,7 @@
     <column name="courriel" phpName="Courriel" type="VARCHAR" size="100"/>
     <column name="telephone" phpName="Telephone" type="VARCHAR" size="15"/>
     <column name="statut" phpName="Statut" type="VARCHAR" size="1"/>
+    <column name="Cote" phpName="Cote" type="LONGVARCHAR" required="true"/>
     <column name="numero" phpName="Numero" type="INTEGER" size="3"/>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
@@ -57,16 +66,28 @@
     <column name="id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="datePartie" phpName="Datepartie" type="DATE" required="true"/>
     <column name="Heure" phpName="Heure" type="TIME"/>
-    <column name="idArena" phpName="Idarena" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
-    <column name="idEquipeLocale" phpName="Idequipelocale" type="INTEGER" size="10" sqlType="int(10) unsigned" required="true"/>
+    <column name="ArenaNo" phpName="Arenano" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="EquipeLocale" phpName="Equipelocale" type="INTEGER" size="10" sqlType="int(10) unsigned" required="true"/>
     <column name="ptsEquipeLocale" phpName="Ptsequipelocale" type="INTEGER" size="3" sqlType="int(3) unsigned"/>
-    <column name="idEquipeVisite" phpName="Idequipevisite" type="INTEGER" size="10" sqlType="int(10) unsigned" required="true"/>
+    <column name="EquipeVisite" phpName="Equipevisite" type="INTEGER" size="10" sqlType="int(10) unsigned" required="true"/>
     <column name="ptsEquipeVisite" phpName="Ptsequipevisite" type="INTEGER" size="3" sqlType="int(3) unsigned"/>
-    <foreign-key foreignTable="Arena" name="Partie_ibfk_1">
-      <reference local="idArena" foreign="id"/>
+    <foreign-key foreignTable="Arena" name="Partie_arenafk">
+      <reference local="ArenaNo" foreign="id"/>
+    </foreign-key>
+    <foreign-key foreignTable="Alignement" name="Partie_eqLocFk">
+      <reference local="EquipeLocale" foreign="Id"/>
+    </foreign-key>
+    <foreign-key foreignTable="Alignement" name="Partie_eqVisFk">
+      <reference local="EquipeVisite" foreign="Id"/>
     </foreign-key>
     <index name="idArena">
-      <index-column name="idArena"/>
+      <index-column name="ArenaNo"/>
+    </index>
+    <index name="Partie_eqLocFk">
+      <index-column name="EquipeLocale"/>
+    </index>
+    <index name="Partie_eqVisFk">
+      <index-column name="EquipeVisite"/>
     </index>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>

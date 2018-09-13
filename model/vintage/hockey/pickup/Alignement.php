@@ -1,9 +1,9 @@
 <?php
 
-use Base\Compositionequipe as BaseCompositionequipe;
+use Base\Alignement as BaseAlignement;
 
 /**
- * Skeleton subclass for representing a row from the 'CompositionEquipe' table.
+ * Skeleton subclass for representing a row from the 'Alignement' table.
  *
  *
  *
@@ -12,7 +12,7 @@ use Base\Compositionequipe as BaseCompositionequipe;
  * long as it does not already exist in the output directory.
  *
  */
-class Compositionequipe extends BaseCompositionequipe
+class Alignement extends BaseAlignement
 {
 
 }

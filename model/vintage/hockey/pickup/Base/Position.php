@@ -2,12 +2,15 @@
 
 namespace Base;
 
+use \Alignement as ChildAlignement;
+use \AlignementQuery as ChildAlignementQuery;
 use \Position as ChildPosition;
 use \PositionQuery as ChildPositionQuery;
 use \Positionjoueur as ChildPositionjoueur;
 use \PositionjoueurQuery as ChildPositionjoueurQuery;
 use \Exception;
 use \PDO;
+use Map\AlignementTableMap;
 use Map\PositionTableMap;
 use Map\PositionjoueurTableMap;
 use Propel\Runtime\Propel;
@@ -79,6 +82,12 @@ abstract class Position implements ActiveRecordInterface
     protected $nom;
 
     /**
+     * @var        ObjectCollection|ChildAlignement[] Collection to store aggregation of ChildAlignement objects.
+     */
+    protected $collAlignements;
+    protected $collAlignementsPartial;
+
+    /**
      * @var        ObjectCollection|ChildPositionjoueur[] Collection to store aggregation of ChildPositionjoueur objects.
      */
     protected $collPositionjoueurs;
@@ -91,6 +100,12 @@ abstract class Position implements ActiveRecordInterface
      * @var boolean
      */
     protected $alreadyInSave = false;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildAlignement[]
+     */
+    protected $alignementsScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -493,6 +508,8 @@ abstract class Position implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->collAlignements = null;
+
             $this->collPositionjoueurs = null;
 
         } // if (deep)
@@ -607,6 +624,23 @@ abstract class Position implements ActiveRecordInterface
                     $affectedRows += $this->doUpdate($con);
                 }
                 $this->resetModified();
+            }
+
+            if ($this->alignementsScheduledForDeletion !== null) {
+                if (!$this->alignementsScheduledForDeletion->isEmpty()) {
+                    \AlignementQuery::create()
+                        ->filterByPrimaryKeys($this->alignementsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->alignementsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collAlignements !== null) {
+                foreach ($this->collAlignements as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
             }
 
             if ($this->positionjoueursScheduledForDeletion !== null) {
@@ -771,6 +805,21 @@ abstract class Position implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
+            if (null !== $this->collAlignements) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'alignements';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'Alignements';
+                        break;
+                    default:
+                        $key = 'Alignements';
+                }
+
+                $result[$key] = $this->collAlignements->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
             if (null !== $this->collPositionjoueurs) {
 
                 switch ($keyType) {
@@ -999,6 +1048,12 @@ abstract class Position implements ActiveRecordInterface
             // the getter/setter methods for fkey referrer objects.
             $copyObj->setNew(false);
 
+            foreach ($this->getAlignements() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addAlignement($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getPositionjoueurs() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addPositionjoueur($relObj->copy($deepCopy));
@@ -1045,10 +1100,289 @@ abstract class Position implements ActiveRecordInterface
      */
     public function initRelation($relationName)
     {
+        if ('Alignement' == $relationName) {
+            $this->initAlignements();
+            return;
+        }
         if ('Positionjoueur' == $relationName) {
             $this->initPositionjoueurs();
             return;
         }
+    }
+
+    /**
+     * Clears out the collAlignements collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addAlignements()
+     */
+    public function clearAlignements()
+    {
+        $this->collAlignements = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collAlignements collection loaded partially.
+     */
+    public function resetPartialAlignements($v = true)
+    {
+        $this->collAlignementsPartial = $v;
+    }
+
+    /**
+     * Initializes the collAlignements collection.
+     *
+     * By default this just sets the collAlignements collection to an empty array (like clearcollAlignements());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initAlignements($overrideExisting = true)
+    {
+        if (null !== $this->collAlignements && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = AlignementTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collAlignements = new $collectionClassName;
+        $this->collAlignements->setModel('\Alignement');
+    }
+
+    /**
+     * Gets an array of ChildAlignement objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildPosition is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildAlignement[] List of ChildAlignement objects
+     * @throws PropelException
+     */
+    public function getAlignements(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collAlignementsPartial && !$this->isNew();
+        if (null === $this->collAlignements || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collAlignements) {
+                // return empty collection
+                $this->initAlignements();
+            } else {
+                $collAlignements = ChildAlignementQuery::create(null, $criteria)
+                    ->filterByPosition($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collAlignementsPartial && count($collAlignements)) {
+                        $this->initAlignements(false);
+
+                        foreach ($collAlignements as $obj) {
+                            if (false == $this->collAlignements->contains($obj)) {
+                                $this->collAlignements->append($obj);
+                            }
+                        }
+
+                        $this->collAlignementsPartial = true;
+                    }
+
+                    return $collAlignements;
+                }
+
+                if ($partial && $this->collAlignements) {
+                    foreach ($this->collAlignements as $obj) {
+                        if ($obj->isNew()) {
+                            $collAlignements[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collAlignements = $collAlignements;
+                $this->collAlignementsPartial = false;
+            }
+        }
+
+        return $this->collAlignements;
+    }
+
+    /**
+     * Sets a collection of ChildAlignement objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $alignements A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildPosition The current object (for fluent API support)
+     */
+    public function setAlignements(Collection $alignements, ConnectionInterface $con = null)
+    {
+        /** @var ChildAlignement[] $alignementsToDelete */
+        $alignementsToDelete = $this->getAlignements(new Criteria(), $con)->diff($alignements);
+
+
+        $this->alignementsScheduledForDeletion = $alignementsToDelete;
+
+        foreach ($alignementsToDelete as $alignementRemoved) {
+            $alignementRemoved->setPosition(null);
+        }
+
+        $this->collAlignements = null;
+        foreach ($alignements as $alignement) {
+            $this->addAlignement($alignement);
+        }
+
+        $this->collAlignements = $alignements;
+        $this->collAlignementsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Alignement objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related Alignement objects.
+     * @throws PropelException
+     */
+    public function countAlignements(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collAlignementsPartial && !$this->isNew();
+        if (null === $this->collAlignements || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collAlignements) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getAlignements());
+            }
+
+            $query = ChildAlignementQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByPosition($this)
+                ->count($con);
+        }
+
+        return count($this->collAlignements);
+    }
+
+    /**
+     * Method called to associate a ChildAlignement object to this object
+     * through the ChildAlignement foreign key attribute.
+     *
+     * @param  ChildAlignement $l ChildAlignement
+     * @return $this|\Position The current object (for fluent API support)
+     */
+    public function addAlignement(ChildAlignement $l)
+    {
+        if ($this->collAlignements === null) {
+            $this->initAlignements();
+            $this->collAlignementsPartial = true;
+        }
+
+        if (!$this->collAlignements->contains($l)) {
+            $this->doAddAlignement($l);
+
+            if ($this->alignementsScheduledForDeletion and $this->alignementsScheduledForDeletion->contains($l)) {
+                $this->alignementsScheduledForDeletion->remove($this->alignementsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildAlignement $alignement The ChildAlignement object to add.
+     */
+    protected function doAddAlignement(ChildAlignement $alignement)
+    {
+        $this->collAlignements[]= $alignement;
+        $alignement->setPosition($this);
+    }
+
+    /**
+     * @param  ChildAlignement $alignement The ChildAlignement object to remove.
+     * @return $this|ChildPosition The current object (for fluent API support)
+     */
+    public function removeAlignement(ChildAlignement $alignement)
+    {
+        if ($this->getAlignements()->contains($alignement)) {
+            $pos = $this->collAlignements->search($alignement);
+            $this->collAlignements->remove($pos);
+            if (null === $this->alignementsScheduledForDeletion) {
+                $this->alignementsScheduledForDeletion = clone $this->collAlignements;
+                $this->alignementsScheduledForDeletion->clear();
+            }
+            $this->alignementsScheduledForDeletion[]= clone $alignement;
+            $alignement->setPosition(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Position is new, it will return
+     * an empty collection; or if this Position has previously
+     * been saved, it will retrieve related Alignements from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Position.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildAlignement[] List of ChildAlignement objects
+     */
+    public function getAlignementsJoinEquipe(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildAlignementQuery::create(null, $criteria);
+        $query->joinWith('Equipe', $joinBehavior);
+
+        return $this->getAlignements($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Position is new, it will return
+     * an empty collection; or if this Position has previously
+     * been saved, it will retrieve related Alignements from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Position.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildAlignement[] List of ChildAlignement objects
+     */
+    public function getAlignementsJoinJoueur(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildAlignementQuery::create(null, $criteria);
+        $query->joinWith('Joueur', $joinBehavior);
+
+        return $this->getAlignements($query, $con);
     }
 
     /**
@@ -1328,6 +1662,11 @@ abstract class Position implements ActiveRecordInterface
     public function clearAllReferences($deep = false)
     {
         if ($deep) {
+            if ($this->collAlignements) {
+                foreach ($this->collAlignements as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collPositionjoueurs) {
                 foreach ($this->collPositionjoueurs as $o) {
                     $o->clearAllReferences($deep);
@@ -1335,6 +1674,7 @@ abstract class Position implements ActiveRecordInterface
             }
         } // if ($deep)
 
+        $this->collAlignements = null;
         $this->collPositionjoueurs = null;
     }
 

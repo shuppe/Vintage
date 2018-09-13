@@ -4,15 +4,18 @@ namespace Base;
 
 use \Alignement as ChildAlignement;
 use \AlignementQuery as ChildAlignementQuery;
+use \Equipe as ChildEquipe;
+use \EquipeQuery as ChildEquipeQuery;
 use \Joueur as ChildJoueur;
 use \JoueurQuery as ChildJoueurQuery;
-use \Positionjoueur as ChildPositionjoueur;
-use \PositionjoueurQuery as ChildPositionjoueurQuery;
+use \Partie as ChildPartie;
+use \PartieQuery as ChildPartieQuery;
+use \Position as ChildPosition;
+use \PositionQuery as ChildPositionQuery;
 use \Exception;
 use \PDO;
 use Map\AlignementTableMap;
-use Map\JoueurTableMap;
-use Map\PositionjoueurTableMap;
+use Map\PartieTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -27,18 +30,18 @@ use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Parser\AbstractParser;
 
 /**
- * Base class that represents a row from the 'Joueur' table.
+ * Base class that represents a row from the 'Alignement' table.
  *
  *
  *
  * @package    propel.generator.vintage.hockey.pickup.Base
  */
-abstract class Joueur implements ActiveRecordInterface
+abstract class Alignement implements ActiveRecordInterface
 {
     /**
      * TableMap class name
      */
-    const TABLE_MAP = '\\Map\\JoueurTableMap';
+    const TABLE_MAP = '\\Map\\AlignementTableMap';
 
 
     /**
@@ -75,65 +78,73 @@ abstract class Joueur implements ActiveRecordInterface
     protected $id;
 
     /**
-     * The value for the nom field.
-     *
-     * @var        string
-     */
-    protected $nom;
-
-    /**
-     * The value for the prenom field.
-     *
-     * @var        string
-     */
-    protected $prenom;
-
-    /**
-     * The value for the courriel field.
-     *
-     * @var        string
-     */
-    protected $courriel;
-
-    /**
-     * The value for the telephone field.
-     *
-     * @var        string
-     */
-    protected $telephone;
-
-    /**
-     * The value for the statut field.
-     *
-     * @var        string
-     */
-    protected $statut;
-
-    /**
-     * The value for the cote field.
-     *
-     * @var        string
-     */
-    protected $cote;
-
-    /**
-     * The value for the numero field.
+     * The value for the equipeno field.
      *
      * @var        int
      */
-    protected $numero;
+    protected $equipeno;
 
     /**
-     * @var        ObjectCollection|ChildAlignement[] Collection to store aggregation of ChildAlignement objects.
+     * The value for the joueurno field.
+     *
+     * @var        int
      */
-    protected $collAlignements;
-    protected $collAlignementsPartial;
+    protected $joueurno;
 
     /**
-     * @var        ObjectCollection|ChildPositionjoueur[] Collection to store aggregation of ChildPositionjoueur objects.
+     * The value for the posabbr field.
+     *
+     * @var        string
      */
-    protected $collPositionjoueurs;
-    protected $collPositionjoueursPartial;
+    protected $posabbr;
+
+    /**
+     * The value for the but field.
+     *
+     * @var        int
+     */
+    protected $but;
+
+    /**
+     * The value for the passe field.
+     *
+     * @var        int
+     */
+    protected $passe;
+
+    /**
+     * The value for the blanchissage field.
+     *
+     * @var        int
+     */
+    protected $blanchissage;
+
+    /**
+     * @var        ChildEquipe
+     */
+    protected $aEquipe;
+
+    /**
+     * @var        ChildJoueur
+     */
+    protected $aJoueur;
+
+    /**
+     * @var        ChildPosition
+     */
+    protected $aPosition;
+
+    /**
+     * @var        ObjectCollection|ChildPartie[] Collection to store aggregation of ChildPartie objects.
+     */
+    protected $collPartiesRelatedByEquipelocale;
+    protected $collPartiesRelatedByEquipelocalePartial;
+
+    /**
+     * @var        ObjectCollection|ChildPartie[] Collection to store aggregation of ChildPartie objects.
+     */
+    protected $collPartiesRelatedByEquipevisite;
+    protected $collPartiesRelatedByEquipevisitePartial;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -145,18 +156,18 @@ abstract class Joueur implements ActiveRecordInterface
 
     /**
      * An array of objects scheduled for deletion.
-     * @var ObjectCollection|ChildAlignement[]
+     * @var ObjectCollection|ChildPartie[]
      */
-    protected $alignementsScheduledForDeletion = null;
+    protected $partiesRelatedByEquipelocaleScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
-     * @var ObjectCollection|ChildPositionjoueur[]
+     * @var ObjectCollection|ChildPartie[]
      */
-    protected $positionjoueursScheduledForDeletion = null;
+    protected $partiesRelatedByEquipevisiteScheduledForDeletion = null;
 
     /**
-     * Initializes internal state of Base\Joueur object.
+     * Initializes internal state of Base\Alignement object.
      */
     public function __construct()
     {
@@ -251,9 +262,9 @@ abstract class Joueur implements ActiveRecordInterface
     }
 
     /**
-     * Compares this with another <code>Joueur</code> instance.  If
-     * <code>obj</code> is an instance of <code>Joueur</code>, delegates to
-     * <code>equals(Joueur)</code>.  Otherwise, returns <code>false</code>.
+     * Compares this with another <code>Alignement</code> instance.  If
+     * <code>obj</code> is an instance of <code>Alignement</code>, delegates to
+     * <code>equals(Alignement)</code>.  Otherwise, returns <code>false</code>.
      *
      * @param  mixed   $obj The object to compare to.
      * @return boolean Whether equal to the object specified.
@@ -319,7 +330,7 @@ abstract class Joueur implements ActiveRecordInterface
      * @param string $name  The virtual column name
      * @param mixed  $value The value to give to the virtual column
      *
-     * @return $this|Joueur The current object, for fluid interface
+     * @return $this|Alignement The current object, for fluid interface
      */
     public function setVirtualColumn($name, $value)
     {
@@ -391,80 +402,70 @@ abstract class Joueur implements ActiveRecordInterface
     }
 
     /**
-     * Get the [nom] column value.
-     *
-     * @return string
-     */
-    public function getNom()
-    {
-        return $this->nom;
-    }
-
-    /**
-     * Get the [prenom] column value.
-     *
-     * @return string
-     */
-    public function getPrenom()
-    {
-        return $this->prenom;
-    }
-
-    /**
-     * Get the [courriel] column value.
-     *
-     * @return string
-     */
-    public function getCourriel()
-    {
-        return $this->courriel;
-    }
-
-    /**
-     * Get the [telephone] column value.
-     *
-     * @return string
-     */
-    public function getTelephone()
-    {
-        return $this->telephone;
-    }
-
-    /**
-     * Get the [statut] column value.
-     *
-     * @return string
-     */
-    public function getStatut()
-    {
-        return $this->statut;
-    }
-
-    /**
-     * Get the [cote] column value.
-     *
-     * @return string
-     */
-    public function getCote()
-    {
-        return $this->cote;
-    }
-
-    /**
-     * Get the [numero] column value.
+     * Get the [equipeno] column value.
      *
      * @return int
      */
-    public function getNumero()
+    public function getEquipeno()
     {
-        return $this->numero;
+        return $this->equipeno;
+    }
+
+    /**
+     * Get the [joueurno] column value.
+     *
+     * @return int
+     */
+    public function getJoueurno()
+    {
+        return $this->joueurno;
+    }
+
+    /**
+     * Get the [posabbr] column value.
+     *
+     * @return string
+     */
+    public function getPosabbr()
+    {
+        return $this->posabbr;
+    }
+
+    /**
+     * Get the [but] column value.
+     *
+     * @return int
+     */
+    public function getBut()
+    {
+        return $this->but;
+    }
+
+    /**
+     * Get the [passe] column value.
+     *
+     * @return int
+     */
+    public function getPasse()
+    {
+        return $this->passe;
+    }
+
+    /**
+     * Get the [blanchissage] column value.
+     *
+     * @return int
+     */
+    public function getBlanchissage()
+    {
+        return $this->blanchissage;
     }
 
     /**
      * Set the value of [id] column.
      *
      * @param int $v new value
-     * @return $this|\Joueur The current object (for fluent API support)
+     * @return $this|\Alignement The current object (for fluent API support)
      */
     public function setId($v)
     {
@@ -474,151 +475,143 @@ abstract class Joueur implements ActiveRecordInterface
 
         if ($this->id !== $v) {
             $this->id = $v;
-            $this->modifiedColumns[JoueurTableMap::COL_ID] = true;
+            $this->modifiedColumns[AlignementTableMap::COL_ID] = true;
         }
 
         return $this;
     } // setId()
 
     /**
-     * Set the value of [nom] column.
-     *
-     * @param string $v new value
-     * @return $this|\Joueur The current object (for fluent API support)
-     */
-    public function setNom($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->nom !== $v) {
-            $this->nom = $v;
-            $this->modifiedColumns[JoueurTableMap::COL_NOM] = true;
-        }
-
-        return $this;
-    } // setNom()
-
-    /**
-     * Set the value of [prenom] column.
-     *
-     * @param string $v new value
-     * @return $this|\Joueur The current object (for fluent API support)
-     */
-    public function setPrenom($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->prenom !== $v) {
-            $this->prenom = $v;
-            $this->modifiedColumns[JoueurTableMap::COL_PRENOM] = true;
-        }
-
-        return $this;
-    } // setPrenom()
-
-    /**
-     * Set the value of [courriel] column.
-     *
-     * @param string $v new value
-     * @return $this|\Joueur The current object (for fluent API support)
-     */
-    public function setCourriel($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->courriel !== $v) {
-            $this->courriel = $v;
-            $this->modifiedColumns[JoueurTableMap::COL_COURRIEL] = true;
-        }
-
-        return $this;
-    } // setCourriel()
-
-    /**
-     * Set the value of [telephone] column.
-     *
-     * @param string $v new value
-     * @return $this|\Joueur The current object (for fluent API support)
-     */
-    public function setTelephone($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->telephone !== $v) {
-            $this->telephone = $v;
-            $this->modifiedColumns[JoueurTableMap::COL_TELEPHONE] = true;
-        }
-
-        return $this;
-    } // setTelephone()
-
-    /**
-     * Set the value of [statut] column.
-     *
-     * @param string $v new value
-     * @return $this|\Joueur The current object (for fluent API support)
-     */
-    public function setStatut($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->statut !== $v) {
-            $this->statut = $v;
-            $this->modifiedColumns[JoueurTableMap::COL_STATUT] = true;
-        }
-
-        return $this;
-    } // setStatut()
-
-    /**
-     * Set the value of [cote] column.
-     *
-     * @param string $v new value
-     * @return $this|\Joueur The current object (for fluent API support)
-     */
-    public function setCote($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->cote !== $v) {
-            $this->cote = $v;
-            $this->modifiedColumns[JoueurTableMap::COL_COTE] = true;
-        }
-
-        return $this;
-    } // setCote()
-
-    /**
-     * Set the value of [numero] column.
+     * Set the value of [equipeno] column.
      *
      * @param int $v new value
-     * @return $this|\Joueur The current object (for fluent API support)
+     * @return $this|\Alignement The current object (for fluent API support)
      */
-    public function setNumero($v)
+    public function setEquipeno($v)
     {
         if ($v !== null) {
             $v = (int) $v;
         }
 
-        if ($this->numero !== $v) {
-            $this->numero = $v;
-            $this->modifiedColumns[JoueurTableMap::COL_NUMERO] = true;
+        if ($this->equipeno !== $v) {
+            $this->equipeno = $v;
+            $this->modifiedColumns[AlignementTableMap::COL_EQUIPENO] = true;
+        }
+
+        if ($this->aEquipe !== null && $this->aEquipe->getId() !== $v) {
+            $this->aEquipe = null;
         }
 
         return $this;
-    } // setNumero()
+    } // setEquipeno()
+
+    /**
+     * Set the value of [joueurno] column.
+     *
+     * @param int $v new value
+     * @return $this|\Alignement The current object (for fluent API support)
+     */
+    public function setJoueurno($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->joueurno !== $v) {
+            $this->joueurno = $v;
+            $this->modifiedColumns[AlignementTableMap::COL_JOUEURNO] = true;
+        }
+
+        if ($this->aJoueur !== null && $this->aJoueur->getId() !== $v) {
+            $this->aJoueur = null;
+        }
+
+        return $this;
+    } // setJoueurno()
+
+    /**
+     * Set the value of [posabbr] column.
+     *
+     * @param string $v new value
+     * @return $this|\Alignement The current object (for fluent API support)
+     */
+    public function setPosabbr($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->posabbr !== $v) {
+            $this->posabbr = $v;
+            $this->modifiedColumns[AlignementTableMap::COL_POSABBR] = true;
+        }
+
+        if ($this->aPosition !== null && $this->aPosition->getAbbr() !== $v) {
+            $this->aPosition = null;
+        }
+
+        return $this;
+    } // setPosabbr()
+
+    /**
+     * Set the value of [but] column.
+     *
+     * @param int $v new value
+     * @return $this|\Alignement The current object (for fluent API support)
+     */
+    public function setBut($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->but !== $v) {
+            $this->but = $v;
+            $this->modifiedColumns[AlignementTableMap::COL_BUT] = true;
+        }
+
+        return $this;
+    } // setBut()
+
+    /**
+     * Set the value of [passe] column.
+     *
+     * @param int $v new value
+     * @return $this|\Alignement The current object (for fluent API support)
+     */
+    public function setPasse($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->passe !== $v) {
+            $this->passe = $v;
+            $this->modifiedColumns[AlignementTableMap::COL_PASSE] = true;
+        }
+
+        return $this;
+    } // setPasse()
+
+    /**
+     * Set the value of [blanchissage] column.
+     *
+     * @param int $v new value
+     * @return $this|\Alignement The current object (for fluent API support)
+     */
+    public function setBlanchissage($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->blanchissage !== $v) {
+            $this->blanchissage = $v;
+            $this->modifiedColumns[AlignementTableMap::COL_BLANCHISSAGE] = true;
+        }
+
+        return $this;
+    } // setBlanchissage()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -656,29 +649,26 @@ abstract class Joueur implements ActiveRecordInterface
     {
         try {
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : JoueurTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : AlignementTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
             $this->id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : JoueurTableMap::translateFieldName('Nom', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->nom = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : AlignementTableMap::translateFieldName('Equipeno', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->equipeno = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : JoueurTableMap::translateFieldName('Prenom', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->prenom = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : AlignementTableMap::translateFieldName('Joueurno', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->joueurno = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : JoueurTableMap::translateFieldName('Courriel', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->courriel = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : AlignementTableMap::translateFieldName('Posabbr', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->posabbr = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : JoueurTableMap::translateFieldName('Telephone', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->telephone = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : AlignementTableMap::translateFieldName('But', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->but = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : JoueurTableMap::translateFieldName('Statut', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->statut = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : AlignementTableMap::translateFieldName('Passe', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->passe = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : JoueurTableMap::translateFieldName('Cote', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->cote = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : JoueurTableMap::translateFieldName('Numero', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->numero = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : AlignementTableMap::translateFieldName('Blanchissage', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->blanchissage = (null !== $col) ? (int) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -687,10 +677,10 @@ abstract class Joueur implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 8; // 8 = JoueurTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 7; // 7 = AlignementTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException(sprintf('Error populating %s object', '\\Joueur'), 0, $e);
+            throw new PropelException(sprintf('Error populating %s object', '\\Alignement'), 0, $e);
         }
     }
 
@@ -709,6 +699,15 @@ abstract class Joueur implements ActiveRecordInterface
      */
     public function ensureConsistency()
     {
+        if ($this->aEquipe !== null && $this->equipeno !== $this->aEquipe->getId()) {
+            $this->aEquipe = null;
+        }
+        if ($this->aJoueur !== null && $this->joueurno !== $this->aJoueur->getId()) {
+            $this->aJoueur = null;
+        }
+        if ($this->aPosition !== null && $this->posabbr !== $this->aPosition->getAbbr()) {
+            $this->aPosition = null;
+        }
     } // ensureConsistency
 
     /**
@@ -732,13 +731,13 @@ abstract class Joueur implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(JoueurTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(AlignementTableMap::DATABASE_NAME);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $dataFetcher = ChildJoueurQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
+        $dataFetcher = ChildAlignementQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
         $row = $dataFetcher->fetch();
         $dataFetcher->close();
         if (!$row) {
@@ -748,9 +747,12 @@ abstract class Joueur implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->collAlignements = null;
+            $this->aEquipe = null;
+            $this->aJoueur = null;
+            $this->aPosition = null;
+            $this->collPartiesRelatedByEquipelocale = null;
 
-            $this->collPositionjoueurs = null;
+            $this->collPartiesRelatedByEquipevisite = null;
 
         } // if (deep)
     }
@@ -761,8 +763,8 @@ abstract class Joueur implements ActiveRecordInterface
      * @param      ConnectionInterface $con
      * @return void
      * @throws PropelException
-     * @see Joueur::setDeleted()
-     * @see Joueur::isDeleted()
+     * @see Alignement::setDeleted()
+     * @see Alignement::isDeleted()
      */
     public function delete(ConnectionInterface $con = null)
     {
@@ -771,11 +773,11 @@ abstract class Joueur implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(JoueurTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(AlignementTableMap::DATABASE_NAME);
         }
 
         $con->transaction(function () use ($con) {
-            $deleteQuery = ChildJoueurQuery::create()
+            $deleteQuery = ChildAlignementQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -810,7 +812,7 @@ abstract class Joueur implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(JoueurTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(AlignementTableMap::DATABASE_NAME);
         }
 
         return $con->transaction(function () use ($con) {
@@ -829,7 +831,7 @@ abstract class Joueur implements ActiveRecordInterface
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                JoueurTableMap::addInstanceToPool($this);
+                AlignementTableMap::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -855,6 +857,32 @@ abstract class Joueur implements ActiveRecordInterface
         if (!$this->alreadyInSave) {
             $this->alreadyInSave = true;
 
+            // We call the save method on the following object(s) if they
+            // were passed to this object by their corresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aEquipe !== null) {
+                if ($this->aEquipe->isModified() || $this->aEquipe->isNew()) {
+                    $affectedRows += $this->aEquipe->save($con);
+                }
+                $this->setEquipe($this->aEquipe);
+            }
+
+            if ($this->aJoueur !== null) {
+                if ($this->aJoueur->isModified() || $this->aJoueur->isNew()) {
+                    $affectedRows += $this->aJoueur->save($con);
+                }
+                $this->setJoueur($this->aJoueur);
+            }
+
+            if ($this->aPosition !== null) {
+                if ($this->aPosition->isModified() || $this->aPosition->isNew()) {
+                    $affectedRows += $this->aPosition->save($con);
+                }
+                $this->setPosition($this->aPosition);
+            }
+
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
                 if ($this->isNew()) {
@@ -866,34 +894,34 @@ abstract class Joueur implements ActiveRecordInterface
                 $this->resetModified();
             }
 
-            if ($this->alignementsScheduledForDeletion !== null) {
-                if (!$this->alignementsScheduledForDeletion->isEmpty()) {
-                    \AlignementQuery::create()
-                        ->filterByPrimaryKeys($this->alignementsScheduledForDeletion->getPrimaryKeys(false))
+            if ($this->partiesRelatedByEquipelocaleScheduledForDeletion !== null) {
+                if (!$this->partiesRelatedByEquipelocaleScheduledForDeletion->isEmpty()) {
+                    \PartieQuery::create()
+                        ->filterByPrimaryKeys($this->partiesRelatedByEquipelocaleScheduledForDeletion->getPrimaryKeys(false))
                         ->delete($con);
-                    $this->alignementsScheduledForDeletion = null;
+                    $this->partiesRelatedByEquipelocaleScheduledForDeletion = null;
                 }
             }
 
-            if ($this->collAlignements !== null) {
-                foreach ($this->collAlignements as $referrerFK) {
+            if ($this->collPartiesRelatedByEquipelocale !== null) {
+                foreach ($this->collPartiesRelatedByEquipelocale as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
                 }
             }
 
-            if ($this->positionjoueursScheduledForDeletion !== null) {
-                if (!$this->positionjoueursScheduledForDeletion->isEmpty()) {
-                    \PositionjoueurQuery::create()
-                        ->filterByPrimaryKeys($this->positionjoueursScheduledForDeletion->getPrimaryKeys(false))
+            if ($this->partiesRelatedByEquipevisiteScheduledForDeletion !== null) {
+                if (!$this->partiesRelatedByEquipevisiteScheduledForDeletion->isEmpty()) {
+                    \PartieQuery::create()
+                        ->filterByPrimaryKeys($this->partiesRelatedByEquipevisiteScheduledForDeletion->getPrimaryKeys(false))
                         ->delete($con);
-                    $this->positionjoueursScheduledForDeletion = null;
+                    $this->partiesRelatedByEquipevisiteScheduledForDeletion = null;
                 }
             }
 
-            if ($this->collPositionjoueurs !== null) {
-                foreach ($this->collPositionjoueurs as $referrerFK) {
+            if ($this->collPartiesRelatedByEquipevisite !== null) {
+                foreach ($this->collPartiesRelatedByEquipevisite as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -920,39 +948,36 @@ abstract class Joueur implements ActiveRecordInterface
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[JoueurTableMap::COL_ID] = true;
+        $this->modifiedColumns[AlignementTableMap::COL_ID] = true;
         if (null !== $this->id) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . JoueurTableMap::COL_ID . ')');
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . AlignementTableMap::COL_ID . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(JoueurTableMap::COL_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'id';
+        if ($this->isColumnModified(AlignementTableMap::COL_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'Id';
         }
-        if ($this->isColumnModified(JoueurTableMap::COL_NOM)) {
-            $modifiedColumns[':p' . $index++]  = 'nom';
+        if ($this->isColumnModified(AlignementTableMap::COL_EQUIPENO)) {
+            $modifiedColumns[':p' . $index++]  = 'EquipeNo';
         }
-        if ($this->isColumnModified(JoueurTableMap::COL_PRENOM)) {
-            $modifiedColumns[':p' . $index++]  = 'prenom';
+        if ($this->isColumnModified(AlignementTableMap::COL_JOUEURNO)) {
+            $modifiedColumns[':p' . $index++]  = 'JoueurNo';
         }
-        if ($this->isColumnModified(JoueurTableMap::COL_COURRIEL)) {
-            $modifiedColumns[':p' . $index++]  = 'courriel';
+        if ($this->isColumnModified(AlignementTableMap::COL_POSABBR)) {
+            $modifiedColumns[':p' . $index++]  = 'PosAbbr';
         }
-        if ($this->isColumnModified(JoueurTableMap::COL_TELEPHONE)) {
-            $modifiedColumns[':p' . $index++]  = 'telephone';
+        if ($this->isColumnModified(AlignementTableMap::COL_BUT)) {
+            $modifiedColumns[':p' . $index++]  = 'But';
         }
-        if ($this->isColumnModified(JoueurTableMap::COL_STATUT)) {
-            $modifiedColumns[':p' . $index++]  = 'statut';
+        if ($this->isColumnModified(AlignementTableMap::COL_PASSE)) {
+            $modifiedColumns[':p' . $index++]  = 'Passe';
         }
-        if ($this->isColumnModified(JoueurTableMap::COL_COTE)) {
-            $modifiedColumns[':p' . $index++]  = 'Cote';
-        }
-        if ($this->isColumnModified(JoueurTableMap::COL_NUMERO)) {
-            $modifiedColumns[':p' . $index++]  = 'numero';
+        if ($this->isColumnModified(AlignementTableMap::COL_BLANCHISSAGE)) {
+            $modifiedColumns[':p' . $index++]  = 'Blanchissage';
         }
 
         $sql = sprintf(
-            'INSERT INTO Joueur (%s) VALUES (%s)',
+            'INSERT INTO Alignement (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -961,29 +986,26 @@ abstract class Joueur implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'id':
+                    case 'Id':
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
                         break;
-                    case 'nom':
-                        $stmt->bindValue($identifier, $this->nom, PDO::PARAM_STR);
+                    case 'EquipeNo':
+                        $stmt->bindValue($identifier, $this->equipeno, PDO::PARAM_INT);
                         break;
-                    case 'prenom':
-                        $stmt->bindValue($identifier, $this->prenom, PDO::PARAM_STR);
+                    case 'JoueurNo':
+                        $stmt->bindValue($identifier, $this->joueurno, PDO::PARAM_INT);
                         break;
-                    case 'courriel':
-                        $stmt->bindValue($identifier, $this->courriel, PDO::PARAM_STR);
+                    case 'PosAbbr':
+                        $stmt->bindValue($identifier, $this->posabbr, PDO::PARAM_STR);
                         break;
-                    case 'telephone':
-                        $stmt->bindValue($identifier, $this->telephone, PDO::PARAM_STR);
+                    case 'But':
+                        $stmt->bindValue($identifier, $this->but, PDO::PARAM_INT);
                         break;
-                    case 'statut':
-                        $stmt->bindValue($identifier, $this->statut, PDO::PARAM_STR);
+                    case 'Passe':
+                        $stmt->bindValue($identifier, $this->passe, PDO::PARAM_INT);
                         break;
-                    case 'Cote':
-                        $stmt->bindValue($identifier, $this->cote, PDO::PARAM_STR);
-                        break;
-                    case 'numero':
-                        $stmt->bindValue($identifier, $this->numero, PDO::PARAM_INT);
+                    case 'Blanchissage':
+                        $stmt->bindValue($identifier, $this->blanchissage, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -1031,7 +1053,7 @@ abstract class Joueur implements ActiveRecordInterface
      */
     public function getByName($name, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = JoueurTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = AlignementTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -1051,25 +1073,22 @@ abstract class Joueur implements ActiveRecordInterface
                 return $this->getId();
                 break;
             case 1:
-                return $this->getNom();
+                return $this->getEquipeno();
                 break;
             case 2:
-                return $this->getPrenom();
+                return $this->getJoueurno();
                 break;
             case 3:
-                return $this->getCourriel();
+                return $this->getPosabbr();
                 break;
             case 4:
-                return $this->getTelephone();
+                return $this->getBut();
                 break;
             case 5:
-                return $this->getStatut();
+                return $this->getPasse();
                 break;
             case 6:
-                return $this->getCote();
-                break;
-            case 7:
-                return $this->getNumero();
+                return $this->getBlanchissage();
                 break;
             default:
                 return null;
@@ -1095,20 +1114,19 @@ abstract class Joueur implements ActiveRecordInterface
     public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
 
-        if (isset($alreadyDumpedObjects['Joueur'][$this->hashCode()])) {
+        if (isset($alreadyDumpedObjects['Alignement'][$this->hashCode()])) {
             return '*RECURSION*';
         }
-        $alreadyDumpedObjects['Joueur'][$this->hashCode()] = true;
-        $keys = JoueurTableMap::getFieldNames($keyType);
+        $alreadyDumpedObjects['Alignement'][$this->hashCode()] = true;
+        $keys = AlignementTableMap::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getId(),
-            $keys[1] => $this->getNom(),
-            $keys[2] => $this->getPrenom(),
-            $keys[3] => $this->getCourriel(),
-            $keys[4] => $this->getTelephone(),
-            $keys[5] => $this->getStatut(),
-            $keys[6] => $this->getCote(),
-            $keys[7] => $this->getNumero(),
+            $keys[1] => $this->getEquipeno(),
+            $keys[2] => $this->getJoueurno(),
+            $keys[3] => $this->getPosabbr(),
+            $keys[4] => $this->getBut(),
+            $keys[5] => $this->getPasse(),
+            $keys[6] => $this->getBlanchissage(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1116,35 +1134,80 @@ abstract class Joueur implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
-            if (null !== $this->collAlignements) {
+            if (null !== $this->aEquipe) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'alignements';
+                        $key = 'equipe';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'Alignements';
+                        $key = 'Equipe';
                         break;
                     default:
-                        $key = 'Alignements';
+                        $key = 'Equipe';
                 }
 
-                $result[$key] = $this->collAlignements->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+                $result[$key] = $this->aEquipe->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
-            if (null !== $this->collPositionjoueurs) {
+            if (null !== $this->aJoueur) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'positionjoueurs';
+                        $key = 'joueur';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'PositionJoueurs';
+                        $key = 'Joueur';
                         break;
                     default:
-                        $key = 'Positionjoueurs';
+                        $key = 'Joueur';
                 }
 
-                $result[$key] = $this->collPositionjoueurs->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+                $result[$key] = $this->aJoueur->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aPosition) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'position';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'Position';
+                        break;
+                    default:
+                        $key = 'Position';
+                }
+
+                $result[$key] = $this->aPosition->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->collPartiesRelatedByEquipelocale) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'parties';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'Parties';
+                        break;
+                    default:
+                        $key = 'Parties';
+                }
+
+                $result[$key] = $this->collPartiesRelatedByEquipelocale->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collPartiesRelatedByEquipevisite) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'parties';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'Parties';
+                        break;
+                    default:
+                        $key = 'Parties';
+                }
+
+                $result[$key] = $this->collPartiesRelatedByEquipevisite->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1160,11 +1223,11 @@ abstract class Joueur implements ActiveRecordInterface
      *                one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *                Defaults to TableMap::TYPE_PHPNAME.
-     * @return $this|\Joueur
+     * @return $this|\Alignement
      */
     public function setByName($name, $value, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = JoueurTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = AlignementTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
 
         return $this->setByPosition($pos, $value);
     }
@@ -1175,7 +1238,7 @@ abstract class Joueur implements ActiveRecordInterface
      *
      * @param  int $pos position in xml schema
      * @param  mixed $value field value
-     * @return $this|\Joueur
+     * @return $this|\Alignement
      */
     public function setByPosition($pos, $value)
     {
@@ -1184,25 +1247,22 @@ abstract class Joueur implements ActiveRecordInterface
                 $this->setId($value);
                 break;
             case 1:
-                $this->setNom($value);
+                $this->setEquipeno($value);
                 break;
             case 2:
-                $this->setPrenom($value);
+                $this->setJoueurno($value);
                 break;
             case 3:
-                $this->setCourriel($value);
+                $this->setPosabbr($value);
                 break;
             case 4:
-                $this->setTelephone($value);
+                $this->setBut($value);
                 break;
             case 5:
-                $this->setStatut($value);
+                $this->setPasse($value);
                 break;
             case 6:
-                $this->setCote($value);
-                break;
-            case 7:
-                $this->setNumero($value);
+                $this->setBlanchissage($value);
                 break;
         } // switch()
 
@@ -1228,31 +1288,28 @@ abstract class Joueur implements ActiveRecordInterface
      */
     public function fromArray($arr, $keyType = TableMap::TYPE_PHPNAME)
     {
-        $keys = JoueurTableMap::getFieldNames($keyType);
+        $keys = AlignementTableMap::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) {
             $this->setId($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setNom($arr[$keys[1]]);
+            $this->setEquipeno($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setPrenom($arr[$keys[2]]);
+            $this->setJoueurno($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setCourriel($arr[$keys[3]]);
+            $this->setPosabbr($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setTelephone($arr[$keys[4]]);
+            $this->setBut($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setStatut($arr[$keys[5]]);
+            $this->setPasse($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setCote($arr[$keys[6]]);
-        }
-        if (array_key_exists($keys[7], $arr)) {
-            $this->setNumero($arr[$keys[7]]);
+            $this->setBlanchissage($arr[$keys[6]]);
         }
     }
 
@@ -1273,7 +1330,7 @@ abstract class Joueur implements ActiveRecordInterface
      * @param string $data The source data to import from
      * @param string $keyType The type of keys the array uses.
      *
-     * @return $this|\Joueur The current object, for fluid interface
+     * @return $this|\Alignement The current object, for fluid interface
      */
     public function importFrom($parser, $data, $keyType = TableMap::TYPE_PHPNAME)
     {
@@ -1293,31 +1350,28 @@ abstract class Joueur implements ActiveRecordInterface
      */
     public function buildCriteria()
     {
-        $criteria = new Criteria(JoueurTableMap::DATABASE_NAME);
+        $criteria = new Criteria(AlignementTableMap::DATABASE_NAME);
 
-        if ($this->isColumnModified(JoueurTableMap::COL_ID)) {
-            $criteria->add(JoueurTableMap::COL_ID, $this->id);
+        if ($this->isColumnModified(AlignementTableMap::COL_ID)) {
+            $criteria->add(AlignementTableMap::COL_ID, $this->id);
         }
-        if ($this->isColumnModified(JoueurTableMap::COL_NOM)) {
-            $criteria->add(JoueurTableMap::COL_NOM, $this->nom);
+        if ($this->isColumnModified(AlignementTableMap::COL_EQUIPENO)) {
+            $criteria->add(AlignementTableMap::COL_EQUIPENO, $this->equipeno);
         }
-        if ($this->isColumnModified(JoueurTableMap::COL_PRENOM)) {
-            $criteria->add(JoueurTableMap::COL_PRENOM, $this->prenom);
+        if ($this->isColumnModified(AlignementTableMap::COL_JOUEURNO)) {
+            $criteria->add(AlignementTableMap::COL_JOUEURNO, $this->joueurno);
         }
-        if ($this->isColumnModified(JoueurTableMap::COL_COURRIEL)) {
-            $criteria->add(JoueurTableMap::COL_COURRIEL, $this->courriel);
+        if ($this->isColumnModified(AlignementTableMap::COL_POSABBR)) {
+            $criteria->add(AlignementTableMap::COL_POSABBR, $this->posabbr);
         }
-        if ($this->isColumnModified(JoueurTableMap::COL_TELEPHONE)) {
-            $criteria->add(JoueurTableMap::COL_TELEPHONE, $this->telephone);
+        if ($this->isColumnModified(AlignementTableMap::COL_BUT)) {
+            $criteria->add(AlignementTableMap::COL_BUT, $this->but);
         }
-        if ($this->isColumnModified(JoueurTableMap::COL_STATUT)) {
-            $criteria->add(JoueurTableMap::COL_STATUT, $this->statut);
+        if ($this->isColumnModified(AlignementTableMap::COL_PASSE)) {
+            $criteria->add(AlignementTableMap::COL_PASSE, $this->passe);
         }
-        if ($this->isColumnModified(JoueurTableMap::COL_COTE)) {
-            $criteria->add(JoueurTableMap::COL_COTE, $this->cote);
-        }
-        if ($this->isColumnModified(JoueurTableMap::COL_NUMERO)) {
-            $criteria->add(JoueurTableMap::COL_NUMERO, $this->numero);
+        if ($this->isColumnModified(AlignementTableMap::COL_BLANCHISSAGE)) {
+            $criteria->add(AlignementTableMap::COL_BLANCHISSAGE, $this->blanchissage);
         }
 
         return $criteria;
@@ -1335,8 +1389,8 @@ abstract class Joueur implements ActiveRecordInterface
      */
     public function buildPkeyCriteria()
     {
-        $criteria = ChildJoueurQuery::create();
-        $criteria->add(JoueurTableMap::COL_ID, $this->id);
+        $criteria = ChildAlignementQuery::create();
+        $criteria->add(AlignementTableMap::COL_ID, $this->id);
 
         return $criteria;
     }
@@ -1398,35 +1452,34 @@ abstract class Joueur implements ActiveRecordInterface
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param      object $copyObj An object of \Joueur (or compatible) type.
+     * @param      object $copyObj An object of \Alignement (or compatible) type.
      * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setNom($this->getNom());
-        $copyObj->setPrenom($this->getPrenom());
-        $copyObj->setCourriel($this->getCourriel());
-        $copyObj->setTelephone($this->getTelephone());
-        $copyObj->setStatut($this->getStatut());
-        $copyObj->setCote($this->getCote());
-        $copyObj->setNumero($this->getNumero());
+        $copyObj->setEquipeno($this->getEquipeno());
+        $copyObj->setJoueurno($this->getJoueurno());
+        $copyObj->setPosabbr($this->getPosabbr());
+        $copyObj->setBut($this->getBut());
+        $copyObj->setPasse($this->getPasse());
+        $copyObj->setBlanchissage($this->getBlanchissage());
 
         if ($deepCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
             // the getter/setter methods for fkey referrer objects.
             $copyObj->setNew(false);
 
-            foreach ($this->getAlignements() as $relObj) {
+            foreach ($this->getPartiesRelatedByEquipelocale() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addAlignement($relObj->copy($deepCopy));
+                    $copyObj->addPartieRelatedByEquipelocale($relObj->copy($deepCopy));
                 }
             }
 
-            foreach ($this->getPositionjoueurs() as $relObj) {
+            foreach ($this->getPartiesRelatedByEquipevisite() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addPositionjoueur($relObj->copy($deepCopy));
+                    $copyObj->addPartieRelatedByEquipevisite($relObj->copy($deepCopy));
                 }
             }
 
@@ -1447,7 +1500,7 @@ abstract class Joueur implements ActiveRecordInterface
      * objects.
      *
      * @param  boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return \Joueur Clone of current object.
+     * @return \Alignement Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -1458,6 +1511,159 @@ abstract class Joueur implements ActiveRecordInterface
         $this->copyInto($copyObj, $deepCopy);
 
         return $copyObj;
+    }
+
+    /**
+     * Declares an association between this object and a ChildEquipe object.
+     *
+     * @param  ChildEquipe $v
+     * @return $this|\Alignement The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setEquipe(ChildEquipe $v = null)
+    {
+        if ($v === null) {
+            $this->setEquipeno(NULL);
+        } else {
+            $this->setEquipeno($v->getId());
+        }
+
+        $this->aEquipe = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildEquipe object, it will not be re-added.
+        if ($v !== null) {
+            $v->addAlignement($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildEquipe object
+     *
+     * @param  ConnectionInterface $con Optional Connection object.
+     * @return ChildEquipe The associated ChildEquipe object.
+     * @throws PropelException
+     */
+    public function getEquipe(ConnectionInterface $con = null)
+    {
+        if ($this->aEquipe === null && ($this->equipeno != 0)) {
+            $this->aEquipe = ChildEquipeQuery::create()->findPk($this->equipeno, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aEquipe->addAlignements($this);
+             */
+        }
+
+        return $this->aEquipe;
+    }
+
+    /**
+     * Declares an association between this object and a ChildJoueur object.
+     *
+     * @param  ChildJoueur $v
+     * @return $this|\Alignement The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setJoueur(ChildJoueur $v = null)
+    {
+        if ($v === null) {
+            $this->setJoueurno(NULL);
+        } else {
+            $this->setJoueurno($v->getId());
+        }
+
+        $this->aJoueur = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildJoueur object, it will not be re-added.
+        if ($v !== null) {
+            $v->addAlignement($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildJoueur object
+     *
+     * @param  ConnectionInterface $con Optional Connection object.
+     * @return ChildJoueur The associated ChildJoueur object.
+     * @throws PropelException
+     */
+    public function getJoueur(ConnectionInterface $con = null)
+    {
+        if ($this->aJoueur === null && ($this->joueurno != 0)) {
+            $this->aJoueur = ChildJoueurQuery::create()->findPk($this->joueurno, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aJoueur->addAlignements($this);
+             */
+        }
+
+        return $this->aJoueur;
+    }
+
+    /**
+     * Declares an association between this object and a ChildPosition object.
+     *
+     * @param  ChildPosition $v
+     * @return $this|\Alignement The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setPosition(ChildPosition $v = null)
+    {
+        if ($v === null) {
+            $this->setPosabbr(NULL);
+        } else {
+            $this->setPosabbr($v->getAbbr());
+        }
+
+        $this->aPosition = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildPosition object, it will not be re-added.
+        if ($v !== null) {
+            $v->addAlignement($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildPosition object
+     *
+     * @param  ConnectionInterface $con Optional Connection object.
+     * @return ChildPosition The associated ChildPosition object.
+     * @throws PropelException
+     */
+    public function getPosition(ConnectionInterface $con = null)
+    {
+        if ($this->aPosition === null && (($this->posabbr !== "" && $this->posabbr !== null))) {
+            $this->aPosition = ChildPositionQuery::create()->findPk($this->posabbr, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aPosition->addAlignements($this);
+             */
+        }
+
+        return $this->aPosition;
     }
 
 
@@ -1471,42 +1677,42 @@ abstract class Joueur implements ActiveRecordInterface
      */
     public function initRelation($relationName)
     {
-        if ('Alignement' == $relationName) {
-            $this->initAlignements();
+        if ('PartieRelatedByEquipelocale' == $relationName) {
+            $this->initPartiesRelatedByEquipelocale();
             return;
         }
-        if ('Positionjoueur' == $relationName) {
-            $this->initPositionjoueurs();
+        if ('PartieRelatedByEquipevisite' == $relationName) {
+            $this->initPartiesRelatedByEquipevisite();
             return;
         }
     }
 
     /**
-     * Clears out the collAlignements collection
+     * Clears out the collPartiesRelatedByEquipelocale collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addAlignements()
+     * @see        addPartiesRelatedByEquipelocale()
      */
-    public function clearAlignements()
+    public function clearPartiesRelatedByEquipelocale()
     {
-        $this->collAlignements = null; // important to set this to NULL since that means it is uninitialized
+        $this->collPartiesRelatedByEquipelocale = null; // important to set this to NULL since that means it is uninitialized
     }
 
     /**
-     * Reset is the collAlignements collection loaded partially.
+     * Reset is the collPartiesRelatedByEquipelocale collection loaded partially.
      */
-    public function resetPartialAlignements($v = true)
+    public function resetPartialPartiesRelatedByEquipelocale($v = true)
     {
-        $this->collAlignementsPartial = $v;
+        $this->collPartiesRelatedByEquipelocalePartial = $v;
     }
 
     /**
-     * Initializes the collAlignements collection.
+     * Initializes the collPartiesRelatedByEquipelocale collection.
      *
-     * By default this just sets the collAlignements collection to an empty array (like clearcollAlignements());
+     * By default this just sets the collPartiesRelatedByEquipelocale collection to an empty array (like clearcollPartiesRelatedByEquipelocale());
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
@@ -1515,162 +1721,162 @@ abstract class Joueur implements ActiveRecordInterface
      *
      * @return void
      */
-    public function initAlignements($overrideExisting = true)
+    public function initPartiesRelatedByEquipelocale($overrideExisting = true)
     {
-        if (null !== $this->collAlignements && !$overrideExisting) {
+        if (null !== $this->collPartiesRelatedByEquipelocale && !$overrideExisting) {
             return;
         }
 
-        $collectionClassName = AlignementTableMap::getTableMap()->getCollectionClassName();
+        $collectionClassName = PartieTableMap::getTableMap()->getCollectionClassName();
 
-        $this->collAlignements = new $collectionClassName;
-        $this->collAlignements->setModel('\Alignement');
+        $this->collPartiesRelatedByEquipelocale = new $collectionClassName;
+        $this->collPartiesRelatedByEquipelocale->setModel('\Partie');
     }
 
     /**
-     * Gets an array of ChildAlignement objects which contain a foreign key that references this object.
+     * Gets an array of ChildPartie objects which contain a foreign key that references this object.
      *
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
      * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildJoueur is new, it will return
+     * If this ChildAlignement is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
-     * @return ObjectCollection|ChildAlignement[] List of ChildAlignement objects
+     * @return ObjectCollection|ChildPartie[] List of ChildPartie objects
      * @throws PropelException
      */
-    public function getAlignements(Criteria $criteria = null, ConnectionInterface $con = null)
+    public function getPartiesRelatedByEquipelocale(Criteria $criteria = null, ConnectionInterface $con = null)
     {
-        $partial = $this->collAlignementsPartial && !$this->isNew();
-        if (null === $this->collAlignements || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collAlignements) {
+        $partial = $this->collPartiesRelatedByEquipelocalePartial && !$this->isNew();
+        if (null === $this->collPartiesRelatedByEquipelocale || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collPartiesRelatedByEquipelocale) {
                 // return empty collection
-                $this->initAlignements();
+                $this->initPartiesRelatedByEquipelocale();
             } else {
-                $collAlignements = ChildAlignementQuery::create(null, $criteria)
-                    ->filterByJoueur($this)
+                $collPartiesRelatedByEquipelocale = ChildPartieQuery::create(null, $criteria)
+                    ->filterByAlignementRelatedByEquipelocale($this)
                     ->find($con);
 
                 if (null !== $criteria) {
-                    if (false !== $this->collAlignementsPartial && count($collAlignements)) {
-                        $this->initAlignements(false);
+                    if (false !== $this->collPartiesRelatedByEquipelocalePartial && count($collPartiesRelatedByEquipelocale)) {
+                        $this->initPartiesRelatedByEquipelocale(false);
 
-                        foreach ($collAlignements as $obj) {
-                            if (false == $this->collAlignements->contains($obj)) {
-                                $this->collAlignements->append($obj);
+                        foreach ($collPartiesRelatedByEquipelocale as $obj) {
+                            if (false == $this->collPartiesRelatedByEquipelocale->contains($obj)) {
+                                $this->collPartiesRelatedByEquipelocale->append($obj);
                             }
                         }
 
-                        $this->collAlignementsPartial = true;
+                        $this->collPartiesRelatedByEquipelocalePartial = true;
                     }
 
-                    return $collAlignements;
+                    return $collPartiesRelatedByEquipelocale;
                 }
 
-                if ($partial && $this->collAlignements) {
-                    foreach ($this->collAlignements as $obj) {
+                if ($partial && $this->collPartiesRelatedByEquipelocale) {
+                    foreach ($this->collPartiesRelatedByEquipelocale as $obj) {
                         if ($obj->isNew()) {
-                            $collAlignements[] = $obj;
+                            $collPartiesRelatedByEquipelocale[] = $obj;
                         }
                     }
                 }
 
-                $this->collAlignements = $collAlignements;
-                $this->collAlignementsPartial = false;
+                $this->collPartiesRelatedByEquipelocale = $collPartiesRelatedByEquipelocale;
+                $this->collPartiesRelatedByEquipelocalePartial = false;
             }
         }
 
-        return $this->collAlignements;
+        return $this->collPartiesRelatedByEquipelocale;
     }
 
     /**
-     * Sets a collection of ChildAlignement objects related by a one-to-many relationship
+     * Sets a collection of ChildPartie objects related by a one-to-many relationship
      * to the current object.
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $alignements A Propel collection.
+     * @param      Collection $partiesRelatedByEquipelocale A Propel collection.
      * @param      ConnectionInterface $con Optional connection object
-     * @return $this|ChildJoueur The current object (for fluent API support)
+     * @return $this|ChildAlignement The current object (for fluent API support)
      */
-    public function setAlignements(Collection $alignements, ConnectionInterface $con = null)
+    public function setPartiesRelatedByEquipelocale(Collection $partiesRelatedByEquipelocale, ConnectionInterface $con = null)
     {
-        /** @var ChildAlignement[] $alignementsToDelete */
-        $alignementsToDelete = $this->getAlignements(new Criteria(), $con)->diff($alignements);
+        /** @var ChildPartie[] $partiesRelatedByEquipelocaleToDelete */
+        $partiesRelatedByEquipelocaleToDelete = $this->getPartiesRelatedByEquipelocale(new Criteria(), $con)->diff($partiesRelatedByEquipelocale);
 
 
-        $this->alignementsScheduledForDeletion = $alignementsToDelete;
+        $this->partiesRelatedByEquipelocaleScheduledForDeletion = $partiesRelatedByEquipelocaleToDelete;
 
-        foreach ($alignementsToDelete as $alignementRemoved) {
-            $alignementRemoved->setJoueur(null);
+        foreach ($partiesRelatedByEquipelocaleToDelete as $partieRelatedByEquipelocaleRemoved) {
+            $partieRelatedByEquipelocaleRemoved->setAlignementRelatedByEquipelocale(null);
         }
 
-        $this->collAlignements = null;
-        foreach ($alignements as $alignement) {
-            $this->addAlignement($alignement);
+        $this->collPartiesRelatedByEquipelocale = null;
+        foreach ($partiesRelatedByEquipelocale as $partieRelatedByEquipelocale) {
+            $this->addPartieRelatedByEquipelocale($partieRelatedByEquipelocale);
         }
 
-        $this->collAlignements = $alignements;
-        $this->collAlignementsPartial = false;
+        $this->collPartiesRelatedByEquipelocale = $partiesRelatedByEquipelocale;
+        $this->collPartiesRelatedByEquipelocalePartial = false;
 
         return $this;
     }
 
     /**
-     * Returns the number of related Alignement objects.
+     * Returns the number of related Partie objects.
      *
      * @param      Criteria $criteria
      * @param      boolean $distinct
      * @param      ConnectionInterface $con
-     * @return int             Count of related Alignement objects.
+     * @return int             Count of related Partie objects.
      * @throws PropelException
      */
-    public function countAlignements(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    public function countPartiesRelatedByEquipelocale(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
     {
-        $partial = $this->collAlignementsPartial && !$this->isNew();
-        if (null === $this->collAlignements || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collAlignements) {
+        $partial = $this->collPartiesRelatedByEquipelocalePartial && !$this->isNew();
+        if (null === $this->collPartiesRelatedByEquipelocale || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collPartiesRelatedByEquipelocale) {
                 return 0;
             }
 
             if ($partial && !$criteria) {
-                return count($this->getAlignements());
+                return count($this->getPartiesRelatedByEquipelocale());
             }
 
-            $query = ChildAlignementQuery::create(null, $criteria);
+            $query = ChildPartieQuery::create(null, $criteria);
             if ($distinct) {
                 $query->distinct();
             }
 
             return $query
-                ->filterByJoueur($this)
+                ->filterByAlignementRelatedByEquipelocale($this)
                 ->count($con);
         }
 
-        return count($this->collAlignements);
+        return count($this->collPartiesRelatedByEquipelocale);
     }
 
     /**
-     * Method called to associate a ChildAlignement object to this object
-     * through the ChildAlignement foreign key attribute.
+     * Method called to associate a ChildPartie object to this object
+     * through the ChildPartie foreign key attribute.
      *
-     * @param  ChildAlignement $l ChildAlignement
-     * @return $this|\Joueur The current object (for fluent API support)
+     * @param  ChildPartie $l ChildPartie
+     * @return $this|\Alignement The current object (for fluent API support)
      */
-    public function addAlignement(ChildAlignement $l)
+    public function addPartieRelatedByEquipelocale(ChildPartie $l)
     {
-        if ($this->collAlignements === null) {
-            $this->initAlignements();
-            $this->collAlignementsPartial = true;
+        if ($this->collPartiesRelatedByEquipelocale === null) {
+            $this->initPartiesRelatedByEquipelocale();
+            $this->collPartiesRelatedByEquipelocalePartial = true;
         }
 
-        if (!$this->collAlignements->contains($l)) {
-            $this->doAddAlignement($l);
+        if (!$this->collPartiesRelatedByEquipelocale->contains($l)) {
+            $this->doAddPartieRelatedByEquipelocale($l);
 
-            if ($this->alignementsScheduledForDeletion and $this->alignementsScheduledForDeletion->contains($l)) {
-                $this->alignementsScheduledForDeletion->remove($this->alignementsScheduledForDeletion->search($l));
+            if ($this->partiesRelatedByEquipelocaleScheduledForDeletion and $this->partiesRelatedByEquipelocaleScheduledForDeletion->contains($l)) {
+                $this->partiesRelatedByEquipelocaleScheduledForDeletion->remove($this->partiesRelatedByEquipelocaleScheduledForDeletion->search($l));
             }
         }
 
@@ -1678,29 +1884,29 @@ abstract class Joueur implements ActiveRecordInterface
     }
 
     /**
-     * @param ChildAlignement $alignement The ChildAlignement object to add.
+     * @param ChildPartie $partieRelatedByEquipelocale The ChildPartie object to add.
      */
-    protected function doAddAlignement(ChildAlignement $alignement)
+    protected function doAddPartieRelatedByEquipelocale(ChildPartie $partieRelatedByEquipelocale)
     {
-        $this->collAlignements[]= $alignement;
-        $alignement->setJoueur($this);
+        $this->collPartiesRelatedByEquipelocale[]= $partieRelatedByEquipelocale;
+        $partieRelatedByEquipelocale->setAlignementRelatedByEquipelocale($this);
     }
 
     /**
-     * @param  ChildAlignement $alignement The ChildAlignement object to remove.
-     * @return $this|ChildJoueur The current object (for fluent API support)
+     * @param  ChildPartie $partieRelatedByEquipelocale The ChildPartie object to remove.
+     * @return $this|ChildAlignement The current object (for fluent API support)
      */
-    public function removeAlignement(ChildAlignement $alignement)
+    public function removePartieRelatedByEquipelocale(ChildPartie $partieRelatedByEquipelocale)
     {
-        if ($this->getAlignements()->contains($alignement)) {
-            $pos = $this->collAlignements->search($alignement);
-            $this->collAlignements->remove($pos);
-            if (null === $this->alignementsScheduledForDeletion) {
-                $this->alignementsScheduledForDeletion = clone $this->collAlignements;
-                $this->alignementsScheduledForDeletion->clear();
+        if ($this->getPartiesRelatedByEquipelocale()->contains($partieRelatedByEquipelocale)) {
+            $pos = $this->collPartiesRelatedByEquipelocale->search($partieRelatedByEquipelocale);
+            $this->collPartiesRelatedByEquipelocale->remove($pos);
+            if (null === $this->partiesRelatedByEquipelocaleScheduledForDeletion) {
+                $this->partiesRelatedByEquipelocaleScheduledForDeletion = clone $this->collPartiesRelatedByEquipelocale;
+                $this->partiesRelatedByEquipelocaleScheduledForDeletion->clear();
             }
-            $this->alignementsScheduledForDeletion[]= clone $alignement;
-            $alignement->setJoueur(null);
+            $this->partiesRelatedByEquipelocaleScheduledForDeletion[]= clone $partieRelatedByEquipelocale;
+            $partieRelatedByEquipelocale->setAlignementRelatedByEquipelocale(null);
         }
 
         return $this;
@@ -1710,78 +1916,53 @@ abstract class Joueur implements ActiveRecordInterface
     /**
      * If this collection has already been initialized with
      * an identical criteria, it returns the collection.
-     * Otherwise if this Joueur is new, it will return
-     * an empty collection; or if this Joueur has previously
-     * been saved, it will retrieve related Alignements from storage.
+     * Otherwise if this Alignement is new, it will return
+     * an empty collection; or if this Alignement has previously
+     * been saved, it will retrieve related PartiesRelatedByEquipelocale from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
-     * actually need in Joueur.
+     * actually need in Alignement.
      *
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildAlignement[] List of ChildAlignement objects
+     * @return ObjectCollection|ChildPartie[] List of ChildPartie objects
      */
-    public function getAlignementsJoinEquipe(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getPartiesRelatedByEquipelocaleJoinArena(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
-        $query = ChildAlignementQuery::create(null, $criteria);
-        $query->joinWith('Equipe', $joinBehavior);
+        $query = ChildPartieQuery::create(null, $criteria);
+        $query->joinWith('Arena', $joinBehavior);
 
-        return $this->getAlignements($query, $con);
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this Joueur is new, it will return
-     * an empty collection; or if this Joueur has previously
-     * been saved, it will retrieve related Alignements from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in Joueur.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildAlignement[] List of ChildAlignement objects
-     */
-    public function getAlignementsJoinPosition(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
-    {
-        $query = ChildAlignementQuery::create(null, $criteria);
-        $query->joinWith('Position', $joinBehavior);
-
-        return $this->getAlignements($query, $con);
+        return $this->getPartiesRelatedByEquipelocale($query, $con);
     }
 
     /**
-     * Clears out the collPositionjoueurs collection
+     * Clears out the collPartiesRelatedByEquipevisite collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addPositionjoueurs()
+     * @see        addPartiesRelatedByEquipevisite()
      */
-    public function clearPositionjoueurs()
+    public function clearPartiesRelatedByEquipevisite()
     {
-        $this->collPositionjoueurs = null; // important to set this to NULL since that means it is uninitialized
+        $this->collPartiesRelatedByEquipevisite = null; // important to set this to NULL since that means it is uninitialized
     }
 
     /**
-     * Reset is the collPositionjoueurs collection loaded partially.
+     * Reset is the collPartiesRelatedByEquipevisite collection loaded partially.
      */
-    public function resetPartialPositionjoueurs($v = true)
+    public function resetPartialPartiesRelatedByEquipevisite($v = true)
     {
-        $this->collPositionjoueursPartial = $v;
+        $this->collPartiesRelatedByEquipevisitePartial = $v;
     }
 
     /**
-     * Initializes the collPositionjoueurs collection.
+     * Initializes the collPartiesRelatedByEquipevisite collection.
      *
-     * By default this just sets the collPositionjoueurs collection to an empty array (like clearcollPositionjoueurs());
+     * By default this just sets the collPartiesRelatedByEquipevisite collection to an empty array (like clearcollPartiesRelatedByEquipevisite());
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
@@ -1790,162 +1971,162 @@ abstract class Joueur implements ActiveRecordInterface
      *
      * @return void
      */
-    public function initPositionjoueurs($overrideExisting = true)
+    public function initPartiesRelatedByEquipevisite($overrideExisting = true)
     {
-        if (null !== $this->collPositionjoueurs && !$overrideExisting) {
+        if (null !== $this->collPartiesRelatedByEquipevisite && !$overrideExisting) {
             return;
         }
 
-        $collectionClassName = PositionjoueurTableMap::getTableMap()->getCollectionClassName();
+        $collectionClassName = PartieTableMap::getTableMap()->getCollectionClassName();
 
-        $this->collPositionjoueurs = new $collectionClassName;
-        $this->collPositionjoueurs->setModel('\Positionjoueur');
+        $this->collPartiesRelatedByEquipevisite = new $collectionClassName;
+        $this->collPartiesRelatedByEquipevisite->setModel('\Partie');
     }
 
     /**
-     * Gets an array of ChildPositionjoueur objects which contain a foreign key that references this object.
+     * Gets an array of ChildPartie objects which contain a foreign key that references this object.
      *
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
      * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildJoueur is new, it will return
+     * If this ChildAlignement is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
-     * @return ObjectCollection|ChildPositionjoueur[] List of ChildPositionjoueur objects
+     * @return ObjectCollection|ChildPartie[] List of ChildPartie objects
      * @throws PropelException
      */
-    public function getPositionjoueurs(Criteria $criteria = null, ConnectionInterface $con = null)
+    public function getPartiesRelatedByEquipevisite(Criteria $criteria = null, ConnectionInterface $con = null)
     {
-        $partial = $this->collPositionjoueursPartial && !$this->isNew();
-        if (null === $this->collPositionjoueurs || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collPositionjoueurs) {
+        $partial = $this->collPartiesRelatedByEquipevisitePartial && !$this->isNew();
+        if (null === $this->collPartiesRelatedByEquipevisite || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collPartiesRelatedByEquipevisite) {
                 // return empty collection
-                $this->initPositionjoueurs();
+                $this->initPartiesRelatedByEquipevisite();
             } else {
-                $collPositionjoueurs = ChildPositionjoueurQuery::create(null, $criteria)
-                    ->filterByJoueur($this)
+                $collPartiesRelatedByEquipevisite = ChildPartieQuery::create(null, $criteria)
+                    ->filterByAlignementRelatedByEquipevisite($this)
                     ->find($con);
 
                 if (null !== $criteria) {
-                    if (false !== $this->collPositionjoueursPartial && count($collPositionjoueurs)) {
-                        $this->initPositionjoueurs(false);
+                    if (false !== $this->collPartiesRelatedByEquipevisitePartial && count($collPartiesRelatedByEquipevisite)) {
+                        $this->initPartiesRelatedByEquipevisite(false);
 
-                        foreach ($collPositionjoueurs as $obj) {
-                            if (false == $this->collPositionjoueurs->contains($obj)) {
-                                $this->collPositionjoueurs->append($obj);
+                        foreach ($collPartiesRelatedByEquipevisite as $obj) {
+                            if (false == $this->collPartiesRelatedByEquipevisite->contains($obj)) {
+                                $this->collPartiesRelatedByEquipevisite->append($obj);
                             }
                         }
 
-                        $this->collPositionjoueursPartial = true;
+                        $this->collPartiesRelatedByEquipevisitePartial = true;
                     }
 
-                    return $collPositionjoueurs;
+                    return $collPartiesRelatedByEquipevisite;
                 }
 
-                if ($partial && $this->collPositionjoueurs) {
-                    foreach ($this->collPositionjoueurs as $obj) {
+                if ($partial && $this->collPartiesRelatedByEquipevisite) {
+                    foreach ($this->collPartiesRelatedByEquipevisite as $obj) {
                         if ($obj->isNew()) {
-                            $collPositionjoueurs[] = $obj;
+                            $collPartiesRelatedByEquipevisite[] = $obj;
                         }
                     }
                 }
 
-                $this->collPositionjoueurs = $collPositionjoueurs;
-                $this->collPositionjoueursPartial = false;
+                $this->collPartiesRelatedByEquipevisite = $collPartiesRelatedByEquipevisite;
+                $this->collPartiesRelatedByEquipevisitePartial = false;
             }
         }
 
-        return $this->collPositionjoueurs;
+        return $this->collPartiesRelatedByEquipevisite;
     }
 
     /**
-     * Sets a collection of ChildPositionjoueur objects related by a one-to-many relationship
+     * Sets a collection of ChildPartie objects related by a one-to-many relationship
      * to the current object.
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $positionjoueurs A Propel collection.
+     * @param      Collection $partiesRelatedByEquipevisite A Propel collection.
      * @param      ConnectionInterface $con Optional connection object
-     * @return $this|ChildJoueur The current object (for fluent API support)
+     * @return $this|ChildAlignement The current object (for fluent API support)
      */
-    public function setPositionjoueurs(Collection $positionjoueurs, ConnectionInterface $con = null)
+    public function setPartiesRelatedByEquipevisite(Collection $partiesRelatedByEquipevisite, ConnectionInterface $con = null)
     {
-        /** @var ChildPositionjoueur[] $positionjoueursToDelete */
-        $positionjoueursToDelete = $this->getPositionjoueurs(new Criteria(), $con)->diff($positionjoueurs);
+        /** @var ChildPartie[] $partiesRelatedByEquipevisiteToDelete */
+        $partiesRelatedByEquipevisiteToDelete = $this->getPartiesRelatedByEquipevisite(new Criteria(), $con)->diff($partiesRelatedByEquipevisite);
 
 
-        $this->positionjoueursScheduledForDeletion = $positionjoueursToDelete;
+        $this->partiesRelatedByEquipevisiteScheduledForDeletion = $partiesRelatedByEquipevisiteToDelete;
 
-        foreach ($positionjoueursToDelete as $positionjoueurRemoved) {
-            $positionjoueurRemoved->setJoueur(null);
+        foreach ($partiesRelatedByEquipevisiteToDelete as $partieRelatedByEquipevisiteRemoved) {
+            $partieRelatedByEquipevisiteRemoved->setAlignementRelatedByEquipevisite(null);
         }
 
-        $this->collPositionjoueurs = null;
-        foreach ($positionjoueurs as $positionjoueur) {
-            $this->addPositionjoueur($positionjoueur);
+        $this->collPartiesRelatedByEquipevisite = null;
+        foreach ($partiesRelatedByEquipevisite as $partieRelatedByEquipevisite) {
+            $this->addPartieRelatedByEquipevisite($partieRelatedByEquipevisite);
         }
 
-        $this->collPositionjoueurs = $positionjoueurs;
-        $this->collPositionjoueursPartial = false;
+        $this->collPartiesRelatedByEquipevisite = $partiesRelatedByEquipevisite;
+        $this->collPartiesRelatedByEquipevisitePartial = false;
 
         return $this;
     }
 
     /**
-     * Returns the number of related Positionjoueur objects.
+     * Returns the number of related Partie objects.
      *
      * @param      Criteria $criteria
      * @param      boolean $distinct
      * @param      ConnectionInterface $con
-     * @return int             Count of related Positionjoueur objects.
+     * @return int             Count of related Partie objects.
      * @throws PropelException
      */
-    public function countPositionjoueurs(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    public function countPartiesRelatedByEquipevisite(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
     {
-        $partial = $this->collPositionjoueursPartial && !$this->isNew();
-        if (null === $this->collPositionjoueurs || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collPositionjoueurs) {
+        $partial = $this->collPartiesRelatedByEquipevisitePartial && !$this->isNew();
+        if (null === $this->collPartiesRelatedByEquipevisite || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collPartiesRelatedByEquipevisite) {
                 return 0;
             }
 
             if ($partial && !$criteria) {
-                return count($this->getPositionjoueurs());
+                return count($this->getPartiesRelatedByEquipevisite());
             }
 
-            $query = ChildPositionjoueurQuery::create(null, $criteria);
+            $query = ChildPartieQuery::create(null, $criteria);
             if ($distinct) {
                 $query->distinct();
             }
 
             return $query
-                ->filterByJoueur($this)
+                ->filterByAlignementRelatedByEquipevisite($this)
                 ->count($con);
         }
 
-        return count($this->collPositionjoueurs);
+        return count($this->collPartiesRelatedByEquipevisite);
     }
 
     /**
-     * Method called to associate a ChildPositionjoueur object to this object
-     * through the ChildPositionjoueur foreign key attribute.
+     * Method called to associate a ChildPartie object to this object
+     * through the ChildPartie foreign key attribute.
      *
-     * @param  ChildPositionjoueur $l ChildPositionjoueur
-     * @return $this|\Joueur The current object (for fluent API support)
+     * @param  ChildPartie $l ChildPartie
+     * @return $this|\Alignement The current object (for fluent API support)
      */
-    public function addPositionjoueur(ChildPositionjoueur $l)
+    public function addPartieRelatedByEquipevisite(ChildPartie $l)
     {
-        if ($this->collPositionjoueurs === null) {
-            $this->initPositionjoueurs();
-            $this->collPositionjoueursPartial = true;
+        if ($this->collPartiesRelatedByEquipevisite === null) {
+            $this->initPartiesRelatedByEquipevisite();
+            $this->collPartiesRelatedByEquipevisitePartial = true;
         }
 
-        if (!$this->collPositionjoueurs->contains($l)) {
-            $this->doAddPositionjoueur($l);
+        if (!$this->collPartiesRelatedByEquipevisite->contains($l)) {
+            $this->doAddPartieRelatedByEquipevisite($l);
 
-            if ($this->positionjoueursScheduledForDeletion and $this->positionjoueursScheduledForDeletion->contains($l)) {
-                $this->positionjoueursScheduledForDeletion->remove($this->positionjoueursScheduledForDeletion->search($l));
+            if ($this->partiesRelatedByEquipevisiteScheduledForDeletion and $this->partiesRelatedByEquipevisiteScheduledForDeletion->contains($l)) {
+                $this->partiesRelatedByEquipevisiteScheduledForDeletion->remove($this->partiesRelatedByEquipevisiteScheduledForDeletion->search($l));
             }
         }
 
@@ -1953,29 +2134,29 @@ abstract class Joueur implements ActiveRecordInterface
     }
 
     /**
-     * @param ChildPositionjoueur $positionjoueur The ChildPositionjoueur object to add.
+     * @param ChildPartie $partieRelatedByEquipevisite The ChildPartie object to add.
      */
-    protected function doAddPositionjoueur(ChildPositionjoueur $positionjoueur)
+    protected function doAddPartieRelatedByEquipevisite(ChildPartie $partieRelatedByEquipevisite)
     {
-        $this->collPositionjoueurs[]= $positionjoueur;
-        $positionjoueur->setJoueur($this);
+        $this->collPartiesRelatedByEquipevisite[]= $partieRelatedByEquipevisite;
+        $partieRelatedByEquipevisite->setAlignementRelatedByEquipevisite($this);
     }
 
     /**
-     * @param  ChildPositionjoueur $positionjoueur The ChildPositionjoueur object to remove.
-     * @return $this|ChildJoueur The current object (for fluent API support)
+     * @param  ChildPartie $partieRelatedByEquipevisite The ChildPartie object to remove.
+     * @return $this|ChildAlignement The current object (for fluent API support)
      */
-    public function removePositionjoueur(ChildPositionjoueur $positionjoueur)
+    public function removePartieRelatedByEquipevisite(ChildPartie $partieRelatedByEquipevisite)
     {
-        if ($this->getPositionjoueurs()->contains($positionjoueur)) {
-            $pos = $this->collPositionjoueurs->search($positionjoueur);
-            $this->collPositionjoueurs->remove($pos);
-            if (null === $this->positionjoueursScheduledForDeletion) {
-                $this->positionjoueursScheduledForDeletion = clone $this->collPositionjoueurs;
-                $this->positionjoueursScheduledForDeletion->clear();
+        if ($this->getPartiesRelatedByEquipevisite()->contains($partieRelatedByEquipevisite)) {
+            $pos = $this->collPartiesRelatedByEquipevisite->search($partieRelatedByEquipevisite);
+            $this->collPartiesRelatedByEquipevisite->remove($pos);
+            if (null === $this->partiesRelatedByEquipevisiteScheduledForDeletion) {
+                $this->partiesRelatedByEquipevisiteScheduledForDeletion = clone $this->collPartiesRelatedByEquipevisite;
+                $this->partiesRelatedByEquipevisiteScheduledForDeletion->clear();
             }
-            $this->positionjoueursScheduledForDeletion[]= clone $positionjoueur;
-            $positionjoueur->setJoueur(null);
+            $this->partiesRelatedByEquipevisiteScheduledForDeletion[]= clone $partieRelatedByEquipevisite;
+            $partieRelatedByEquipevisite->setAlignementRelatedByEquipevisite(null);
         }
 
         return $this;
@@ -1985,25 +2166,25 @@ abstract class Joueur implements ActiveRecordInterface
     /**
      * If this collection has already been initialized with
      * an identical criteria, it returns the collection.
-     * Otherwise if this Joueur is new, it will return
-     * an empty collection; or if this Joueur has previously
-     * been saved, it will retrieve related Positionjoueurs from storage.
+     * Otherwise if this Alignement is new, it will return
+     * an empty collection; or if this Alignement has previously
+     * been saved, it will retrieve related PartiesRelatedByEquipevisite from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
-     * actually need in Joueur.
+     * actually need in Alignement.
      *
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildPositionjoueur[] List of ChildPositionjoueur objects
+     * @return ObjectCollection|ChildPartie[] List of ChildPartie objects
      */
-    public function getPositionjoueursJoinPosition(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getPartiesRelatedByEquipevisiteJoinArena(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
-        $query = ChildPositionjoueurQuery::create(null, $criteria);
-        $query->joinWith('Position', $joinBehavior);
+        $query = ChildPartieQuery::create(null, $criteria);
+        $query->joinWith('Arena', $joinBehavior);
 
-        return $this->getPositionjoueurs($query, $con);
+        return $this->getPartiesRelatedByEquipevisite($query, $con);
     }
 
     /**
@@ -2013,14 +2194,22 @@ abstract class Joueur implements ActiveRecordInterface
      */
     public function clear()
     {
+        if (null !== $this->aEquipe) {
+            $this->aEquipe->removeAlignement($this);
+        }
+        if (null !== $this->aJoueur) {
+            $this->aJoueur->removeAlignement($this);
+        }
+        if (null !== $this->aPosition) {
+            $this->aPosition->removeAlignement($this);
+        }
         $this->id = null;
-        $this->nom = null;
-        $this->prenom = null;
-        $this->courriel = null;
-        $this->telephone = null;
-        $this->statut = null;
-        $this->cote = null;
-        $this->numero = null;
+        $this->equipeno = null;
+        $this->joueurno = null;
+        $this->posabbr = null;
+        $this->but = null;
+        $this->passe = null;
+        $this->blanchissage = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();
@@ -2039,20 +2228,23 @@ abstract class Joueur implements ActiveRecordInterface
     public function clearAllReferences($deep = false)
     {
         if ($deep) {
-            if ($this->collAlignements) {
-                foreach ($this->collAlignements as $o) {
+            if ($this->collPartiesRelatedByEquipelocale) {
+                foreach ($this->collPartiesRelatedByEquipelocale as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
-            if ($this->collPositionjoueurs) {
-                foreach ($this->collPositionjoueurs as $o) {
+            if ($this->collPartiesRelatedByEquipevisite) {
+                foreach ($this->collPartiesRelatedByEquipevisite as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
         } // if ($deep)
 
-        $this->collAlignements = null;
-        $this->collPositionjoueurs = null;
+        $this->collPartiesRelatedByEquipelocale = null;
+        $this->collPartiesRelatedByEquipevisite = null;
+        $this->aEquipe = null;
+        $this->aJoueur = null;
+        $this->aPosition = null;
     }
 
     /**
@@ -2062,7 +2254,7 @@ abstract class Joueur implements ActiveRecordInterface
      */
     public function __toString()
     {
-        return (string) $this->exportTo(JoueurTableMap::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(AlignementTableMap::DEFAULT_STRING_FORMAT);
     }
 
     /**

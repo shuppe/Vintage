@@ -34,6 +34,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPositionQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildPositionQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
+ * @method     ChildPositionQuery leftJoinAlignement($relationAlias = null) Adds a LEFT JOIN clause to the query using the Alignement relation
+ * @method     ChildPositionQuery rightJoinAlignement($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Alignement relation
+ * @method     ChildPositionQuery innerJoinAlignement($relationAlias = null) Adds a INNER JOIN clause to the query using the Alignement relation
+ *
+ * @method     ChildPositionQuery joinWithAlignement($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Alignement relation
+ *
+ * @method     ChildPositionQuery leftJoinWithAlignement() Adds a LEFT JOIN clause and with to the query using the Alignement relation
+ * @method     ChildPositionQuery rightJoinWithAlignement() Adds a RIGHT JOIN clause and with to the query using the Alignement relation
+ * @method     ChildPositionQuery innerJoinWithAlignement() Adds a INNER JOIN clause and with to the query using the Alignement relation
+ *
  * @method     ChildPositionQuery leftJoinPositionjoueur($relationAlias = null) Adds a LEFT JOIN clause to the query using the Positionjoueur relation
  * @method     ChildPositionQuery rightJoinPositionjoueur($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Positionjoueur relation
  * @method     ChildPositionQuery innerJoinPositionjoueur($relationAlias = null) Adds a INNER JOIN clause to the query using the Positionjoueur relation
@@ -44,7 +54,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPositionQuery rightJoinWithPositionjoueur() Adds a RIGHT JOIN clause and with to the query using the Positionjoueur relation
  * @method     ChildPositionQuery innerJoinWithPositionjoueur() Adds a INNER JOIN clause and with to the query using the Positionjoueur relation
  *
- * @method     \PositionjoueurQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \AlignementQuery|\PositionjoueurQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildPosition findOne(ConnectionInterface $con = null) Return the first ChildPosition matching the query
  * @method     ChildPosition findOneOrCreate(ConnectionInterface $con = null) Return the first ChildPosition matching the query, or a new ChildPosition object populated from the query conditions when no match is found
@@ -297,6 +307,79 @@ abstract class PositionQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(PositionTableMap::COL_NOM, $nom, $comparison);
+    }
+
+    /**
+     * Filter the query by a related \Alignement object
+     *
+     * @param \Alignement|ObjectCollection $alignement the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildPositionQuery The current query, for fluid interface
+     */
+    public function filterByAlignement($alignement, $comparison = null)
+    {
+        if ($alignement instanceof \Alignement) {
+            return $this
+                ->addUsingAlias(PositionTableMap::COL_ABBR, $alignement->getPosabbr(), $comparison);
+        } elseif ($alignement instanceof ObjectCollection) {
+            return $this
+                ->useAlignementQuery()
+                ->filterByPrimaryKeys($alignement->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByAlignement() only accepts arguments of type \Alignement or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Alignement relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildPositionQuery The current query, for fluid interface
+     */
+    public function joinAlignement($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Alignement');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Alignement');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Alignement relation Alignement object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \AlignementQuery A secondary query class using the current class as primary query
+     */
+    public function useAlignementQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinAlignement($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Alignement', '\AlignementQuery');
     }
 
     /**
