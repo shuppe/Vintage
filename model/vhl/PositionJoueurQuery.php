@@ -1,9 +1,9 @@
 <?php
 
-use Base\PositionjoueurQuery as BasePositionjoueurQuery;
+use Base\PositionJoueurQuery as BasePositionJoueurQuery;
 
 /**
- * Skeleton subclass for performing query and update operations on the 'PositionJoueur' table.
+ * Skeleton subclass for performing query and update operations on the 'Position_Joueur' table.
  *
  *
  *
@@ -12,7 +12,7 @@ use Base\PositionjoueurQuery as BasePositionjoueurQuery;
  * long as it does not already exist in the output directory.
  *
  */
-class PositionjoueurQuery extends BasePositionjoueurQuery
+class PositionJoueurQuery extends BasePositionJoueurQuery
 {
 
 }

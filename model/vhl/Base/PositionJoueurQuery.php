@@ -2,11 +2,11 @@
 
 namespace Base;
 
-use \Positionjoueur as ChildPositionjoueur;
-use \PositionjoueurQuery as ChildPositionjoueurQuery;
+use \PositionJoueur as ChildPositionJoueur;
+use \PositionJoueurQuery as ChildPositionJoueurQuery;
 use \Exception;
 use \PDO;
-use Map\PositionjoueurTableMap;
+use Map\PositionJoueurTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -16,99 +16,99 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'PositionJoueur' table.
+ * Base class that represents a query for the 'Position_Joueur' table.
  *
  *
  *
- * @method     ChildPositionjoueurQuery orderById($order = Criteria::ASC) Order by the id column
- * @method     ChildPositionjoueurQuery orderByIdjoueur($order = Criteria::ASC) Order by the idJoueur column
- * @method     ChildPositionjoueurQuery orderByAbbrpos($order = Criteria::ASC) Order by the abbrPos column
+ * @method     ChildPositionJoueurQuery orderById($order = Criteria::ASC) Order by the id column
+ * @method     ChildPositionJoueurQuery orderByIdjoueur($order = Criteria::ASC) Order by the idJoueur column
+ * @method     ChildPositionJoueurQuery orderByAbbrpos($order = Criteria::ASC) Order by the abbrPos column
  *
- * @method     ChildPositionjoueurQuery groupById() Group by the id column
- * @method     ChildPositionjoueurQuery groupByIdjoueur() Group by the idJoueur column
- * @method     ChildPositionjoueurQuery groupByAbbrpos() Group by the abbrPos column
+ * @method     ChildPositionJoueurQuery groupById() Group by the id column
+ * @method     ChildPositionJoueurQuery groupByIdjoueur() Group by the idJoueur column
+ * @method     ChildPositionJoueurQuery groupByAbbrpos() Group by the abbrPos column
  *
- * @method     ChildPositionjoueurQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
- * @method     ChildPositionjoueurQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
- * @method     ChildPositionjoueurQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ * @method     ChildPositionJoueurQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
+ * @method     ChildPositionJoueurQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
+ * @method     ChildPositionJoueurQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ChildPositionjoueurQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
- * @method     ChildPositionjoueurQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
- * @method     ChildPositionjoueurQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ * @method     ChildPositionJoueurQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
+ * @method     ChildPositionJoueurQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
+ * @method     ChildPositionJoueurQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildPositionjoueurQuery leftJoinJoueur($relationAlias = null) Adds a LEFT JOIN clause to the query using the Joueur relation
- * @method     ChildPositionjoueurQuery rightJoinJoueur($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Joueur relation
- * @method     ChildPositionjoueurQuery innerJoinJoueur($relationAlias = null) Adds a INNER JOIN clause to the query using the Joueur relation
+ * @method     ChildPositionJoueurQuery leftJoinJoueur($relationAlias = null) Adds a LEFT JOIN clause to the query using the Joueur relation
+ * @method     ChildPositionJoueurQuery rightJoinJoueur($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Joueur relation
+ * @method     ChildPositionJoueurQuery innerJoinJoueur($relationAlias = null) Adds a INNER JOIN clause to the query using the Joueur relation
  *
- * @method     ChildPositionjoueurQuery joinWithJoueur($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Joueur relation
+ * @method     ChildPositionJoueurQuery joinWithJoueur($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Joueur relation
  *
- * @method     ChildPositionjoueurQuery leftJoinWithJoueur() Adds a LEFT JOIN clause and with to the query using the Joueur relation
- * @method     ChildPositionjoueurQuery rightJoinWithJoueur() Adds a RIGHT JOIN clause and with to the query using the Joueur relation
- * @method     ChildPositionjoueurQuery innerJoinWithJoueur() Adds a INNER JOIN clause and with to the query using the Joueur relation
+ * @method     ChildPositionJoueurQuery leftJoinWithJoueur() Adds a LEFT JOIN clause and with to the query using the Joueur relation
+ * @method     ChildPositionJoueurQuery rightJoinWithJoueur() Adds a RIGHT JOIN clause and with to the query using the Joueur relation
+ * @method     ChildPositionJoueurQuery innerJoinWithJoueur() Adds a INNER JOIN clause and with to the query using the Joueur relation
  *
- * @method     ChildPositionjoueurQuery leftJoinPosition($relationAlias = null) Adds a LEFT JOIN clause to the query using the Position relation
- * @method     ChildPositionjoueurQuery rightJoinPosition($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Position relation
- * @method     ChildPositionjoueurQuery innerJoinPosition($relationAlias = null) Adds a INNER JOIN clause to the query using the Position relation
+ * @method     ChildPositionJoueurQuery leftJoinPosition($relationAlias = null) Adds a LEFT JOIN clause to the query using the Position relation
+ * @method     ChildPositionJoueurQuery rightJoinPosition($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Position relation
+ * @method     ChildPositionJoueurQuery innerJoinPosition($relationAlias = null) Adds a INNER JOIN clause to the query using the Position relation
  *
- * @method     ChildPositionjoueurQuery joinWithPosition($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Position relation
+ * @method     ChildPositionJoueurQuery joinWithPosition($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Position relation
  *
- * @method     ChildPositionjoueurQuery leftJoinWithPosition() Adds a LEFT JOIN clause and with to the query using the Position relation
- * @method     ChildPositionjoueurQuery rightJoinWithPosition() Adds a RIGHT JOIN clause and with to the query using the Position relation
- * @method     ChildPositionjoueurQuery innerJoinWithPosition() Adds a INNER JOIN clause and with to the query using the Position relation
+ * @method     ChildPositionJoueurQuery leftJoinWithPosition() Adds a LEFT JOIN clause and with to the query using the Position relation
+ * @method     ChildPositionJoueurQuery rightJoinWithPosition() Adds a RIGHT JOIN clause and with to the query using the Position relation
+ * @method     ChildPositionJoueurQuery innerJoinWithPosition() Adds a INNER JOIN clause and with to the query using the Position relation
  *
  * @method     \JoueurQuery|\PositionQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildPositionjoueur findOne(ConnectionInterface $con = null) Return the first ChildPositionjoueur matching the query
- * @method     ChildPositionjoueur findOneOrCreate(ConnectionInterface $con = null) Return the first ChildPositionjoueur matching the query, or a new ChildPositionjoueur object populated from the query conditions when no match is found
+ * @method     ChildPositionJoueur findOne(ConnectionInterface $con = null) Return the first ChildPositionJoueur matching the query
+ * @method     ChildPositionJoueur findOneOrCreate(ConnectionInterface $con = null) Return the first ChildPositionJoueur matching the query, or a new ChildPositionJoueur object populated from the query conditions when no match is found
  *
- * @method     ChildPositionjoueur findOneById(int $id) Return the first ChildPositionjoueur filtered by the id column
- * @method     ChildPositionjoueur findOneByIdjoueur(int $idJoueur) Return the first ChildPositionjoueur filtered by the idJoueur column
- * @method     ChildPositionjoueur findOneByAbbrpos(string $abbrPos) Return the first ChildPositionjoueur filtered by the abbrPos column *
+ * @method     ChildPositionJoueur findOneById(int $id) Return the first ChildPositionJoueur filtered by the id column
+ * @method     ChildPositionJoueur findOneByIdjoueur(int $idJoueur) Return the first ChildPositionJoueur filtered by the idJoueur column
+ * @method     ChildPositionJoueur findOneByAbbrpos(string $abbrPos) Return the first ChildPositionJoueur filtered by the abbrPos column *
 
- * @method     ChildPositionjoueur requirePk($key, ConnectionInterface $con = null) Return the ChildPositionjoueur by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPositionjoueur requireOne(ConnectionInterface $con = null) Return the first ChildPositionjoueur matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildPositionJoueur requirePk($key, ConnectionInterface $con = null) Return the ChildPositionJoueur by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildPositionJoueur requireOne(ConnectionInterface $con = null) Return the first ChildPositionJoueur matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildPositionjoueur requireOneById(int $id) Return the first ChildPositionjoueur filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPositionjoueur requireOneByIdjoueur(int $idJoueur) Return the first ChildPositionjoueur filtered by the idJoueur column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPositionjoueur requireOneByAbbrpos(string $abbrPos) Return the first ChildPositionjoueur filtered by the abbrPos column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildPositionJoueur requireOneById(int $id) Return the first ChildPositionJoueur filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildPositionJoueur requireOneByIdjoueur(int $idJoueur) Return the first ChildPositionJoueur filtered by the idJoueur column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildPositionJoueur requireOneByAbbrpos(string $abbrPos) Return the first ChildPositionJoueur filtered by the abbrPos column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildPositionjoueur[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildPositionjoueur objects based on current ModelCriteria
- * @method     ChildPositionjoueur[]|ObjectCollection findById(int $id) Return ChildPositionjoueur objects filtered by the id column
- * @method     ChildPositionjoueur[]|ObjectCollection findByIdjoueur(int $idJoueur) Return ChildPositionjoueur objects filtered by the idJoueur column
- * @method     ChildPositionjoueur[]|ObjectCollection findByAbbrpos(string $abbrPos) Return ChildPositionjoueur objects filtered by the abbrPos column
- * @method     ChildPositionjoueur[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildPositionJoueur[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildPositionJoueur objects based on current ModelCriteria
+ * @method     ChildPositionJoueur[]|ObjectCollection findById(int $id) Return ChildPositionJoueur objects filtered by the id column
+ * @method     ChildPositionJoueur[]|ObjectCollection findByIdjoueur(int $idJoueur) Return ChildPositionJoueur objects filtered by the idJoueur column
+ * @method     ChildPositionJoueur[]|ObjectCollection findByAbbrpos(string $abbrPos) Return ChildPositionJoueur objects filtered by the abbrPos column
+ * @method     ChildPositionJoueur[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
-abstract class PositionjoueurQuery extends ModelCriteria
+abstract class PositionJoueurQuery extends ModelCriteria
 {
     protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityNotFoundException';
 
     /**
-     * Initializes internal state of \Base\PositionjoueurQuery object.
+     * Initializes internal state of \Base\PositionJoueurQuery object.
      *
      * @param     string $dbName The database name
      * @param     string $modelName The phpName of a model, e.g. 'Book'
      * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
      */
-    public function __construct($dbName = 'default', $modelName = '\\Positionjoueur', $modelAlias = null)
+    public function __construct($dbName = 'default', $modelName = '\\PositionJoueur', $modelAlias = null)
     {
         parent::__construct($dbName, $modelName, $modelAlias);
     }
 
     /**
-     * Returns a new ChildPositionjoueurQuery object.
+     * Returns a new ChildPositionJoueurQuery object.
      *
      * @param     string $modelAlias The alias of a model in the query
      * @param     Criteria $criteria Optional Criteria to build the query from
      *
-     * @return ChildPositionjoueurQuery
+     * @return ChildPositionJoueurQuery
      */
     public static function create($modelAlias = null, Criteria $criteria = null)
     {
-        if ($criteria instanceof ChildPositionjoueurQuery) {
+        if ($criteria instanceof ChildPositionJoueurQuery) {
             return $criteria;
         }
-        $query = new ChildPositionjoueurQuery();
+        $query = new ChildPositionJoueurQuery();
         if (null !== $modelAlias) {
             $query->setModelAlias($modelAlias);
         }
@@ -131,7 +131,7 @@ abstract class PositionjoueurQuery extends ModelCriteria
      * @param mixed $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
-     * @return ChildPositionjoueur|array|mixed the result, formatted by the current formatter
+     * @return ChildPositionJoueur|array|mixed the result, formatted by the current formatter
      */
     public function findPk($key, ConnectionInterface $con = null)
     {
@@ -140,7 +140,7 @@ abstract class PositionjoueurQuery extends ModelCriteria
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(PositionjoueurTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(PositionJoueurTableMap::DATABASE_NAME);
         }
 
         $this->basePreSelect($con);
@@ -153,7 +153,7 @@ abstract class PositionjoueurQuery extends ModelCriteria
             return $this->findPkComplex($key, $con);
         }
 
-        if ((null !== ($obj = PositionjoueurTableMap::getInstanceFromPool(null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key)))) {
+        if ((null !== ($obj = PositionJoueurTableMap::getInstanceFromPool(null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key)))) {
             // the object is already in the instance pool
             return $obj;
         }
@@ -170,11 +170,11 @@ abstract class PositionjoueurQuery extends ModelCriteria
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildPositionjoueur A model object, or null if the key is not found
+     * @return ChildPositionJoueur A model object, or null if the key is not found
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, idJoueur, abbrPos FROM PositionJoueur WHERE id = :p0';
+        $sql = 'SELECT id, idJoueur, abbrPos FROM Position_Joueur WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -185,10 +185,10 @@ abstract class PositionjoueurQuery extends ModelCriteria
         }
         $obj = null;
         if ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
-            /** @var ChildPositionjoueur $obj */
-            $obj = new ChildPositionjoueur();
+            /** @var ChildPositionJoueur $obj */
+            $obj = new ChildPositionJoueur();
             $obj->hydrate($row);
-            PositionjoueurTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
+            PositionJoueurTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
         }
         $stmt->closeCursor();
 
@@ -201,7 +201,7 @@ abstract class PositionjoueurQuery extends ModelCriteria
      * @param     mixed $key Primary key to use for the query
      * @param     ConnectionInterface $con A connection object
      *
-     * @return ChildPositionjoueur|array|mixed the result, formatted by the current formatter
+     * @return ChildPositionJoueur|array|mixed the result, formatted by the current formatter
      */
     protected function findPkComplex($key, ConnectionInterface $con)
     {
@@ -243,12 +243,12 @@ abstract class PositionjoueurQuery extends ModelCriteria
      *
      * @param     mixed $key Primary key to use for the query
      *
-     * @return $this|ChildPositionjoueurQuery The current query, for fluid interface
+     * @return $this|ChildPositionJoueurQuery The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(PositionjoueurTableMap::COL_ID, $key, Criteria::EQUAL);
+        return $this->addUsingAlias(PositionJoueurTableMap::COL_ID, $key, Criteria::EQUAL);
     }
 
     /**
@@ -256,12 +256,12 @@ abstract class PositionjoueurQuery extends ModelCriteria
      *
      * @param     array $keys The list of primary key to use for the query
      *
-     * @return $this|ChildPositionjoueurQuery The current query, for fluid interface
+     * @return $this|ChildPositionJoueurQuery The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(PositionjoueurTableMap::COL_ID, $keys, Criteria::IN);
+        return $this->addUsingAlias(PositionJoueurTableMap::COL_ID, $keys, Criteria::IN);
     }
 
     /**
@@ -280,18 +280,18 @@ abstract class PositionjoueurQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPositionjoueurQuery The current query, for fluid interface
+     * @return $this|ChildPositionJoueurQuery The current query, for fluid interface
      */
     public function filterById($id = null, $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
             if (isset($id['min'])) {
-                $this->addUsingAlias(PositionjoueurTableMap::COL_ID, $id['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(PositionJoueurTableMap::COL_ID, $id['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($id['max'])) {
-                $this->addUsingAlias(PositionjoueurTableMap::COL_ID, $id['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(PositionJoueurTableMap::COL_ID, $id['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -302,7 +302,7 @@ abstract class PositionjoueurQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PositionjoueurTableMap::COL_ID, $id, $comparison);
+        return $this->addUsingAlias(PositionJoueurTableMap::COL_ID, $id, $comparison);
     }
 
     /**
@@ -323,18 +323,18 @@ abstract class PositionjoueurQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPositionjoueurQuery The current query, for fluid interface
+     * @return $this|ChildPositionJoueurQuery The current query, for fluid interface
      */
     public function filterByIdjoueur($idjoueur = null, $comparison = null)
     {
         if (is_array($idjoueur)) {
             $useMinMax = false;
             if (isset($idjoueur['min'])) {
-                $this->addUsingAlias(PositionjoueurTableMap::COL_IDJOUEUR, $idjoueur['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(PositionJoueurTableMap::COL_IDJOUEUR, $idjoueur['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($idjoueur['max'])) {
-                $this->addUsingAlias(PositionjoueurTableMap::COL_IDJOUEUR, $idjoueur['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(PositionJoueurTableMap::COL_IDJOUEUR, $idjoueur['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -345,7 +345,7 @@ abstract class PositionjoueurQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PositionjoueurTableMap::COL_IDJOUEUR, $idjoueur, $comparison);
+        return $this->addUsingAlias(PositionJoueurTableMap::COL_IDJOUEUR, $idjoueur, $comparison);
     }
 
     /**
@@ -360,7 +360,7 @@ abstract class PositionjoueurQuery extends ModelCriteria
      * @param     string $abbrpos The value to use as filter.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPositionjoueurQuery The current query, for fluid interface
+     * @return $this|ChildPositionJoueurQuery The current query, for fluid interface
      */
     public function filterByAbbrpos($abbrpos = null, $comparison = null)
     {
@@ -370,7 +370,7 @@ abstract class PositionjoueurQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PositionjoueurTableMap::COL_ABBRPOS, $abbrpos, $comparison);
+        return $this->addUsingAlias(PositionJoueurTableMap::COL_ABBRPOS, $abbrpos, $comparison);
     }
 
     /**
@@ -381,20 +381,20 @@ abstract class PositionjoueurQuery extends ModelCriteria
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildPositionjoueurQuery The current query, for fluid interface
+     * @return ChildPositionJoueurQuery The current query, for fluid interface
      */
     public function filterByJoueur($joueur, $comparison = null)
     {
         if ($joueur instanceof \Joueur) {
             return $this
-                ->addUsingAlias(PositionjoueurTableMap::COL_IDJOUEUR, $joueur->getId(), $comparison);
+                ->addUsingAlias(PositionJoueurTableMap::COL_IDJOUEUR, $joueur->getId(), $comparison);
         } elseif ($joueur instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             return $this
-                ->addUsingAlias(PositionjoueurTableMap::COL_IDJOUEUR, $joueur->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(PositionJoueurTableMap::COL_IDJOUEUR, $joueur->toKeyValue('PrimaryKey', 'Id'), $comparison);
         } else {
             throw new PropelException('filterByJoueur() only accepts arguments of type \Joueur or Collection');
         }
@@ -406,7 +406,7 @@ abstract class PositionjoueurQuery extends ModelCriteria
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildPositionjoueurQuery The current query, for fluid interface
+     * @return $this|ChildPositionJoueurQuery The current query, for fluid interface
      */
     public function joinJoueur($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
@@ -458,20 +458,20 @@ abstract class PositionjoueurQuery extends ModelCriteria
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildPositionjoueurQuery The current query, for fluid interface
+     * @return ChildPositionJoueurQuery The current query, for fluid interface
      */
     public function filterByPosition($position, $comparison = null)
     {
         if ($position instanceof \Position) {
             return $this
-                ->addUsingAlias(PositionjoueurTableMap::COL_ABBRPOS, $position->getAbbr(), $comparison);
+                ->addUsingAlias(PositionJoueurTableMap::COL_ABBRPOS, $position->getAbbr(), $comparison);
         } elseif ($position instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             return $this
-                ->addUsingAlias(PositionjoueurTableMap::COL_ABBRPOS, $position->toKeyValue('PrimaryKey', 'Abbr'), $comparison);
+                ->addUsingAlias(PositionJoueurTableMap::COL_ABBRPOS, $position->toKeyValue('PrimaryKey', 'Abbr'), $comparison);
         } else {
             throw new PropelException('filterByPosition() only accepts arguments of type \Position or Collection');
         }
@@ -483,7 +483,7 @@ abstract class PositionjoueurQuery extends ModelCriteria
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildPositionjoueurQuery The current query, for fluid interface
+     * @return $this|ChildPositionJoueurQuery The current query, for fluid interface
      */
     public function joinPosition($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
@@ -530,21 +530,21 @@ abstract class PositionjoueurQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param   ChildPositionjoueur $positionjoueur Object to remove from the list of results
+     * @param   ChildPositionJoueur $positionJoueur Object to remove from the list of results
      *
-     * @return $this|ChildPositionjoueurQuery The current query, for fluid interface
+     * @return $this|ChildPositionJoueurQuery The current query, for fluid interface
      */
-    public function prune($positionjoueur = null)
+    public function prune($positionJoueur = null)
     {
-        if ($positionjoueur) {
-            $this->addUsingAlias(PositionjoueurTableMap::COL_ID, $positionjoueur->getId(), Criteria::NOT_EQUAL);
+        if ($positionJoueur) {
+            $this->addUsingAlias(PositionJoueurTableMap::COL_ID, $positionJoueur->getId(), Criteria::NOT_EQUAL);
         }
 
         return $this;
     }
 
     /**
-     * Deletes all rows from the PositionJoueur table.
+     * Deletes all rows from the Position_Joueur table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
@@ -552,7 +552,7 @@ abstract class PositionjoueurQuery extends ModelCriteria
     public function doDeleteAll(ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(PositionjoueurTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(PositionJoueurTableMap::DATABASE_NAME);
         }
 
         // use transaction because $criteria could contain info
@@ -563,8 +563,8 @@ abstract class PositionjoueurQuery extends ModelCriteria
             // Because this db requires some delete cascade/set null emulation, we have to
             // clear the cached instance *after* the emulation has happened (since
             // instances get re-added by the select statement contained therein).
-            PositionjoueurTableMap::clearInstancePool();
-            PositionjoueurTableMap::clearRelatedInstancePool();
+            PositionJoueurTableMap::clearInstancePool();
+            PositionJoueurTableMap::clearRelatedInstancePool();
 
             return $affectedRows;
         });
@@ -582,26 +582,26 @@ abstract class PositionjoueurQuery extends ModelCriteria
     public function delete(ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(PositionjoueurTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(PositionJoueurTableMap::DATABASE_NAME);
         }
 
         $criteria = $this;
 
         // Set the correct dbName
-        $criteria->setDbName(PositionjoueurTableMap::DATABASE_NAME);
+        $criteria->setDbName(PositionJoueurTableMap::DATABASE_NAME);
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
 
-            PositionjoueurTableMap::removeInstanceFromPool($criteria);
+            PositionJoueurTableMap::removeInstanceFromPool($criteria);
 
             $affectedRows += ModelCriteria::delete($con);
-            PositionjoueurTableMap::clearRelatedInstancePool();
+            PositionJoueurTableMap::clearRelatedInstancePool();
 
             return $affectedRows;
         });
     }
 
-} // PositionjoueurQuery
+} // PositionJoueurQuery

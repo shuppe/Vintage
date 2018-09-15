@@ -2,8 +2,8 @@
 
 namespace Map;
 
-use \Arena;
-use \ArenaQuery;
+use \Partie;
+use \PartieQuery;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\InstancePoolTrait;
@@ -16,7 +16,7 @@ use Propel\Runtime\Map\TableMapTrait;
 
 
 /**
- * This class defines the structure of the 'Arena' table.
+ * This class defines the structure of the 'Partie' table.
  *
  *
  *
@@ -26,7 +26,7 @@ use Propel\Runtime\Map\TableMapTrait;
  * (i.e. if it's a text column type).
  *
  */
-class ArenaTableMap extends TableMap
+class PartieTableMap extends TableMap
 {
     use InstancePoolTrait;
     use TableMapTrait;
@@ -34,7 +34,7 @@ class ArenaTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'vintage.hockey.pickup.Map.ArenaTableMap';
+    const CLASS_NAME = 'vhl.Map.PartieTableMap';
 
     /**
      * The default database name for this class
@@ -44,22 +44,22 @@ class ArenaTableMap extends TableMap
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'Arena';
+    const TABLE_NAME = 'Partie';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\Arena';
+    const OM_CLASS = '\\Partie';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'vintage.hockey.pickup.Arena';
+    const CLASS_DEFAULT = 'vhl.Partie';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 7;
+    const NUM_COLUMNS = 8;
 
     /**
      * The number of lazy-loaded columns
@@ -69,42 +69,47 @@ class ArenaTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 7;
+    const NUM_HYDRATE_COLUMNS = 8;
 
     /**
      * the column name for the id field
      */
-    const COL_ID = 'Arena.id';
+    const COL_ID = 'Partie.id';
 
     /**
-     * the column name for the Nom field
+     * the column name for the datePartie field
      */
-    const COL_NOM = 'Arena.Nom';
+    const COL_DATEPARTIE = 'Partie.datePartie';
 
     /**
-     * the column name for the adresse field
+     * the column name for the Heure field
      */
-    const COL_ADRESSE = 'Arena.adresse';
+    const COL_HEURE = 'Partie.Heure';
 
     /**
-     * the column name for the Ville field
+     * the column name for the ArenaNo field
      */
-    const COL_VILLE = 'Arena.Ville';
+    const COL_ARENANO = 'Partie.ArenaNo';
 
     /**
-     * the column name for the province field
+     * the column name for the EquipeLocale field
      */
-    const COL_PROVINCE = 'Arena.province';
+    const COL_EQUIPELOCALE = 'Partie.EquipeLocale';
 
     /**
-     * the column name for the codePostal field
+     * the column name for the ptsEquipeLocale field
      */
-    const COL_CODEPOSTAL = 'Arena.codePostal';
+    const COL_PTSEQUIPELOCALE = 'Partie.ptsEquipeLocale';
 
     /**
-     * the column name for the url field
+     * the column name for the EquipeVisite field
      */
-    const COL_URL = 'Arena.url';
+    const COL_EQUIPEVISITE = 'Partie.EquipeVisite';
+
+    /**
+     * the column name for the ptsEquipeVisite field
+     */
+    const COL_PTSEQUIPEVISITE = 'Partie.ptsEquipeVisite';
 
     /**
      * The default string format for model objects of the related table
@@ -118,11 +123,11 @@ class ArenaTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Nom', 'Adresse', 'Ville', 'Province', 'Codepostal', 'Url', ),
-        self::TYPE_CAMELNAME     => array('id', 'nom', 'adresse', 'ville', 'province', 'codepostal', 'url', ),
-        self::TYPE_COLNAME       => array(ArenaTableMap::COL_ID, ArenaTableMap::COL_NOM, ArenaTableMap::COL_ADRESSE, ArenaTableMap::COL_VILLE, ArenaTableMap::COL_PROVINCE, ArenaTableMap::COL_CODEPOSTAL, ArenaTableMap::COL_URL, ),
-        self::TYPE_FIELDNAME     => array('id', 'Nom', 'adresse', 'Ville', 'province', 'codePostal', 'url', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
+        self::TYPE_PHPNAME       => array('Id', 'Datepartie', 'Heure', 'Arenano', 'Equipelocale', 'Ptsequipelocale', 'Equipevisite', 'Ptsequipevisite', ),
+        self::TYPE_CAMELNAME     => array('id', 'datepartie', 'heure', 'arenano', 'equipelocale', 'ptsequipelocale', 'equipevisite', 'ptsequipevisite', ),
+        self::TYPE_COLNAME       => array(PartieTableMap::COL_ID, PartieTableMap::COL_DATEPARTIE, PartieTableMap::COL_HEURE, PartieTableMap::COL_ARENANO, PartieTableMap::COL_EQUIPELOCALE, PartieTableMap::COL_PTSEQUIPELOCALE, PartieTableMap::COL_EQUIPEVISITE, PartieTableMap::COL_PTSEQUIPEVISITE, ),
+        self::TYPE_FIELDNAME     => array('id', 'datePartie', 'Heure', 'ArenaNo', 'EquipeLocale', 'ptsEquipeLocale', 'EquipeVisite', 'ptsEquipeVisite', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -132,11 +137,11 @@ class ArenaTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Nom' => 1, 'Adresse' => 2, 'Ville' => 3, 'Province' => 4, 'Codepostal' => 5, 'Url' => 6, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'nom' => 1, 'adresse' => 2, 'ville' => 3, 'province' => 4, 'codepostal' => 5, 'url' => 6, ),
-        self::TYPE_COLNAME       => array(ArenaTableMap::COL_ID => 0, ArenaTableMap::COL_NOM => 1, ArenaTableMap::COL_ADRESSE => 2, ArenaTableMap::COL_VILLE => 3, ArenaTableMap::COL_PROVINCE => 4, ArenaTableMap::COL_CODEPOSTAL => 5, ArenaTableMap::COL_URL => 6, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'Nom' => 1, 'adresse' => 2, 'Ville' => 3, 'province' => 4, 'codePostal' => 5, 'url' => 6, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Datepartie' => 1, 'Heure' => 2, 'Arenano' => 3, 'Equipelocale' => 4, 'Ptsequipelocale' => 5, 'Equipevisite' => 6, 'Ptsequipevisite' => 7, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'datepartie' => 1, 'heure' => 2, 'arenano' => 3, 'equipelocale' => 4, 'ptsequipelocale' => 5, 'equipevisite' => 6, 'ptsequipevisite' => 7, ),
+        self::TYPE_COLNAME       => array(PartieTableMap::COL_ID => 0, PartieTableMap::COL_DATEPARTIE => 1, PartieTableMap::COL_HEURE => 2, PartieTableMap::COL_ARENANO => 3, PartieTableMap::COL_EQUIPELOCALE => 4, PartieTableMap::COL_PTSEQUIPELOCALE => 5, PartieTableMap::COL_EQUIPEVISITE => 6, PartieTableMap::COL_PTSEQUIPEVISITE => 7, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'datePartie' => 1, 'Heure' => 2, 'ArenaNo' => 3, 'EquipeLocale' => 4, 'ptsEquipeLocale' => 5, 'EquipeVisite' => 6, 'ptsEquipeVisite' => 7, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -149,20 +154,21 @@ class ArenaTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('Arena');
-        $this->setPhpName('Arena');
+        $this->setName('Partie');
+        $this->setPhpName('Partie');
         $this->setIdentifierQuoting(false);
-        $this->setClassName('\\Arena');
-        $this->setPackage('vintage.hockey.pickup');
+        $this->setClassName('\\Partie');
+        $this->setPackage('vhl');
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, 10, null);
-        $this->addColumn('Nom', 'Nom', 'VARCHAR', true, 100, null);
-        $this->addColumn('adresse', 'Adresse', 'VARCHAR', false, 200, null);
-        $this->addColumn('Ville', 'Ville', 'VARCHAR', false, 100, null);
-        $this->addColumn('province', 'Province', 'VARCHAR', false, 100, null);
-        $this->addColumn('codePostal', 'Codepostal', 'VARCHAR', false, 6, null);
-        $this->addColumn('url', 'Url', 'VARCHAR', true, 1000, null);
+        $this->addColumn('datePartie', 'Datepartie', 'DATE', true, null, null);
+        $this->addColumn('Heure', 'Heure', 'TIME', false, null, null);
+        $this->addForeignKey('ArenaNo', 'Arenano', 'INTEGER', 'Arena', 'id', false, 10, null);
+        $this->addForeignKey('EquipeLocale', 'Equipelocale', 'INTEGER', 'Alignement', 'Id', true, 10, null);
+        $this->addColumn('ptsEquipeLocale', 'Ptsequipelocale', 'INTEGER', false, 3, null);
+        $this->addForeignKey('EquipeVisite', 'Equipevisite', 'INTEGER', 'Alignement', 'Id', true, 10, null);
+        $this->addColumn('ptsEquipeVisite', 'Ptsequipevisite', 'INTEGER', false, 3, null);
     } // initialize()
 
     /**
@@ -170,13 +176,27 @@ class ArenaTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Partie', '\\Partie', RelationMap::ONE_TO_MANY, array (
+        $this->addRelation('Arena', '\\Arena', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
     0 => ':ArenaNo',
     1 => ':id',
   ),
-), null, null, 'Parties', false);
+), null, null, null, false);
+        $this->addRelation('AlignementRelatedByEquipelocale', '\\Alignement', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':EquipeLocale',
+    1 => ':Id',
+  ),
+), null, null, null, false);
+        $this->addRelation('AlignementRelatedByEquipevisite', '\\Alignement', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':EquipeVisite',
+    1 => ':Id',
+  ),
+), null, null, null, false);
     } // buildRelations()
 
     /**
@@ -236,7 +256,7 @@ class ArenaTableMap extends TableMap
      */
     public static function getOMClass($withPrefix = true)
     {
-        return $withPrefix ? ArenaTableMap::CLASS_DEFAULT : ArenaTableMap::OM_CLASS;
+        return $withPrefix ? PartieTableMap::CLASS_DEFAULT : PartieTableMap::OM_CLASS;
     }
 
     /**
@@ -250,22 +270,22 @@ class ArenaTableMap extends TableMap
      *
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (Arena object, last column rank)
+     * @return array           (Partie object, last column rank)
      */
     public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        $key = ArenaTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
-        if (null !== ($obj = ArenaTableMap::getInstanceFromPool($key))) {
+        $key = PartieTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
+        if (null !== ($obj = PartieTableMap::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $offset, true); // rehydrate
-            $col = $offset + ArenaTableMap::NUM_HYDRATE_COLUMNS;
+            $col = $offset + PartieTableMap::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = ArenaTableMap::OM_CLASS;
-            /** @var Arena $obj */
+            $cls = PartieTableMap::OM_CLASS;
+            /** @var Partie $obj */
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
-            ArenaTableMap::addInstanceToPool($obj, $key);
+            PartieTableMap::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -288,18 +308,18 @@ class ArenaTableMap extends TableMap
         $cls = static::getOMClass(false);
         // populate the object(s)
         while ($row = $dataFetcher->fetch()) {
-            $key = ArenaTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
-            if (null !== ($obj = ArenaTableMap::getInstanceFromPool($key))) {
+            $key = PartieTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
+            if (null !== ($obj = PartieTableMap::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var Arena $obj */
+                /** @var Partie $obj */
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                ArenaTableMap::addInstanceToPool($obj, $key);
+                PartieTableMap::addInstanceToPool($obj, $key);
             } // if key exists
         }
 
@@ -320,21 +340,23 @@ class ArenaTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(ArenaTableMap::COL_ID);
-            $criteria->addSelectColumn(ArenaTableMap::COL_NOM);
-            $criteria->addSelectColumn(ArenaTableMap::COL_ADRESSE);
-            $criteria->addSelectColumn(ArenaTableMap::COL_VILLE);
-            $criteria->addSelectColumn(ArenaTableMap::COL_PROVINCE);
-            $criteria->addSelectColumn(ArenaTableMap::COL_CODEPOSTAL);
-            $criteria->addSelectColumn(ArenaTableMap::COL_URL);
+            $criteria->addSelectColumn(PartieTableMap::COL_ID);
+            $criteria->addSelectColumn(PartieTableMap::COL_DATEPARTIE);
+            $criteria->addSelectColumn(PartieTableMap::COL_HEURE);
+            $criteria->addSelectColumn(PartieTableMap::COL_ARENANO);
+            $criteria->addSelectColumn(PartieTableMap::COL_EQUIPELOCALE);
+            $criteria->addSelectColumn(PartieTableMap::COL_PTSEQUIPELOCALE);
+            $criteria->addSelectColumn(PartieTableMap::COL_EQUIPEVISITE);
+            $criteria->addSelectColumn(PartieTableMap::COL_PTSEQUIPEVISITE);
         } else {
             $criteria->addSelectColumn($alias . '.id');
-            $criteria->addSelectColumn($alias . '.Nom');
-            $criteria->addSelectColumn($alias . '.adresse');
-            $criteria->addSelectColumn($alias . '.Ville');
-            $criteria->addSelectColumn($alias . '.province');
-            $criteria->addSelectColumn($alias . '.codePostal');
-            $criteria->addSelectColumn($alias . '.url');
+            $criteria->addSelectColumn($alias . '.datePartie');
+            $criteria->addSelectColumn($alias . '.Heure');
+            $criteria->addSelectColumn($alias . '.ArenaNo');
+            $criteria->addSelectColumn($alias . '.EquipeLocale');
+            $criteria->addSelectColumn($alias . '.ptsEquipeLocale');
+            $criteria->addSelectColumn($alias . '.EquipeVisite');
+            $criteria->addSelectColumn($alias . '.ptsEquipeVisite');
         }
     }
 
@@ -347,7 +369,7 @@ class ArenaTableMap extends TableMap
      */
     public static function getTableMap()
     {
-        return Propel::getServiceContainer()->getDatabaseMap(ArenaTableMap::DATABASE_NAME)->getTable(ArenaTableMap::TABLE_NAME);
+        return Propel::getServiceContainer()->getDatabaseMap(PartieTableMap::DATABASE_NAME)->getTable(PartieTableMap::TABLE_NAME);
     }
 
     /**
@@ -355,16 +377,16 @@ class ArenaTableMap extends TableMap
      */
     public static function buildTableMap()
     {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(ArenaTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(ArenaTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new ArenaTableMap());
+        $dbMap = Propel::getServiceContainer()->getDatabaseMap(PartieTableMap::DATABASE_NAME);
+        if (!$dbMap->hasTable(PartieTableMap::TABLE_NAME)) {
+            $dbMap->addTableObject(new PartieTableMap());
         }
     }
 
     /**
-     * Performs a DELETE on the database, given a Arena or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a Partie or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or Arena object or primary key or array of primary keys
+     * @param mixed               $values Criteria or Partie object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -375,27 +397,27 @@ class ArenaTableMap extends TableMap
      public static function doDelete($values, ConnectionInterface $con = null)
      {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(ArenaTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(PartieTableMap::DATABASE_NAME);
         }
 
         if ($values instanceof Criteria) {
             // rename for clarity
             $criteria = $values;
-        } elseif ($values instanceof \Arena) { // it's a model object
+        } elseif ($values instanceof \Partie) { // it's a model object
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(ArenaTableMap::DATABASE_NAME);
-            $criteria->add(ArenaTableMap::COL_ID, (array) $values, Criteria::IN);
+            $criteria = new Criteria(PartieTableMap::DATABASE_NAME);
+            $criteria->add(PartieTableMap::COL_ID, (array) $values, Criteria::IN);
         }
 
-        $query = ArenaQuery::create()->mergeWith($criteria);
+        $query = PartieQuery::create()->mergeWith($criteria);
 
         if ($values instanceof Criteria) {
-            ArenaTableMap::clearInstancePool();
+            PartieTableMap::clearInstancePool();
         } elseif (!is_object($values)) { // it's a primary key, or an array of pks
             foreach ((array) $values as $singleval) {
-                ArenaTableMap::removeInstanceFromPool($singleval);
+                PartieTableMap::removeInstanceFromPool($singleval);
             }
         }
 
@@ -403,20 +425,20 @@ class ArenaTableMap extends TableMap
     }
 
     /**
-     * Deletes all rows from the Arena table.
+     * Deletes all rows from the Partie table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
     {
-        return ArenaQuery::create()->doDeleteAll($con);
+        return PartieQuery::create()->doDeleteAll($con);
     }
 
     /**
-     * Performs an INSERT on the database, given a Arena or Criteria object.
+     * Performs an INSERT on the database, given a Partie or Criteria object.
      *
-     * @param mixed               $criteria Criteria or Arena object containing data that is used to create the INSERT statement.
+     * @param mixed               $criteria Criteria or Partie object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -425,22 +447,22 @@ class ArenaTableMap extends TableMap
     public static function doInsert($criteria, ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(ArenaTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(PartieTableMap::DATABASE_NAME);
         }
 
         if ($criteria instanceof Criteria) {
             $criteria = clone $criteria; // rename for clarity
         } else {
-            $criteria = $criteria->buildCriteria(); // build Criteria from Arena object
+            $criteria = $criteria->buildCriteria(); // build Criteria from Partie object
         }
 
-        if ($criteria->containsKey(ArenaTableMap::COL_ID) && $criteria->keyContainsValue(ArenaTableMap::COL_ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.ArenaTableMap::COL_ID.')');
+        if ($criteria->containsKey(PartieTableMap::COL_ID) && $criteria->keyContainsValue(PartieTableMap::COL_ID) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.PartieTableMap::COL_ID.')');
         }
 
 
         // Set the correct dbName
-        $query = ArenaQuery::create()->mergeWith($criteria);
+        $query = PartieQuery::create()->mergeWith($criteria);
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
@@ -449,7 +471,7 @@ class ArenaTableMap extends TableMap
         });
     }
 
-} // ArenaTableMap
+} // PartieTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-ArenaTableMap::buildTableMap();
+PartieTableMap::buildTableMap();

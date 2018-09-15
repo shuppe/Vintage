@@ -327,7 +327,7 @@ abstract class EquipeQuery extends ModelCriteria
     {
         if ($alignement instanceof \Alignement) {
             return $this
-                ->addUsingAlias(EquipeTableMap::COL_ID, $alignement->getEquipeno(), $comparison);
+                ->addUsingAlias(EquipeTableMap::COL_ID, $alignement->getEquipeid(), $comparison);
         } elseif ($alignement instanceof ObjectCollection) {
             return $this
                 ->useAlignementQuery()

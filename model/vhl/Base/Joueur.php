@@ -2,17 +2,14 @@
 
 namespace Base;
 
-use \Alignement as ChildAlignement;
-use \AlignementQuery as ChildAlignementQuery;
 use \Joueur as ChildJoueur;
 use \JoueurQuery as ChildJoueurQuery;
-use \Positionjoueur as ChildPositionjoueur;
-use \PositionjoueurQuery as ChildPositionjoueurQuery;
+use \PositionJoueur as ChildPositionJoueur;
+use \PositionJoueurQuery as ChildPositionJoueurQuery;
 use \Exception;
 use \PDO;
-use Map\AlignementTableMap;
 use Map\JoueurTableMap;
-use Map\PositionjoueurTableMap;
+use Map\PositionJoueurTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -31,7 +28,7 @@ use Propel\Runtime\Parser\AbstractParser;
  *
  *
  *
- * @package    propel.generator.vintage.hockey.pickup.Base
+ * @package    propel.generator.vhl.Base
  */
 abstract class Joueur implements ActiveRecordInterface
 {
@@ -124,16 +121,10 @@ abstract class Joueur implements ActiveRecordInterface
     protected $numero;
 
     /**
-     * @var        ObjectCollection|ChildAlignement[] Collection to store aggregation of ChildAlignement objects.
+     * @var        ObjectCollection|ChildPositionJoueur[] Collection to store aggregation of ChildPositionJoueur objects.
      */
-    protected $collAlignements;
-    protected $collAlignementsPartial;
-
-    /**
-     * @var        ObjectCollection|ChildPositionjoueur[] Collection to store aggregation of ChildPositionjoueur objects.
-     */
-    protected $collPositionjoueurs;
-    protected $collPositionjoueursPartial;
+    protected $collPositionJoueurs;
+    protected $collPositionJoueursPartial;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -145,15 +136,9 @@ abstract class Joueur implements ActiveRecordInterface
 
     /**
      * An array of objects scheduled for deletion.
-     * @var ObjectCollection|ChildAlignement[]
+     * @var ObjectCollection|ChildPositionJoueur[]
      */
-    protected $alignementsScheduledForDeletion = null;
-
-    /**
-     * An array of objects scheduled for deletion.
-     * @var ObjectCollection|ChildPositionjoueur[]
-     */
-    protected $positionjoueursScheduledForDeletion = null;
+    protected $positionJoueursScheduledForDeletion = null;
 
     /**
      * Initializes internal state of Base\Joueur object.
@@ -748,9 +733,7 @@ abstract class Joueur implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->collAlignements = null;
-
-            $this->collPositionjoueurs = null;
+            $this->collPositionJoueurs = null;
 
         } // if (deep)
     }
@@ -866,34 +849,17 @@ abstract class Joueur implements ActiveRecordInterface
                 $this->resetModified();
             }
 
-            if ($this->alignementsScheduledForDeletion !== null) {
-                if (!$this->alignementsScheduledForDeletion->isEmpty()) {
-                    \AlignementQuery::create()
-                        ->filterByPrimaryKeys($this->alignementsScheduledForDeletion->getPrimaryKeys(false))
+            if ($this->positionJoueursScheduledForDeletion !== null) {
+                if (!$this->positionJoueursScheduledForDeletion->isEmpty()) {
+                    \PositionJoueurQuery::create()
+                        ->filterByPrimaryKeys($this->positionJoueursScheduledForDeletion->getPrimaryKeys(false))
                         ->delete($con);
-                    $this->alignementsScheduledForDeletion = null;
+                    $this->positionJoueursScheduledForDeletion = null;
                 }
             }
 
-            if ($this->collAlignements !== null) {
-                foreach ($this->collAlignements as $referrerFK) {
-                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
-                        $affectedRows += $referrerFK->save($con);
-                    }
-                }
-            }
-
-            if ($this->positionjoueursScheduledForDeletion !== null) {
-                if (!$this->positionjoueursScheduledForDeletion->isEmpty()) {
-                    \PositionjoueurQuery::create()
-                        ->filterByPrimaryKeys($this->positionjoueursScheduledForDeletion->getPrimaryKeys(false))
-                        ->delete($con);
-                    $this->positionjoueursScheduledForDeletion = null;
-                }
-            }
-
-            if ($this->collPositionjoueurs !== null) {
-                foreach ($this->collPositionjoueurs as $referrerFK) {
+            if ($this->collPositionJoueurs !== null) {
+                foreach ($this->collPositionJoueurs as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1116,35 +1082,20 @@ abstract class Joueur implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
-            if (null !== $this->collAlignements) {
+            if (null !== $this->collPositionJoueurs) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'alignements';
+                        $key = 'positionJoueurs';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'Alignements';
+                        $key = 'Position_Joueurs';
                         break;
                     default:
-                        $key = 'Alignements';
-                }
-
-                $result[$key] = $this->collAlignements->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
-            }
-            if (null !== $this->collPositionjoueurs) {
-
-                switch ($keyType) {
-                    case TableMap::TYPE_CAMELNAME:
-                        $key = 'positionjoueurs';
-                        break;
-                    case TableMap::TYPE_FIELDNAME:
                         $key = 'PositionJoueurs';
-                        break;
-                    default:
-                        $key = 'Positionjoueurs';
                 }
 
-                $result[$key] = $this->collPositionjoueurs->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+                $result[$key] = $this->collPositionJoueurs->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1418,15 +1369,9 @@ abstract class Joueur implements ActiveRecordInterface
             // the getter/setter methods for fkey referrer objects.
             $copyObj->setNew(false);
 
-            foreach ($this->getAlignements() as $relObj) {
+            foreach ($this->getPositionJoueurs() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addAlignement($relObj->copy($deepCopy));
-                }
-            }
-
-            foreach ($this->getPositionjoueurs() as $relObj) {
-                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addPositionjoueur($relObj->copy($deepCopy));
+                    $copyObj->addPositionJoueur($relObj->copy($deepCopy));
                 }
             }
 
@@ -1471,42 +1416,38 @@ abstract class Joueur implements ActiveRecordInterface
      */
     public function initRelation($relationName)
     {
-        if ('Alignement' == $relationName) {
-            $this->initAlignements();
-            return;
-        }
-        if ('Positionjoueur' == $relationName) {
-            $this->initPositionjoueurs();
+        if ('PositionJoueur' == $relationName) {
+            $this->initPositionJoueurs();
             return;
         }
     }
 
     /**
-     * Clears out the collAlignements collection
+     * Clears out the collPositionJoueurs collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addAlignements()
+     * @see        addPositionJoueurs()
      */
-    public function clearAlignements()
+    public function clearPositionJoueurs()
     {
-        $this->collAlignements = null; // important to set this to NULL since that means it is uninitialized
+        $this->collPositionJoueurs = null; // important to set this to NULL since that means it is uninitialized
     }
 
     /**
-     * Reset is the collAlignements collection loaded partially.
+     * Reset is the collPositionJoueurs collection loaded partially.
      */
-    public function resetPartialAlignements($v = true)
+    public function resetPartialPositionJoueurs($v = true)
     {
-        $this->collAlignementsPartial = $v;
+        $this->collPositionJoueursPartial = $v;
     }
 
     /**
-     * Initializes the collAlignements collection.
+     * Initializes the collPositionJoueurs collection.
      *
-     * By default this just sets the collAlignements collection to an empty array (like clearcollAlignements());
+     * By default this just sets the collPositionJoueurs collection to an empty array (like clearcollPositionJoueurs());
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
@@ -1515,20 +1456,20 @@ abstract class Joueur implements ActiveRecordInterface
      *
      * @return void
      */
-    public function initAlignements($overrideExisting = true)
+    public function initPositionJoueurs($overrideExisting = true)
     {
-        if (null !== $this->collAlignements && !$overrideExisting) {
+        if (null !== $this->collPositionJoueurs && !$overrideExisting) {
             return;
         }
 
-        $collectionClassName = AlignementTableMap::getTableMap()->getCollectionClassName();
+        $collectionClassName = PositionJoueurTableMap::getTableMap()->getCollectionClassName();
 
-        $this->collAlignements = new $collectionClassName;
-        $this->collAlignements->setModel('\Alignement');
+        $this->collPositionJoueurs = new $collectionClassName;
+        $this->collPositionJoueurs->setModel('\PositionJoueur');
     }
 
     /**
-     * Gets an array of ChildAlignement objects which contain a foreign key that references this object.
+     * Gets an array of ChildPositionJoueur objects which contain a foreign key that references this object.
      *
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
@@ -1538,108 +1479,108 @@ abstract class Joueur implements ActiveRecordInterface
      *
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
-     * @return ObjectCollection|ChildAlignement[] List of ChildAlignement objects
+     * @return ObjectCollection|ChildPositionJoueur[] List of ChildPositionJoueur objects
      * @throws PropelException
      */
-    public function getAlignements(Criteria $criteria = null, ConnectionInterface $con = null)
+    public function getPositionJoueurs(Criteria $criteria = null, ConnectionInterface $con = null)
     {
-        $partial = $this->collAlignementsPartial && !$this->isNew();
-        if (null === $this->collAlignements || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collAlignements) {
+        $partial = $this->collPositionJoueursPartial && !$this->isNew();
+        if (null === $this->collPositionJoueurs || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collPositionJoueurs) {
                 // return empty collection
-                $this->initAlignements();
+                $this->initPositionJoueurs();
             } else {
-                $collAlignements = ChildAlignementQuery::create(null, $criteria)
+                $collPositionJoueurs = ChildPositionJoueurQuery::create(null, $criteria)
                     ->filterByJoueur($this)
                     ->find($con);
 
                 if (null !== $criteria) {
-                    if (false !== $this->collAlignementsPartial && count($collAlignements)) {
-                        $this->initAlignements(false);
+                    if (false !== $this->collPositionJoueursPartial && count($collPositionJoueurs)) {
+                        $this->initPositionJoueurs(false);
 
-                        foreach ($collAlignements as $obj) {
-                            if (false == $this->collAlignements->contains($obj)) {
-                                $this->collAlignements->append($obj);
+                        foreach ($collPositionJoueurs as $obj) {
+                            if (false == $this->collPositionJoueurs->contains($obj)) {
+                                $this->collPositionJoueurs->append($obj);
                             }
                         }
 
-                        $this->collAlignementsPartial = true;
+                        $this->collPositionJoueursPartial = true;
                     }
 
-                    return $collAlignements;
+                    return $collPositionJoueurs;
                 }
 
-                if ($partial && $this->collAlignements) {
-                    foreach ($this->collAlignements as $obj) {
+                if ($partial && $this->collPositionJoueurs) {
+                    foreach ($this->collPositionJoueurs as $obj) {
                         if ($obj->isNew()) {
-                            $collAlignements[] = $obj;
+                            $collPositionJoueurs[] = $obj;
                         }
                     }
                 }
 
-                $this->collAlignements = $collAlignements;
-                $this->collAlignementsPartial = false;
+                $this->collPositionJoueurs = $collPositionJoueurs;
+                $this->collPositionJoueursPartial = false;
             }
         }
 
-        return $this->collAlignements;
+        return $this->collPositionJoueurs;
     }
 
     /**
-     * Sets a collection of ChildAlignement objects related by a one-to-many relationship
+     * Sets a collection of ChildPositionJoueur objects related by a one-to-many relationship
      * to the current object.
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $alignements A Propel collection.
+     * @param      Collection $positionJoueurs A Propel collection.
      * @param      ConnectionInterface $con Optional connection object
      * @return $this|ChildJoueur The current object (for fluent API support)
      */
-    public function setAlignements(Collection $alignements, ConnectionInterface $con = null)
+    public function setPositionJoueurs(Collection $positionJoueurs, ConnectionInterface $con = null)
     {
-        /** @var ChildAlignement[] $alignementsToDelete */
-        $alignementsToDelete = $this->getAlignements(new Criteria(), $con)->diff($alignements);
+        /** @var ChildPositionJoueur[] $positionJoueursToDelete */
+        $positionJoueursToDelete = $this->getPositionJoueurs(new Criteria(), $con)->diff($positionJoueurs);
 
 
-        $this->alignementsScheduledForDeletion = $alignementsToDelete;
+        $this->positionJoueursScheduledForDeletion = $positionJoueursToDelete;
 
-        foreach ($alignementsToDelete as $alignementRemoved) {
-            $alignementRemoved->setJoueur(null);
+        foreach ($positionJoueursToDelete as $positionJoueurRemoved) {
+            $positionJoueurRemoved->setJoueur(null);
         }
 
-        $this->collAlignements = null;
-        foreach ($alignements as $alignement) {
-            $this->addAlignement($alignement);
+        $this->collPositionJoueurs = null;
+        foreach ($positionJoueurs as $positionJoueur) {
+            $this->addPositionJoueur($positionJoueur);
         }
 
-        $this->collAlignements = $alignements;
-        $this->collAlignementsPartial = false;
+        $this->collPositionJoueurs = $positionJoueurs;
+        $this->collPositionJoueursPartial = false;
 
         return $this;
     }
 
     /**
-     * Returns the number of related Alignement objects.
+     * Returns the number of related PositionJoueur objects.
      *
      * @param      Criteria $criteria
      * @param      boolean $distinct
      * @param      ConnectionInterface $con
-     * @return int             Count of related Alignement objects.
+     * @return int             Count of related PositionJoueur objects.
      * @throws PropelException
      */
-    public function countAlignements(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    public function countPositionJoueurs(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
     {
-        $partial = $this->collAlignementsPartial && !$this->isNew();
-        if (null === $this->collAlignements || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collAlignements) {
+        $partial = $this->collPositionJoueursPartial && !$this->isNew();
+        if (null === $this->collPositionJoueurs || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collPositionJoueurs) {
                 return 0;
             }
 
             if ($partial && !$criteria) {
-                return count($this->getAlignements());
+                return count($this->getPositionJoueurs());
             }
 
-            $query = ChildAlignementQuery::create(null, $criteria);
+            $query = ChildPositionJoueurQuery::create(null, $criteria);
             if ($distinct) {
                 $query->distinct();
             }
@@ -1649,28 +1590,28 @@ abstract class Joueur implements ActiveRecordInterface
                 ->count($con);
         }
 
-        return count($this->collAlignements);
+        return count($this->collPositionJoueurs);
     }
 
     /**
-     * Method called to associate a ChildAlignement object to this object
-     * through the ChildAlignement foreign key attribute.
+     * Method called to associate a ChildPositionJoueur object to this object
+     * through the ChildPositionJoueur foreign key attribute.
      *
-     * @param  ChildAlignement $l ChildAlignement
+     * @param  ChildPositionJoueur $l ChildPositionJoueur
      * @return $this|\Joueur The current object (for fluent API support)
      */
-    public function addAlignement(ChildAlignement $l)
+    public function addPositionJoueur(ChildPositionJoueur $l)
     {
-        if ($this->collAlignements === null) {
-            $this->initAlignements();
-            $this->collAlignementsPartial = true;
+        if ($this->collPositionJoueurs === null) {
+            $this->initPositionJoueurs();
+            $this->collPositionJoueursPartial = true;
         }
 
-        if (!$this->collAlignements->contains($l)) {
-            $this->doAddAlignement($l);
+        if (!$this->collPositionJoueurs->contains($l)) {
+            $this->doAddPositionJoueur($l);
 
-            if ($this->alignementsScheduledForDeletion and $this->alignementsScheduledForDeletion->contains($l)) {
-                $this->alignementsScheduledForDeletion->remove($this->alignementsScheduledForDeletion->search($l));
+            if ($this->positionJoueursScheduledForDeletion and $this->positionJoueursScheduledForDeletion->contains($l)) {
+                $this->positionJoueursScheduledForDeletion->remove($this->positionJoueursScheduledForDeletion->search($l));
             }
         }
 
@@ -1678,29 +1619,29 @@ abstract class Joueur implements ActiveRecordInterface
     }
 
     /**
-     * @param ChildAlignement $alignement The ChildAlignement object to add.
+     * @param ChildPositionJoueur $positionJoueur The ChildPositionJoueur object to add.
      */
-    protected function doAddAlignement(ChildAlignement $alignement)
+    protected function doAddPositionJoueur(ChildPositionJoueur $positionJoueur)
     {
-        $this->collAlignements[]= $alignement;
-        $alignement->setJoueur($this);
+        $this->collPositionJoueurs[]= $positionJoueur;
+        $positionJoueur->setJoueur($this);
     }
 
     /**
-     * @param  ChildAlignement $alignement The ChildAlignement object to remove.
+     * @param  ChildPositionJoueur $positionJoueur The ChildPositionJoueur object to remove.
      * @return $this|ChildJoueur The current object (for fluent API support)
      */
-    public function removeAlignement(ChildAlignement $alignement)
+    public function removePositionJoueur(ChildPositionJoueur $positionJoueur)
     {
-        if ($this->getAlignements()->contains($alignement)) {
-            $pos = $this->collAlignements->search($alignement);
-            $this->collAlignements->remove($pos);
-            if (null === $this->alignementsScheduledForDeletion) {
-                $this->alignementsScheduledForDeletion = clone $this->collAlignements;
-                $this->alignementsScheduledForDeletion->clear();
+        if ($this->getPositionJoueurs()->contains($positionJoueur)) {
+            $pos = $this->collPositionJoueurs->search($positionJoueur);
+            $this->collPositionJoueurs->remove($pos);
+            if (null === $this->positionJoueursScheduledForDeletion) {
+                $this->positionJoueursScheduledForDeletion = clone $this->collPositionJoueurs;
+                $this->positionJoueursScheduledForDeletion->clear();
             }
-            $this->alignementsScheduledForDeletion[]= clone $alignement;
-            $alignement->setJoueur(null);
+            $this->positionJoueursScheduledForDeletion[]= clone $positionJoueur;
+            $positionJoueur->setJoueur(null);
         }
 
         return $this;
@@ -1712,7 +1653,7 @@ abstract class Joueur implements ActiveRecordInterface
      * an identical criteria, it returns the collection.
      * Otherwise if this Joueur is new, it will return
      * an empty collection; or if this Joueur has previously
-     * been saved, it will retrieve related Alignements from storage.
+     * been saved, it will retrieve related PositionJoueurs from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
@@ -1721,289 +1662,14 @@ abstract class Joueur implements ActiveRecordInterface
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildAlignement[] List of ChildAlignement objects
+     * @return ObjectCollection|ChildPositionJoueur[] List of ChildPositionJoueur objects
      */
-    public function getAlignementsJoinEquipe(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getPositionJoueursJoinPosition(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
-        $query = ChildAlignementQuery::create(null, $criteria);
-        $query->joinWith('Equipe', $joinBehavior);
-
-        return $this->getAlignements($query, $con);
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this Joueur is new, it will return
-     * an empty collection; or if this Joueur has previously
-     * been saved, it will retrieve related Alignements from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in Joueur.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildAlignement[] List of ChildAlignement objects
-     */
-    public function getAlignementsJoinPosition(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
-    {
-        $query = ChildAlignementQuery::create(null, $criteria);
+        $query = ChildPositionJoueurQuery::create(null, $criteria);
         $query->joinWith('Position', $joinBehavior);
 
-        return $this->getAlignements($query, $con);
-    }
-
-    /**
-     * Clears out the collPositionjoueurs collection
-     *
-     * This does not modify the database; however, it will remove any associated objects, causing
-     * them to be refetched by subsequent calls to accessor method.
-     *
-     * @return void
-     * @see        addPositionjoueurs()
-     */
-    public function clearPositionjoueurs()
-    {
-        $this->collPositionjoueurs = null; // important to set this to NULL since that means it is uninitialized
-    }
-
-    /**
-     * Reset is the collPositionjoueurs collection loaded partially.
-     */
-    public function resetPartialPositionjoueurs($v = true)
-    {
-        $this->collPositionjoueursPartial = $v;
-    }
-
-    /**
-     * Initializes the collPositionjoueurs collection.
-     *
-     * By default this just sets the collPositionjoueurs collection to an empty array (like clearcollPositionjoueurs());
-     * however, you may wish to override this method in your stub class to provide setting appropriate
-     * to your application -- for example, setting the initial array to the values stored in database.
-     *
-     * @param      boolean $overrideExisting If set to true, the method call initializes
-     *                                        the collection even if it is not empty
-     *
-     * @return void
-     */
-    public function initPositionjoueurs($overrideExisting = true)
-    {
-        if (null !== $this->collPositionjoueurs && !$overrideExisting) {
-            return;
-        }
-
-        $collectionClassName = PositionjoueurTableMap::getTableMap()->getCollectionClassName();
-
-        $this->collPositionjoueurs = new $collectionClassName;
-        $this->collPositionjoueurs->setModel('\Positionjoueur');
-    }
-
-    /**
-     * Gets an array of ChildPositionjoueur objects which contain a foreign key that references this object.
-     *
-     * If the $criteria is not null, it is used to always fetch the results from the database.
-     * Otherwise the results are fetched from the database the first time, then cached.
-     * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildJoueur is new, it will return
-     * an empty collection or the current collection; the criteria is ignored on a new object.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @return ObjectCollection|ChildPositionjoueur[] List of ChildPositionjoueur objects
-     * @throws PropelException
-     */
-    public function getPositionjoueurs(Criteria $criteria = null, ConnectionInterface $con = null)
-    {
-        $partial = $this->collPositionjoueursPartial && !$this->isNew();
-        if (null === $this->collPositionjoueurs || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collPositionjoueurs) {
-                // return empty collection
-                $this->initPositionjoueurs();
-            } else {
-                $collPositionjoueurs = ChildPositionjoueurQuery::create(null, $criteria)
-                    ->filterByJoueur($this)
-                    ->find($con);
-
-                if (null !== $criteria) {
-                    if (false !== $this->collPositionjoueursPartial && count($collPositionjoueurs)) {
-                        $this->initPositionjoueurs(false);
-
-                        foreach ($collPositionjoueurs as $obj) {
-                            if (false == $this->collPositionjoueurs->contains($obj)) {
-                                $this->collPositionjoueurs->append($obj);
-                            }
-                        }
-
-                        $this->collPositionjoueursPartial = true;
-                    }
-
-                    return $collPositionjoueurs;
-                }
-
-                if ($partial && $this->collPositionjoueurs) {
-                    foreach ($this->collPositionjoueurs as $obj) {
-                        if ($obj->isNew()) {
-                            $collPositionjoueurs[] = $obj;
-                        }
-                    }
-                }
-
-                $this->collPositionjoueurs = $collPositionjoueurs;
-                $this->collPositionjoueursPartial = false;
-            }
-        }
-
-        return $this->collPositionjoueurs;
-    }
-
-    /**
-     * Sets a collection of ChildPositionjoueur objects related by a one-to-many relationship
-     * to the current object.
-     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
-     * and new objects from the given Propel collection.
-     *
-     * @param      Collection $positionjoueurs A Propel collection.
-     * @param      ConnectionInterface $con Optional connection object
-     * @return $this|ChildJoueur The current object (for fluent API support)
-     */
-    public function setPositionjoueurs(Collection $positionjoueurs, ConnectionInterface $con = null)
-    {
-        /** @var ChildPositionjoueur[] $positionjoueursToDelete */
-        $positionjoueursToDelete = $this->getPositionjoueurs(new Criteria(), $con)->diff($positionjoueurs);
-
-
-        $this->positionjoueursScheduledForDeletion = $positionjoueursToDelete;
-
-        foreach ($positionjoueursToDelete as $positionjoueurRemoved) {
-            $positionjoueurRemoved->setJoueur(null);
-        }
-
-        $this->collPositionjoueurs = null;
-        foreach ($positionjoueurs as $positionjoueur) {
-            $this->addPositionjoueur($positionjoueur);
-        }
-
-        $this->collPositionjoueurs = $positionjoueurs;
-        $this->collPositionjoueursPartial = false;
-
-        return $this;
-    }
-
-    /**
-     * Returns the number of related Positionjoueur objects.
-     *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct
-     * @param      ConnectionInterface $con
-     * @return int             Count of related Positionjoueur objects.
-     * @throws PropelException
-     */
-    public function countPositionjoueurs(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
-    {
-        $partial = $this->collPositionjoueursPartial && !$this->isNew();
-        if (null === $this->collPositionjoueurs || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collPositionjoueurs) {
-                return 0;
-            }
-
-            if ($partial && !$criteria) {
-                return count($this->getPositionjoueurs());
-            }
-
-            $query = ChildPositionjoueurQuery::create(null, $criteria);
-            if ($distinct) {
-                $query->distinct();
-            }
-
-            return $query
-                ->filterByJoueur($this)
-                ->count($con);
-        }
-
-        return count($this->collPositionjoueurs);
-    }
-
-    /**
-     * Method called to associate a ChildPositionjoueur object to this object
-     * through the ChildPositionjoueur foreign key attribute.
-     *
-     * @param  ChildPositionjoueur $l ChildPositionjoueur
-     * @return $this|\Joueur The current object (for fluent API support)
-     */
-    public function addPositionjoueur(ChildPositionjoueur $l)
-    {
-        if ($this->collPositionjoueurs === null) {
-            $this->initPositionjoueurs();
-            $this->collPositionjoueursPartial = true;
-        }
-
-        if (!$this->collPositionjoueurs->contains($l)) {
-            $this->doAddPositionjoueur($l);
-
-            if ($this->positionjoueursScheduledForDeletion and $this->positionjoueursScheduledForDeletion->contains($l)) {
-                $this->positionjoueursScheduledForDeletion->remove($this->positionjoueursScheduledForDeletion->search($l));
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param ChildPositionjoueur $positionjoueur The ChildPositionjoueur object to add.
-     */
-    protected function doAddPositionjoueur(ChildPositionjoueur $positionjoueur)
-    {
-        $this->collPositionjoueurs[]= $positionjoueur;
-        $positionjoueur->setJoueur($this);
-    }
-
-    /**
-     * @param  ChildPositionjoueur $positionjoueur The ChildPositionjoueur object to remove.
-     * @return $this|ChildJoueur The current object (for fluent API support)
-     */
-    public function removePositionjoueur(ChildPositionjoueur $positionjoueur)
-    {
-        if ($this->getPositionjoueurs()->contains($positionjoueur)) {
-            $pos = $this->collPositionjoueurs->search($positionjoueur);
-            $this->collPositionjoueurs->remove($pos);
-            if (null === $this->positionjoueursScheduledForDeletion) {
-                $this->positionjoueursScheduledForDeletion = clone $this->collPositionjoueurs;
-                $this->positionjoueursScheduledForDeletion->clear();
-            }
-            $this->positionjoueursScheduledForDeletion[]= clone $positionjoueur;
-            $positionjoueur->setJoueur(null);
-        }
-
-        return $this;
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this Joueur is new, it will return
-     * an empty collection; or if this Joueur has previously
-     * been saved, it will retrieve related Positionjoueurs from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in Joueur.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildPositionjoueur[] List of ChildPositionjoueur objects
-     */
-    public function getPositionjoueursJoinPosition(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
-    {
-        $query = ChildPositionjoueurQuery::create(null, $criteria);
-        $query->joinWith('Position', $joinBehavior);
-
-        return $this->getPositionjoueurs($query, $con);
+        return $this->getPositionJoueurs($query, $con);
     }
 
     /**
@@ -2039,20 +1705,14 @@ abstract class Joueur implements ActiveRecordInterface
     public function clearAllReferences($deep = false)
     {
         if ($deep) {
-            if ($this->collAlignements) {
-                foreach ($this->collAlignements as $o) {
-                    $o->clearAllReferences($deep);
-                }
-            }
-            if ($this->collPositionjoueurs) {
-                foreach ($this->collPositionjoueurs as $o) {
+            if ($this->collPositionJoueurs) {
+                foreach ($this->collPositionJoueurs as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
         } // if ($deep)
 
-        $this->collAlignements = null;
-        $this->collPositionjoueurs = null;
+        $this->collPositionJoueurs = null;
     }
 
     /**

@@ -4,38 +4,39 @@ namespace Base;
 
 use \Alignement as ChildAlignement;
 use \AlignementQuery as ChildAlignementQuery;
-use \Equipe as ChildEquipe;
-use \EquipeQuery as ChildEquipeQuery;
+use \Arena as ChildArena;
+use \ArenaQuery as ChildArenaQuery;
+use \PartieQuery as ChildPartieQuery;
+use \DateTime;
 use \Exception;
 use \PDO;
-use Map\AlignementTableMap;
-use Map\EquipeTableMap;
+use Map\PartieTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Propel\Runtime\ActiveRecord\ActiveRecordInterface;
 use Propel\Runtime\Collection\Collection;
-use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\BadMethodCallException;
 use Propel\Runtime\Exception\LogicException;
 use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Parser\AbstractParser;
+use Propel\Runtime\Util\PropelDateTime;
 
 /**
- * Base class that represents a row from the 'Equipe' table.
+ * Base class that represents a row from the 'Partie' table.
  *
  *
  *
- * @package    propel.generator.vintage.hockey.pickup.Base
+ * @package    propel.generator.vhl.Base
  */
-abstract class Equipe implements ActiveRecordInterface
+abstract class Partie implements ActiveRecordInterface
 {
     /**
      * TableMap class name
      */
-    const TABLE_MAP = '\\Map\\EquipeTableMap';
+    const TABLE_MAP = '\\Map\\PartieTableMap';
 
 
     /**
@@ -72,17 +73,68 @@ abstract class Equipe implements ActiveRecordInterface
     protected $id;
 
     /**
-     * The value for the nom field.
+     * The value for the datepartie field.
      *
-     * @var        string
+     * @var        DateTime
      */
-    protected $nom;
+    protected $datepartie;
 
     /**
-     * @var        ObjectCollection|ChildAlignement[] Collection to store aggregation of ChildAlignement objects.
+     * The value for the heure field.
+     *
+     * @var        DateTime
      */
-    protected $collAlignements;
-    protected $collAlignementsPartial;
+    protected $heure;
+
+    /**
+     * The value for the arenano field.
+     *
+     * @var        int
+     */
+    protected $arenano;
+
+    /**
+     * The value for the equipelocale field.
+     *
+     * @var        int
+     */
+    protected $equipelocale;
+
+    /**
+     * The value for the ptsequipelocale field.
+     *
+     * @var        int
+     */
+    protected $ptsequipelocale;
+
+    /**
+     * The value for the equipevisite field.
+     *
+     * @var        int
+     */
+    protected $equipevisite;
+
+    /**
+     * The value for the ptsequipevisite field.
+     *
+     * @var        int
+     */
+    protected $ptsequipevisite;
+
+    /**
+     * @var        ChildArena
+     */
+    protected $aArena;
+
+    /**
+     * @var        ChildAlignement
+     */
+    protected $aAlignementRelatedByEquipelocale;
+
+    /**
+     * @var        ChildAlignement
+     */
+    protected $aAlignementRelatedByEquipevisite;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -93,13 +145,7 @@ abstract class Equipe implements ActiveRecordInterface
     protected $alreadyInSave = false;
 
     /**
-     * An array of objects scheduled for deletion.
-     * @var ObjectCollection|ChildAlignement[]
-     */
-    protected $alignementsScheduledForDeletion = null;
-
-    /**
-     * Initializes internal state of Base\Equipe object.
+     * Initializes internal state of Base\Partie object.
      */
     public function __construct()
     {
@@ -194,9 +240,9 @@ abstract class Equipe implements ActiveRecordInterface
     }
 
     /**
-     * Compares this with another <code>Equipe</code> instance.  If
-     * <code>obj</code> is an instance of <code>Equipe</code>, delegates to
-     * <code>equals(Equipe)</code>.  Otherwise, returns <code>false</code>.
+     * Compares this with another <code>Partie</code> instance.  If
+     * <code>obj</code> is an instance of <code>Partie</code>, delegates to
+     * <code>equals(Partie)</code>.  Otherwise, returns <code>false</code>.
      *
      * @param  mixed   $obj The object to compare to.
      * @return boolean Whether equal to the object specified.
@@ -262,7 +308,7 @@ abstract class Equipe implements ActiveRecordInterface
      * @param string $name  The virtual column name
      * @param mixed  $value The value to give to the virtual column
      *
-     * @return $this|Equipe The current object, for fluid interface
+     * @return $this|Partie The current object, for fluid interface
      */
     public function setVirtualColumn($name, $value)
     {
@@ -334,20 +380,100 @@ abstract class Equipe implements ActiveRecordInterface
     }
 
     /**
-     * Get the [nom] column value.
+     * Get the [optionally formatted] temporal [datepartie] column value.
      *
-     * @return string
+     *
+     * @param      string|null $format The date/time format string (either date()-style or strftime()-style).
+     *                            If format is NULL, then the raw DateTime object will be returned.
+     *
+     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00
+     *
+     * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getNom()
+    public function getDatepartie($format = NULL)
     {
-        return $this->nom;
+        if ($format === null) {
+            return $this->datepartie;
+        } else {
+            return $this->datepartie instanceof \DateTimeInterface ? $this->datepartie->format($format) : null;
+        }
+    }
+
+    /**
+     * Get the [optionally formatted] temporal [heure] column value.
+     *
+     *
+     * @param      string|null $format The date/time format string (either date()-style or strftime()-style).
+     *                            If format is NULL, then the raw DateTime object will be returned.
+     *
+     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL
+     *
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getHeure($format = NULL)
+    {
+        if ($format === null) {
+            return $this->heure;
+        } else {
+            return $this->heure instanceof \DateTimeInterface ? $this->heure->format($format) : null;
+        }
+    }
+
+    /**
+     * Get the [arenano] column value.
+     *
+     * @return int
+     */
+    public function getArenano()
+    {
+        return $this->arenano;
+    }
+
+    /**
+     * Get the [equipelocale] column value.
+     *
+     * @return int
+     */
+    public function getEquipelocale()
+    {
+        return $this->equipelocale;
+    }
+
+    /**
+     * Get the [ptsequipelocale] column value.
+     *
+     * @return int
+     */
+    public function getPtsequipelocale()
+    {
+        return $this->ptsequipelocale;
+    }
+
+    /**
+     * Get the [equipevisite] column value.
+     *
+     * @return int
+     */
+    public function getEquipevisite()
+    {
+        return $this->equipevisite;
+    }
+
+    /**
+     * Get the [ptsequipevisite] column value.
+     *
+     * @return int
+     */
+    public function getPtsequipevisite()
+    {
+        return $this->ptsequipevisite;
     }
 
     /**
      * Set the value of [id] column.
      *
      * @param int $v new value
-     * @return $this|\Equipe The current object (for fluent API support)
+     * @return $this|\Partie The current object (for fluent API support)
      */
     public function setId($v)
     {
@@ -357,31 +483,163 @@ abstract class Equipe implements ActiveRecordInterface
 
         if ($this->id !== $v) {
             $this->id = $v;
-            $this->modifiedColumns[EquipeTableMap::COL_ID] = true;
+            $this->modifiedColumns[PartieTableMap::COL_ID] = true;
         }
 
         return $this;
     } // setId()
 
     /**
-     * Set the value of [nom] column.
+     * Sets the value of [datepartie] column to a normalized version of the date/time value specified.
      *
-     * @param string $v new value
-     * @return $this|\Equipe The current object (for fluent API support)
+     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
+     *               Empty strings are treated as NULL.
+     * @return $this|\Partie The current object (for fluent API support)
      */
-    public function setNom($v)
+    public function setDatepartie($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->datepartie !== null || $dt !== null) {
+            if ($this->datepartie === null || $dt === null || $dt->format("Y-m-d") !== $this->datepartie->format("Y-m-d")) {
+                $this->datepartie = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[PartieTableMap::COL_DATEPARTIE] = true;
+            }
+        } // if either are not null
+
+        return $this;
+    } // setDatepartie()
+
+    /**
+     * Sets the value of [heure] column to a normalized version of the date/time value specified.
+     *
+     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
+     *               Empty strings are treated as NULL.
+     * @return $this|\Partie The current object (for fluent API support)
+     */
+    public function setHeure($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->heure !== null || $dt !== null) {
+            if ($this->heure === null || $dt === null || $dt->format("H:i:s.u") !== $this->heure->format("H:i:s.u")) {
+                $this->heure = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[PartieTableMap::COL_HEURE] = true;
+            }
+        } // if either are not null
+
+        return $this;
+    } // setHeure()
+
+    /**
+     * Set the value of [arenano] column.
+     *
+     * @param int $v new value
+     * @return $this|\Partie The current object (for fluent API support)
+     */
+    public function setArenano($v)
     {
         if ($v !== null) {
-            $v = (string) $v;
+            $v = (int) $v;
         }
 
-        if ($this->nom !== $v) {
-            $this->nom = $v;
-            $this->modifiedColumns[EquipeTableMap::COL_NOM] = true;
+        if ($this->arenano !== $v) {
+            $this->arenano = $v;
+            $this->modifiedColumns[PartieTableMap::COL_ARENANO] = true;
+        }
+
+        if ($this->aArena !== null && $this->aArena->getId() !== $v) {
+            $this->aArena = null;
         }
 
         return $this;
-    } // setNom()
+    } // setArenano()
+
+    /**
+     * Set the value of [equipelocale] column.
+     *
+     * @param int $v new value
+     * @return $this|\Partie The current object (for fluent API support)
+     */
+    public function setEquipelocale($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->equipelocale !== $v) {
+            $this->equipelocale = $v;
+            $this->modifiedColumns[PartieTableMap::COL_EQUIPELOCALE] = true;
+        }
+
+        if ($this->aAlignementRelatedByEquipelocale !== null && $this->aAlignementRelatedByEquipelocale->getId() !== $v) {
+            $this->aAlignementRelatedByEquipelocale = null;
+        }
+
+        return $this;
+    } // setEquipelocale()
+
+    /**
+     * Set the value of [ptsequipelocale] column.
+     *
+     * @param int $v new value
+     * @return $this|\Partie The current object (for fluent API support)
+     */
+    public function setPtsequipelocale($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->ptsequipelocale !== $v) {
+            $this->ptsequipelocale = $v;
+            $this->modifiedColumns[PartieTableMap::COL_PTSEQUIPELOCALE] = true;
+        }
+
+        return $this;
+    } // setPtsequipelocale()
+
+    /**
+     * Set the value of [equipevisite] column.
+     *
+     * @param int $v new value
+     * @return $this|\Partie The current object (for fluent API support)
+     */
+    public function setEquipevisite($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->equipevisite !== $v) {
+            $this->equipevisite = $v;
+            $this->modifiedColumns[PartieTableMap::COL_EQUIPEVISITE] = true;
+        }
+
+        if ($this->aAlignementRelatedByEquipevisite !== null && $this->aAlignementRelatedByEquipevisite->getId() !== $v) {
+            $this->aAlignementRelatedByEquipevisite = null;
+        }
+
+        return $this;
+    } // setEquipevisite()
+
+    /**
+     * Set the value of [ptsequipevisite] column.
+     *
+     * @param int $v new value
+     * @return $this|\Partie The current object (for fluent API support)
+     */
+    public function setPtsequipevisite($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->ptsequipevisite !== $v) {
+            $this->ptsequipevisite = $v;
+            $this->modifiedColumns[PartieTableMap::COL_PTSEQUIPEVISITE] = true;
+        }
+
+        return $this;
+    } // setPtsequipevisite()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -419,11 +677,32 @@ abstract class Equipe implements ActiveRecordInterface
     {
         try {
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : EquipeTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : PartieTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
             $this->id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : EquipeTableMap::translateFieldName('Nom', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->nom = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : PartieTableMap::translateFieldName('Datepartie', TableMap::TYPE_PHPNAME, $indexType)];
+            if ($col === '0000-00-00') {
+                $col = null;
+            }
+            $this->datepartie = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : PartieTableMap::translateFieldName('Heure', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->heure = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : PartieTableMap::translateFieldName('Arenano', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->arenano = (null !== $col) ? (int) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : PartieTableMap::translateFieldName('Equipelocale', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->equipelocale = (null !== $col) ? (int) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : PartieTableMap::translateFieldName('Ptsequipelocale', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->ptsequipelocale = (null !== $col) ? (int) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : PartieTableMap::translateFieldName('Equipevisite', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->equipevisite = (null !== $col) ? (int) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : PartieTableMap::translateFieldName('Ptsequipevisite', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->ptsequipevisite = (null !== $col) ? (int) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -432,10 +711,10 @@ abstract class Equipe implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 2; // 2 = EquipeTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 8; // 8 = PartieTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException(sprintf('Error populating %s object', '\\Equipe'), 0, $e);
+            throw new PropelException(sprintf('Error populating %s object', '\\Partie'), 0, $e);
         }
     }
 
@@ -454,6 +733,15 @@ abstract class Equipe implements ActiveRecordInterface
      */
     public function ensureConsistency()
     {
+        if ($this->aArena !== null && $this->arenano !== $this->aArena->getId()) {
+            $this->aArena = null;
+        }
+        if ($this->aAlignementRelatedByEquipelocale !== null && $this->equipelocale !== $this->aAlignementRelatedByEquipelocale->getId()) {
+            $this->aAlignementRelatedByEquipelocale = null;
+        }
+        if ($this->aAlignementRelatedByEquipevisite !== null && $this->equipevisite !== $this->aAlignementRelatedByEquipevisite->getId()) {
+            $this->aAlignementRelatedByEquipevisite = null;
+        }
     } // ensureConsistency
 
     /**
@@ -477,13 +765,13 @@ abstract class Equipe implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(EquipeTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(PartieTableMap::DATABASE_NAME);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $dataFetcher = ChildEquipeQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
+        $dataFetcher = ChildPartieQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
         $row = $dataFetcher->fetch();
         $dataFetcher->close();
         if (!$row) {
@@ -493,8 +781,9 @@ abstract class Equipe implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->collAlignements = null;
-
+            $this->aArena = null;
+            $this->aAlignementRelatedByEquipelocale = null;
+            $this->aAlignementRelatedByEquipevisite = null;
         } // if (deep)
     }
 
@@ -504,8 +793,8 @@ abstract class Equipe implements ActiveRecordInterface
      * @param      ConnectionInterface $con
      * @return void
      * @throws PropelException
-     * @see Equipe::setDeleted()
-     * @see Equipe::isDeleted()
+     * @see Partie::setDeleted()
+     * @see Partie::isDeleted()
      */
     public function delete(ConnectionInterface $con = null)
     {
@@ -514,11 +803,11 @@ abstract class Equipe implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(EquipeTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(PartieTableMap::DATABASE_NAME);
         }
 
         $con->transaction(function () use ($con) {
-            $deleteQuery = ChildEquipeQuery::create()
+            $deleteQuery = ChildPartieQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -553,7 +842,7 @@ abstract class Equipe implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(EquipeTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(PartieTableMap::DATABASE_NAME);
         }
 
         return $con->transaction(function () use ($con) {
@@ -572,7 +861,7 @@ abstract class Equipe implements ActiveRecordInterface
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                EquipeTableMap::addInstanceToPool($this);
+                PartieTableMap::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -598,6 +887,32 @@ abstract class Equipe implements ActiveRecordInterface
         if (!$this->alreadyInSave) {
             $this->alreadyInSave = true;
 
+            // We call the save method on the following object(s) if they
+            // were passed to this object by their corresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aArena !== null) {
+                if ($this->aArena->isModified() || $this->aArena->isNew()) {
+                    $affectedRows += $this->aArena->save($con);
+                }
+                $this->setArena($this->aArena);
+            }
+
+            if ($this->aAlignementRelatedByEquipelocale !== null) {
+                if ($this->aAlignementRelatedByEquipelocale->isModified() || $this->aAlignementRelatedByEquipelocale->isNew()) {
+                    $affectedRows += $this->aAlignementRelatedByEquipelocale->save($con);
+                }
+                $this->setAlignementRelatedByEquipelocale($this->aAlignementRelatedByEquipelocale);
+            }
+
+            if ($this->aAlignementRelatedByEquipevisite !== null) {
+                if ($this->aAlignementRelatedByEquipevisite->isModified() || $this->aAlignementRelatedByEquipevisite->isNew()) {
+                    $affectedRows += $this->aAlignementRelatedByEquipevisite->save($con);
+                }
+                $this->setAlignementRelatedByEquipevisite($this->aAlignementRelatedByEquipevisite);
+            }
+
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
                 if ($this->isNew()) {
@@ -607,23 +922,6 @@ abstract class Equipe implements ActiveRecordInterface
                     $affectedRows += $this->doUpdate($con);
                 }
                 $this->resetModified();
-            }
-
-            if ($this->alignementsScheduledForDeletion !== null) {
-                if (!$this->alignementsScheduledForDeletion->isEmpty()) {
-                    \AlignementQuery::create()
-                        ->filterByPrimaryKeys($this->alignementsScheduledForDeletion->getPrimaryKeys(false))
-                        ->delete($con);
-                    $this->alignementsScheduledForDeletion = null;
-                }
-            }
-
-            if ($this->collAlignements !== null) {
-                foreach ($this->collAlignements as $referrerFK) {
-                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
-                        $affectedRows += $referrerFK->save($con);
-                    }
-                }
             }
 
             $this->alreadyInSave = false;
@@ -646,21 +944,39 @@ abstract class Equipe implements ActiveRecordInterface
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[EquipeTableMap::COL_ID] = true;
+        $this->modifiedColumns[PartieTableMap::COL_ID] = true;
         if (null !== $this->id) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . EquipeTableMap::COL_ID . ')');
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . PartieTableMap::COL_ID . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(EquipeTableMap::COL_ID)) {
+        if ($this->isColumnModified(PartieTableMap::COL_ID)) {
             $modifiedColumns[':p' . $index++]  = 'id';
         }
-        if ($this->isColumnModified(EquipeTableMap::COL_NOM)) {
-            $modifiedColumns[':p' . $index++]  = 'nom';
+        if ($this->isColumnModified(PartieTableMap::COL_DATEPARTIE)) {
+            $modifiedColumns[':p' . $index++]  = 'datePartie';
+        }
+        if ($this->isColumnModified(PartieTableMap::COL_HEURE)) {
+            $modifiedColumns[':p' . $index++]  = 'Heure';
+        }
+        if ($this->isColumnModified(PartieTableMap::COL_ARENANO)) {
+            $modifiedColumns[':p' . $index++]  = 'ArenaNo';
+        }
+        if ($this->isColumnModified(PartieTableMap::COL_EQUIPELOCALE)) {
+            $modifiedColumns[':p' . $index++]  = 'EquipeLocale';
+        }
+        if ($this->isColumnModified(PartieTableMap::COL_PTSEQUIPELOCALE)) {
+            $modifiedColumns[':p' . $index++]  = 'ptsEquipeLocale';
+        }
+        if ($this->isColumnModified(PartieTableMap::COL_EQUIPEVISITE)) {
+            $modifiedColumns[':p' . $index++]  = 'EquipeVisite';
+        }
+        if ($this->isColumnModified(PartieTableMap::COL_PTSEQUIPEVISITE)) {
+            $modifiedColumns[':p' . $index++]  = 'ptsEquipeVisite';
         }
 
         $sql = sprintf(
-            'INSERT INTO Equipe (%s) VALUES (%s)',
+            'INSERT INTO Partie (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -672,8 +988,26 @@ abstract class Equipe implements ActiveRecordInterface
                     case 'id':
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
                         break;
-                    case 'nom':
-                        $stmt->bindValue($identifier, $this->nom, PDO::PARAM_STR);
+                    case 'datePartie':
+                        $stmt->bindValue($identifier, $this->datepartie ? $this->datepartie->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+                        break;
+                    case 'Heure':
+                        $stmt->bindValue($identifier, $this->heure ? $this->heure->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+                        break;
+                    case 'ArenaNo':
+                        $stmt->bindValue($identifier, $this->arenano, PDO::PARAM_INT);
+                        break;
+                    case 'EquipeLocale':
+                        $stmt->bindValue($identifier, $this->equipelocale, PDO::PARAM_INT);
+                        break;
+                    case 'ptsEquipeLocale':
+                        $stmt->bindValue($identifier, $this->ptsequipelocale, PDO::PARAM_INT);
+                        break;
+                    case 'EquipeVisite':
+                        $stmt->bindValue($identifier, $this->equipevisite, PDO::PARAM_INT);
+                        break;
+                    case 'ptsEquipeVisite':
+                        $stmt->bindValue($identifier, $this->ptsequipevisite, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -721,7 +1055,7 @@ abstract class Equipe implements ActiveRecordInterface
      */
     public function getByName($name, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = EquipeTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = PartieTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -741,7 +1075,25 @@ abstract class Equipe implements ActiveRecordInterface
                 return $this->getId();
                 break;
             case 1:
-                return $this->getNom();
+                return $this->getDatepartie();
+                break;
+            case 2:
+                return $this->getHeure();
+                break;
+            case 3:
+                return $this->getArenano();
+                break;
+            case 4:
+                return $this->getEquipelocale();
+                break;
+            case 5:
+                return $this->getPtsequipelocale();
+                break;
+            case 6:
+                return $this->getEquipevisite();
+                break;
+            case 7:
+                return $this->getPtsequipevisite();
                 break;
             default:
                 return null;
@@ -767,35 +1119,79 @@ abstract class Equipe implements ActiveRecordInterface
     public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
 
-        if (isset($alreadyDumpedObjects['Equipe'][$this->hashCode()])) {
+        if (isset($alreadyDumpedObjects['Partie'][$this->hashCode()])) {
             return '*RECURSION*';
         }
-        $alreadyDumpedObjects['Equipe'][$this->hashCode()] = true;
-        $keys = EquipeTableMap::getFieldNames($keyType);
+        $alreadyDumpedObjects['Partie'][$this->hashCode()] = true;
+        $keys = PartieTableMap::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getId(),
-            $keys[1] => $this->getNom(),
+            $keys[1] => $this->getDatepartie(),
+            $keys[2] => $this->getHeure(),
+            $keys[3] => $this->getArenano(),
+            $keys[4] => $this->getEquipelocale(),
+            $keys[5] => $this->getPtsequipelocale(),
+            $keys[6] => $this->getEquipevisite(),
+            $keys[7] => $this->getPtsequipevisite(),
         );
+        if ($result[$keys[1]] instanceof \DateTimeInterface) {
+            $result[$keys[1]] = $result[$keys[1]]->format('c');
+        }
+
+        if ($result[$keys[2]] instanceof \DateTimeInterface) {
+            $result[$keys[2]] = $result[$keys[2]]->format('c');
+        }
+
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
 
         if ($includeForeignObjects) {
-            if (null !== $this->collAlignements) {
+            if (null !== $this->aArena) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'alignements';
+                        $key = 'arena';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'Alignements';
+                        $key = 'Arena';
                         break;
                     default:
-                        $key = 'Alignements';
+                        $key = 'Arena';
                 }
 
-                $result[$key] = $this->collAlignements->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+                $result[$key] = $this->aArena->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aAlignementRelatedByEquipelocale) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'alignement';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'Alignement';
+                        break;
+                    default:
+                        $key = 'Alignement';
+                }
+
+                $result[$key] = $this->aAlignementRelatedByEquipelocale->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aAlignementRelatedByEquipevisite) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'alignement';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'Alignement';
+                        break;
+                    default:
+                        $key = 'Alignement';
+                }
+
+                $result[$key] = $this->aAlignementRelatedByEquipevisite->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
 
@@ -811,11 +1207,11 @@ abstract class Equipe implements ActiveRecordInterface
      *                one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *                Defaults to TableMap::TYPE_PHPNAME.
-     * @return $this|\Equipe
+     * @return $this|\Partie
      */
     public function setByName($name, $value, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = EquipeTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = PartieTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
 
         return $this->setByPosition($pos, $value);
     }
@@ -826,7 +1222,7 @@ abstract class Equipe implements ActiveRecordInterface
      *
      * @param  int $pos position in xml schema
      * @param  mixed $value field value
-     * @return $this|\Equipe
+     * @return $this|\Partie
      */
     public function setByPosition($pos, $value)
     {
@@ -835,7 +1231,25 @@ abstract class Equipe implements ActiveRecordInterface
                 $this->setId($value);
                 break;
             case 1:
-                $this->setNom($value);
+                $this->setDatepartie($value);
+                break;
+            case 2:
+                $this->setHeure($value);
+                break;
+            case 3:
+                $this->setArenano($value);
+                break;
+            case 4:
+                $this->setEquipelocale($value);
+                break;
+            case 5:
+                $this->setPtsequipelocale($value);
+                break;
+            case 6:
+                $this->setEquipevisite($value);
+                break;
+            case 7:
+                $this->setPtsequipevisite($value);
                 break;
         } // switch()
 
@@ -861,13 +1275,31 @@ abstract class Equipe implements ActiveRecordInterface
      */
     public function fromArray($arr, $keyType = TableMap::TYPE_PHPNAME)
     {
-        $keys = EquipeTableMap::getFieldNames($keyType);
+        $keys = PartieTableMap::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) {
             $this->setId($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setNom($arr[$keys[1]]);
+            $this->setDatepartie($arr[$keys[1]]);
+        }
+        if (array_key_exists($keys[2], $arr)) {
+            $this->setHeure($arr[$keys[2]]);
+        }
+        if (array_key_exists($keys[3], $arr)) {
+            $this->setArenano($arr[$keys[3]]);
+        }
+        if (array_key_exists($keys[4], $arr)) {
+            $this->setEquipelocale($arr[$keys[4]]);
+        }
+        if (array_key_exists($keys[5], $arr)) {
+            $this->setPtsequipelocale($arr[$keys[5]]);
+        }
+        if (array_key_exists($keys[6], $arr)) {
+            $this->setEquipevisite($arr[$keys[6]]);
+        }
+        if (array_key_exists($keys[7], $arr)) {
+            $this->setPtsequipevisite($arr[$keys[7]]);
         }
     }
 
@@ -888,7 +1320,7 @@ abstract class Equipe implements ActiveRecordInterface
      * @param string $data The source data to import from
      * @param string $keyType The type of keys the array uses.
      *
-     * @return $this|\Equipe The current object, for fluid interface
+     * @return $this|\Partie The current object, for fluid interface
      */
     public function importFrom($parser, $data, $keyType = TableMap::TYPE_PHPNAME)
     {
@@ -908,13 +1340,31 @@ abstract class Equipe implements ActiveRecordInterface
      */
     public function buildCriteria()
     {
-        $criteria = new Criteria(EquipeTableMap::DATABASE_NAME);
+        $criteria = new Criteria(PartieTableMap::DATABASE_NAME);
 
-        if ($this->isColumnModified(EquipeTableMap::COL_ID)) {
-            $criteria->add(EquipeTableMap::COL_ID, $this->id);
+        if ($this->isColumnModified(PartieTableMap::COL_ID)) {
+            $criteria->add(PartieTableMap::COL_ID, $this->id);
         }
-        if ($this->isColumnModified(EquipeTableMap::COL_NOM)) {
-            $criteria->add(EquipeTableMap::COL_NOM, $this->nom);
+        if ($this->isColumnModified(PartieTableMap::COL_DATEPARTIE)) {
+            $criteria->add(PartieTableMap::COL_DATEPARTIE, $this->datepartie);
+        }
+        if ($this->isColumnModified(PartieTableMap::COL_HEURE)) {
+            $criteria->add(PartieTableMap::COL_HEURE, $this->heure);
+        }
+        if ($this->isColumnModified(PartieTableMap::COL_ARENANO)) {
+            $criteria->add(PartieTableMap::COL_ARENANO, $this->arenano);
+        }
+        if ($this->isColumnModified(PartieTableMap::COL_EQUIPELOCALE)) {
+            $criteria->add(PartieTableMap::COL_EQUIPELOCALE, $this->equipelocale);
+        }
+        if ($this->isColumnModified(PartieTableMap::COL_PTSEQUIPELOCALE)) {
+            $criteria->add(PartieTableMap::COL_PTSEQUIPELOCALE, $this->ptsequipelocale);
+        }
+        if ($this->isColumnModified(PartieTableMap::COL_EQUIPEVISITE)) {
+            $criteria->add(PartieTableMap::COL_EQUIPEVISITE, $this->equipevisite);
+        }
+        if ($this->isColumnModified(PartieTableMap::COL_PTSEQUIPEVISITE)) {
+            $criteria->add(PartieTableMap::COL_PTSEQUIPEVISITE, $this->ptsequipevisite);
         }
 
         return $criteria;
@@ -932,8 +1382,8 @@ abstract class Equipe implements ActiveRecordInterface
      */
     public function buildPkeyCriteria()
     {
-        $criteria = ChildEquipeQuery::create();
-        $criteria->add(EquipeTableMap::COL_ID, $this->id);
+        $criteria = ChildPartieQuery::create();
+        $criteria->add(PartieTableMap::COL_ID, $this->id);
 
         return $criteria;
     }
@@ -995,28 +1445,20 @@ abstract class Equipe implements ActiveRecordInterface
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param      object $copyObj An object of \Equipe (or compatible) type.
+     * @param      object $copyObj An object of \Partie (or compatible) type.
      * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setNom($this->getNom());
-
-        if ($deepCopy) {
-            // important: temporarily setNew(false) because this affects the behavior of
-            // the getter/setter methods for fkey referrer objects.
-            $copyObj->setNew(false);
-
-            foreach ($this->getAlignements() as $relObj) {
-                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addAlignement($relObj->copy($deepCopy));
-                }
-            }
-
-        } // if ($deepCopy)
-
+        $copyObj->setDatepartie($this->getDatepartie());
+        $copyObj->setHeure($this->getHeure());
+        $copyObj->setArenano($this->getArenano());
+        $copyObj->setEquipelocale($this->getEquipelocale());
+        $copyObj->setPtsequipelocale($this->getPtsequipelocale());
+        $copyObj->setEquipevisite($this->getEquipevisite());
+        $copyObj->setPtsequipevisite($this->getPtsequipevisite());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1032,7 +1474,7 @@ abstract class Equipe implements ActiveRecordInterface
      * objects.
      *
      * @param  boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return \Equipe Clone of current object.
+     * @return \Partie Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -1045,296 +1487,157 @@ abstract class Equipe implements ActiveRecordInterface
         return $copyObj;
     }
 
-
     /**
-     * Initializes a collection based on the name of a relation.
-     * Avoids crafting an 'init[$relationName]s' method name
-     * that wouldn't work when StandardEnglishPluralizer is used.
+     * Declares an association between this object and a ChildArena object.
      *
-     * @param      string $relationName The name of the relation to initialize
-     * @return void
-     */
-    public function initRelation($relationName)
-    {
-        if ('Alignement' == $relationName) {
-            $this->initAlignements();
-            return;
-        }
-    }
-
-    /**
-     * Clears out the collAlignements collection
-     *
-     * This does not modify the database; however, it will remove any associated objects, causing
-     * them to be refetched by subsequent calls to accessor method.
-     *
-     * @return void
-     * @see        addAlignements()
-     */
-    public function clearAlignements()
-    {
-        $this->collAlignements = null; // important to set this to NULL since that means it is uninitialized
-    }
-
-    /**
-     * Reset is the collAlignements collection loaded partially.
-     */
-    public function resetPartialAlignements($v = true)
-    {
-        $this->collAlignementsPartial = $v;
-    }
-
-    /**
-     * Initializes the collAlignements collection.
-     *
-     * By default this just sets the collAlignements collection to an empty array (like clearcollAlignements());
-     * however, you may wish to override this method in your stub class to provide setting appropriate
-     * to your application -- for example, setting the initial array to the values stored in database.
-     *
-     * @param      boolean $overrideExisting If set to true, the method call initializes
-     *                                        the collection even if it is not empty
-     *
-     * @return void
-     */
-    public function initAlignements($overrideExisting = true)
-    {
-        if (null !== $this->collAlignements && !$overrideExisting) {
-            return;
-        }
-
-        $collectionClassName = AlignementTableMap::getTableMap()->getCollectionClassName();
-
-        $this->collAlignements = new $collectionClassName;
-        $this->collAlignements->setModel('\Alignement');
-    }
-
-    /**
-     * Gets an array of ChildAlignement objects which contain a foreign key that references this object.
-     *
-     * If the $criteria is not null, it is used to always fetch the results from the database.
-     * Otherwise the results are fetched from the database the first time, then cached.
-     * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildEquipe is new, it will return
-     * an empty collection or the current collection; the criteria is ignored on a new object.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @return ObjectCollection|ChildAlignement[] List of ChildAlignement objects
+     * @param  ChildArena $v
+     * @return $this|\Partie The current object (for fluent API support)
      * @throws PropelException
      */
-    public function getAlignements(Criteria $criteria = null, ConnectionInterface $con = null)
+    public function setArena(ChildArena $v = null)
     {
-        $partial = $this->collAlignementsPartial && !$this->isNew();
-        if (null === $this->collAlignements || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collAlignements) {
-                // return empty collection
-                $this->initAlignements();
-            } else {
-                $collAlignements = ChildAlignementQuery::create(null, $criteria)
-                    ->filterByEquipe($this)
-                    ->find($con);
-
-                if (null !== $criteria) {
-                    if (false !== $this->collAlignementsPartial && count($collAlignements)) {
-                        $this->initAlignements(false);
-
-                        foreach ($collAlignements as $obj) {
-                            if (false == $this->collAlignements->contains($obj)) {
-                                $this->collAlignements->append($obj);
-                            }
-                        }
-
-                        $this->collAlignementsPartial = true;
-                    }
-
-                    return $collAlignements;
-                }
-
-                if ($partial && $this->collAlignements) {
-                    foreach ($this->collAlignements as $obj) {
-                        if ($obj->isNew()) {
-                            $collAlignements[] = $obj;
-                        }
-                    }
-                }
-
-                $this->collAlignements = $collAlignements;
-                $this->collAlignementsPartial = false;
-            }
+        if ($v === null) {
+            $this->setArenano(NULL);
+        } else {
+            $this->setArenano($v->getId());
         }
 
-        return $this->collAlignements;
-    }
+        $this->aArena = $v;
 
-    /**
-     * Sets a collection of ChildAlignement objects related by a one-to-many relationship
-     * to the current object.
-     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
-     * and new objects from the given Propel collection.
-     *
-     * @param      Collection $alignements A Propel collection.
-     * @param      ConnectionInterface $con Optional connection object
-     * @return $this|ChildEquipe The current object (for fluent API support)
-     */
-    public function setAlignements(Collection $alignements, ConnectionInterface $con = null)
-    {
-        /** @var ChildAlignement[] $alignementsToDelete */
-        $alignementsToDelete = $this->getAlignements(new Criteria(), $con)->diff($alignements);
-
-
-        $this->alignementsScheduledForDeletion = $alignementsToDelete;
-
-        foreach ($alignementsToDelete as $alignementRemoved) {
-            $alignementRemoved->setEquipe(null);
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildArena object, it will not be re-added.
+        if ($v !== null) {
+            $v->addPartie($this);
         }
 
-        $this->collAlignements = null;
-        foreach ($alignements as $alignement) {
-            $this->addAlignement($alignement);
-        }
-
-        $this->collAlignements = $alignements;
-        $this->collAlignementsPartial = false;
 
         return $this;
     }
 
+
     /**
-     * Returns the number of related Alignement objects.
+     * Get the associated ChildArena object
      *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct
-     * @param      ConnectionInterface $con
-     * @return int             Count of related Alignement objects.
+     * @param  ConnectionInterface $con Optional Connection object.
+     * @return ChildArena The associated ChildArena object.
      * @throws PropelException
      */
-    public function countAlignements(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    public function getArena(ConnectionInterface $con = null)
     {
-        $partial = $this->collAlignementsPartial && !$this->isNew();
-        if (null === $this->collAlignements || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collAlignements) {
-                return 0;
-            }
-
-            if ($partial && !$criteria) {
-                return count($this->getAlignements());
-            }
-
-            $query = ChildAlignementQuery::create(null, $criteria);
-            if ($distinct) {
-                $query->distinct();
-            }
-
-            return $query
-                ->filterByEquipe($this)
-                ->count($con);
+        if ($this->aArena === null && ($this->arenano != 0)) {
+            $this->aArena = ChildArenaQuery::create()->findPk($this->arenano, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aArena->addParties($this);
+             */
         }
 
-        return count($this->collAlignements);
+        return $this->aArena;
     }
 
     /**
-     * Method called to associate a ChildAlignement object to this object
-     * through the ChildAlignement foreign key attribute.
+     * Declares an association between this object and a ChildAlignement object.
      *
-     * @param  ChildAlignement $l ChildAlignement
-     * @return $this|\Equipe The current object (for fluent API support)
+     * @param  ChildAlignement $v
+     * @return $this|\Partie The current object (for fluent API support)
+     * @throws PropelException
      */
-    public function addAlignement(ChildAlignement $l)
+    public function setAlignementRelatedByEquipelocale(ChildAlignement $v = null)
     {
-        if ($this->collAlignements === null) {
-            $this->initAlignements();
-            $this->collAlignementsPartial = true;
+        if ($v === null) {
+            $this->setEquipelocale(NULL);
+        } else {
+            $this->setEquipelocale($v->getId());
         }
 
-        if (!$this->collAlignements->contains($l)) {
-            $this->doAddAlignement($l);
+        $this->aAlignementRelatedByEquipelocale = $v;
 
-            if ($this->alignementsScheduledForDeletion and $this->alignementsScheduledForDeletion->contains($l)) {
-                $this->alignementsScheduledForDeletion->remove($this->alignementsScheduledForDeletion->search($l));
-            }
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildAlignement object, it will not be re-added.
+        if ($v !== null) {
+            $v->addPartieRelatedByEquipelocale($this);
         }
 
-        return $this;
-    }
-
-    /**
-     * @param ChildAlignement $alignement The ChildAlignement object to add.
-     */
-    protected function doAddAlignement(ChildAlignement $alignement)
-    {
-        $this->collAlignements[]= $alignement;
-        $alignement->setEquipe($this);
-    }
-
-    /**
-     * @param  ChildAlignement $alignement The ChildAlignement object to remove.
-     * @return $this|ChildEquipe The current object (for fluent API support)
-     */
-    public function removeAlignement(ChildAlignement $alignement)
-    {
-        if ($this->getAlignements()->contains($alignement)) {
-            $pos = $this->collAlignements->search($alignement);
-            $this->collAlignements->remove($pos);
-            if (null === $this->alignementsScheduledForDeletion) {
-                $this->alignementsScheduledForDeletion = clone $this->collAlignements;
-                $this->alignementsScheduledForDeletion->clear();
-            }
-            $this->alignementsScheduledForDeletion[]= clone $alignement;
-            $alignement->setEquipe(null);
-        }
 
         return $this;
     }
 
 
     /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this Equipe is new, it will return
-     * an empty collection; or if this Equipe has previously
-     * been saved, it will retrieve related Alignements from storage.
+     * Get the associated ChildAlignement object
      *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in Equipe.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildAlignement[] List of ChildAlignement objects
+     * @param  ConnectionInterface $con Optional Connection object.
+     * @return ChildAlignement The associated ChildAlignement object.
+     * @throws PropelException
      */
-    public function getAlignementsJoinJoueur(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getAlignementRelatedByEquipelocale(ConnectionInterface $con = null)
     {
-        $query = ChildAlignementQuery::create(null, $criteria);
-        $query->joinWith('Joueur', $joinBehavior);
+        if ($this->aAlignementRelatedByEquipelocale === null && ($this->equipelocale != 0)) {
+            $this->aAlignementRelatedByEquipelocale = ChildAlignementQuery::create()->findPk($this->equipelocale, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aAlignementRelatedByEquipelocale->addPartiesRelatedByEquipelocale($this);
+             */
+        }
 
-        return $this->getAlignements($query, $con);
+        return $this->aAlignementRelatedByEquipelocale;
+    }
+
+    /**
+     * Declares an association between this object and a ChildAlignement object.
+     *
+     * @param  ChildAlignement $v
+     * @return $this|\Partie The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setAlignementRelatedByEquipevisite(ChildAlignement $v = null)
+    {
+        if ($v === null) {
+            $this->setEquipevisite(NULL);
+        } else {
+            $this->setEquipevisite($v->getId());
+        }
+
+        $this->aAlignementRelatedByEquipevisite = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildAlignement object, it will not be re-added.
+        if ($v !== null) {
+            $v->addPartieRelatedByEquipevisite($this);
+        }
+
+
+        return $this;
     }
 
 
     /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this Equipe is new, it will return
-     * an empty collection; or if this Equipe has previously
-     * been saved, it will retrieve related Alignements from storage.
+     * Get the associated ChildAlignement object
      *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in Equipe.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildAlignement[] List of ChildAlignement objects
+     * @param  ConnectionInterface $con Optional Connection object.
+     * @return ChildAlignement The associated ChildAlignement object.
+     * @throws PropelException
      */
-    public function getAlignementsJoinPosition(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getAlignementRelatedByEquipevisite(ConnectionInterface $con = null)
     {
-        $query = ChildAlignementQuery::create(null, $criteria);
-        $query->joinWith('Position', $joinBehavior);
+        if ($this->aAlignementRelatedByEquipevisite === null && ($this->equipevisite != 0)) {
+            $this->aAlignementRelatedByEquipevisite = ChildAlignementQuery::create()->findPk($this->equipevisite, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aAlignementRelatedByEquipevisite->addPartiesRelatedByEquipevisite($this);
+             */
+        }
 
-        return $this->getAlignements($query, $con);
+        return $this->aAlignementRelatedByEquipevisite;
     }
 
     /**
@@ -1344,8 +1647,23 @@ abstract class Equipe implements ActiveRecordInterface
      */
     public function clear()
     {
+        if (null !== $this->aArena) {
+            $this->aArena->removePartie($this);
+        }
+        if (null !== $this->aAlignementRelatedByEquipelocale) {
+            $this->aAlignementRelatedByEquipelocale->removePartieRelatedByEquipelocale($this);
+        }
+        if (null !== $this->aAlignementRelatedByEquipevisite) {
+            $this->aAlignementRelatedByEquipevisite->removePartieRelatedByEquipevisite($this);
+        }
         $this->id = null;
-        $this->nom = null;
+        $this->datepartie = null;
+        $this->heure = null;
+        $this->arenano = null;
+        $this->equipelocale = null;
+        $this->ptsequipelocale = null;
+        $this->equipevisite = null;
+        $this->ptsequipevisite = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();
@@ -1364,14 +1682,11 @@ abstract class Equipe implements ActiveRecordInterface
     public function clearAllReferences($deep = false)
     {
         if ($deep) {
-            if ($this->collAlignements) {
-                foreach ($this->collAlignements as $o) {
-                    $o->clearAllReferences($deep);
-                }
-            }
         } // if ($deep)
 
-        $this->collAlignements = null;
+        $this->aArena = null;
+        $this->aAlignementRelatedByEquipelocale = null;
+        $this->aAlignementRelatedByEquipevisite = null;
     }
 
     /**
@@ -1381,7 +1696,7 @@ abstract class Equipe implements ActiveRecordInterface
      */
     public function __toString()
     {
-        return (string) $this->exportTo(EquipeTableMap::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(PartieTableMap::DEFAULT_STRING_FORMAT);
     }
 
     /**

@@ -2,8 +2,8 @@
 
 namespace Map;
 
-use \Alignement;
-use \AlignementQuery;
+use \PositionJoueur;
+use \PositionJoueurQuery;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\InstancePoolTrait;
@@ -16,7 +16,7 @@ use Propel\Runtime\Map\TableMapTrait;
 
 
 /**
- * This class defines the structure of the 'Alignement' table.
+ * This class defines the structure of the 'Position_Joueur' table.
  *
  *
  *
@@ -26,7 +26,7 @@ use Propel\Runtime\Map\TableMapTrait;
  * (i.e. if it's a text column type).
  *
  */
-class AlignementTableMap extends TableMap
+class PositionJoueurTableMap extends TableMap
 {
     use InstancePoolTrait;
     use TableMapTrait;
@@ -34,7 +34,7 @@ class AlignementTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'vintage.hockey.pickup.Map.AlignementTableMap';
+    const CLASS_NAME = 'vhl.Map.PositionJoueurTableMap';
 
     /**
      * The default database name for this class
@@ -44,22 +44,22 @@ class AlignementTableMap extends TableMap
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'Alignement';
+    const TABLE_NAME = 'Position_Joueur';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\Alignement';
+    const OM_CLASS = '\\PositionJoueur';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'vintage.hockey.pickup.Alignement';
+    const CLASS_DEFAULT = 'vhl.PositionJoueur';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 7;
+    const NUM_COLUMNS = 3;
 
     /**
      * The number of lazy-loaded columns
@@ -69,42 +69,22 @@ class AlignementTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 7;
+    const NUM_HYDRATE_COLUMNS = 3;
 
     /**
-     * the column name for the Id field
+     * the column name for the id field
      */
-    const COL_ID = 'Alignement.Id';
+    const COL_ID = 'Position_Joueur.id';
 
     /**
-     * the column name for the EquipeNo field
+     * the column name for the idJoueur field
      */
-    const COL_EQUIPENO = 'Alignement.EquipeNo';
+    const COL_IDJOUEUR = 'Position_Joueur.idJoueur';
 
     /**
-     * the column name for the JoueurNo field
+     * the column name for the abbrPos field
      */
-    const COL_JOUEURNO = 'Alignement.JoueurNo';
-
-    /**
-     * the column name for the PosAbbr field
-     */
-    const COL_POSABBR = 'Alignement.PosAbbr';
-
-    /**
-     * the column name for the But field
-     */
-    const COL_BUT = 'Alignement.But';
-
-    /**
-     * the column name for the Passe field
-     */
-    const COL_PASSE = 'Alignement.Passe';
-
-    /**
-     * the column name for the Blanchissage field
-     */
-    const COL_BLANCHISSAGE = 'Alignement.Blanchissage';
+    const COL_ABBRPOS = 'Position_Joueur.abbrPos';
 
     /**
      * The default string format for model objects of the related table
@@ -118,11 +98,11 @@ class AlignementTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Equipeno', 'Joueurno', 'Posabbr', 'But', 'Passe', 'Blanchissage', ),
-        self::TYPE_CAMELNAME     => array('id', 'equipeno', 'joueurno', 'posabbr', 'but', 'passe', 'blanchissage', ),
-        self::TYPE_COLNAME       => array(AlignementTableMap::COL_ID, AlignementTableMap::COL_EQUIPENO, AlignementTableMap::COL_JOUEURNO, AlignementTableMap::COL_POSABBR, AlignementTableMap::COL_BUT, AlignementTableMap::COL_PASSE, AlignementTableMap::COL_BLANCHISSAGE, ),
-        self::TYPE_FIELDNAME     => array('Id', 'EquipeNo', 'JoueurNo', 'PosAbbr', 'But', 'Passe', 'Blanchissage', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
+        self::TYPE_PHPNAME       => array('Id', 'Idjoueur', 'Abbrpos', ),
+        self::TYPE_CAMELNAME     => array('id', 'idjoueur', 'abbrpos', ),
+        self::TYPE_COLNAME       => array(PositionJoueurTableMap::COL_ID, PositionJoueurTableMap::COL_IDJOUEUR, PositionJoueurTableMap::COL_ABBRPOS, ),
+        self::TYPE_FIELDNAME     => array('id', 'idJoueur', 'abbrPos', ),
+        self::TYPE_NUM           => array(0, 1, 2, )
     );
 
     /**
@@ -132,11 +112,11 @@ class AlignementTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Equipeno' => 1, 'Joueurno' => 2, 'Posabbr' => 3, 'But' => 4, 'Passe' => 5, 'Blanchissage' => 6, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'equipeno' => 1, 'joueurno' => 2, 'posabbr' => 3, 'but' => 4, 'passe' => 5, 'blanchissage' => 6, ),
-        self::TYPE_COLNAME       => array(AlignementTableMap::COL_ID => 0, AlignementTableMap::COL_EQUIPENO => 1, AlignementTableMap::COL_JOUEURNO => 2, AlignementTableMap::COL_POSABBR => 3, AlignementTableMap::COL_BUT => 4, AlignementTableMap::COL_PASSE => 5, AlignementTableMap::COL_BLANCHISSAGE => 6, ),
-        self::TYPE_FIELDNAME     => array('Id' => 0, 'EquipeNo' => 1, 'JoueurNo' => 2, 'PosAbbr' => 3, 'But' => 4, 'Passe' => 5, 'Blanchissage' => 6, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Idjoueur' => 1, 'Abbrpos' => 2, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'idjoueur' => 1, 'abbrpos' => 2, ),
+        self::TYPE_COLNAME       => array(PositionJoueurTableMap::COL_ID => 0, PositionJoueurTableMap::COL_IDJOUEUR => 1, PositionJoueurTableMap::COL_ABBRPOS => 2, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'idJoueur' => 1, 'abbrPos' => 2, ),
+        self::TYPE_NUM           => array(0, 1, 2, )
     );
 
     /**
@@ -149,20 +129,16 @@ class AlignementTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('Alignement');
-        $this->setPhpName('Alignement');
+        $this->setName('Position_Joueur');
+        $this->setPhpName('PositionJoueur');
         $this->setIdentifierQuoting(false);
-        $this->setClassName('\\Alignement');
-        $this->setPackage('vintage.hockey.pickup');
+        $this->setClassName('\\PositionJoueur');
+        $this->setPackage('vhl');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('Id', 'Id', 'INTEGER', true, 10, null);
-        $this->addForeignKey('EquipeNo', 'Equipeno', 'INTEGER', 'Equipe', 'id', true, 10, null);
-        $this->addForeignKey('JoueurNo', 'Joueurno', 'INTEGER', 'Joueur', 'id', true, 10, null);
-        $this->addForeignKey('PosAbbr', 'Posabbr', 'VARCHAR', 'Position', 'abbr', true, 3, null);
-        $this->addColumn('But', 'But', 'INTEGER', true, 2, null);
-        $this->addColumn('Passe', 'Passe', 'INTEGER', true, null, null);
-        $this->addColumn('Blanchissage', 'Blanchissage', 'INTEGER', true, null, null);
+        $this->addPrimaryKey('id', 'Id', 'INTEGER', true, 10, null);
+        $this->addForeignKey('idJoueur', 'Idjoueur', 'INTEGER', 'Joueur', 'id', true, 10, null);
+        $this->addForeignKey('abbrPos', 'Abbrpos', 'VARCHAR', 'Position', 'abbr', true, 3, null);
     } // initialize()
 
     /**
@@ -170,41 +146,20 @@ class AlignementTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Equipe', '\\Equipe', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':EquipeNo',
-    1 => ':id',
-  ),
-), null, null, null, false);
         $this->addRelation('Joueur', '\\Joueur', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
-    0 => ':JoueurNo',
+    0 => ':idJoueur',
     1 => ':id',
   ),
 ), null, null, null, false);
         $this->addRelation('Position', '\\Position', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
-    0 => ':PosAbbr',
+    0 => ':abbrPos',
     1 => ':abbr',
   ),
 ), null, null, null, false);
-        $this->addRelation('PartieRelatedByEquipelocale', '\\Partie', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':EquipeLocale',
-    1 => ':Id',
-  ),
-), null, null, 'PartiesRelatedByEquipelocale', false);
-        $this->addRelation('PartieRelatedByEquipevisite', '\\Partie', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':EquipeVisite',
-    1 => ':Id',
-  ),
-), null, null, 'PartiesRelatedByEquipevisite', false);
     } // buildRelations()
 
     /**
@@ -264,7 +219,7 @@ class AlignementTableMap extends TableMap
      */
     public static function getOMClass($withPrefix = true)
     {
-        return $withPrefix ? AlignementTableMap::CLASS_DEFAULT : AlignementTableMap::OM_CLASS;
+        return $withPrefix ? PositionJoueurTableMap::CLASS_DEFAULT : PositionJoueurTableMap::OM_CLASS;
     }
 
     /**
@@ -278,22 +233,22 @@ class AlignementTableMap extends TableMap
      *
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (Alignement object, last column rank)
+     * @return array           (PositionJoueur object, last column rank)
      */
     public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        $key = AlignementTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
-        if (null !== ($obj = AlignementTableMap::getInstanceFromPool($key))) {
+        $key = PositionJoueurTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
+        if (null !== ($obj = PositionJoueurTableMap::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $offset, true); // rehydrate
-            $col = $offset + AlignementTableMap::NUM_HYDRATE_COLUMNS;
+            $col = $offset + PositionJoueurTableMap::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = AlignementTableMap::OM_CLASS;
-            /** @var Alignement $obj */
+            $cls = PositionJoueurTableMap::OM_CLASS;
+            /** @var PositionJoueur $obj */
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
-            AlignementTableMap::addInstanceToPool($obj, $key);
+            PositionJoueurTableMap::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -316,18 +271,18 @@ class AlignementTableMap extends TableMap
         $cls = static::getOMClass(false);
         // populate the object(s)
         while ($row = $dataFetcher->fetch()) {
-            $key = AlignementTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
-            if (null !== ($obj = AlignementTableMap::getInstanceFromPool($key))) {
+            $key = PositionJoueurTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
+            if (null !== ($obj = PositionJoueurTableMap::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var Alignement $obj */
+                /** @var PositionJoueur $obj */
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                AlignementTableMap::addInstanceToPool($obj, $key);
+                PositionJoueurTableMap::addInstanceToPool($obj, $key);
             } // if key exists
         }
 
@@ -348,21 +303,13 @@ class AlignementTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(AlignementTableMap::COL_ID);
-            $criteria->addSelectColumn(AlignementTableMap::COL_EQUIPENO);
-            $criteria->addSelectColumn(AlignementTableMap::COL_JOUEURNO);
-            $criteria->addSelectColumn(AlignementTableMap::COL_POSABBR);
-            $criteria->addSelectColumn(AlignementTableMap::COL_BUT);
-            $criteria->addSelectColumn(AlignementTableMap::COL_PASSE);
-            $criteria->addSelectColumn(AlignementTableMap::COL_BLANCHISSAGE);
+            $criteria->addSelectColumn(PositionJoueurTableMap::COL_ID);
+            $criteria->addSelectColumn(PositionJoueurTableMap::COL_IDJOUEUR);
+            $criteria->addSelectColumn(PositionJoueurTableMap::COL_ABBRPOS);
         } else {
-            $criteria->addSelectColumn($alias . '.Id');
-            $criteria->addSelectColumn($alias . '.EquipeNo');
-            $criteria->addSelectColumn($alias . '.JoueurNo');
-            $criteria->addSelectColumn($alias . '.PosAbbr');
-            $criteria->addSelectColumn($alias . '.But');
-            $criteria->addSelectColumn($alias . '.Passe');
-            $criteria->addSelectColumn($alias . '.Blanchissage');
+            $criteria->addSelectColumn($alias . '.id');
+            $criteria->addSelectColumn($alias . '.idJoueur');
+            $criteria->addSelectColumn($alias . '.abbrPos');
         }
     }
 
@@ -375,7 +322,7 @@ class AlignementTableMap extends TableMap
      */
     public static function getTableMap()
     {
-        return Propel::getServiceContainer()->getDatabaseMap(AlignementTableMap::DATABASE_NAME)->getTable(AlignementTableMap::TABLE_NAME);
+        return Propel::getServiceContainer()->getDatabaseMap(PositionJoueurTableMap::DATABASE_NAME)->getTable(PositionJoueurTableMap::TABLE_NAME);
     }
 
     /**
@@ -383,16 +330,16 @@ class AlignementTableMap extends TableMap
      */
     public static function buildTableMap()
     {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(AlignementTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(AlignementTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new AlignementTableMap());
+        $dbMap = Propel::getServiceContainer()->getDatabaseMap(PositionJoueurTableMap::DATABASE_NAME);
+        if (!$dbMap->hasTable(PositionJoueurTableMap::TABLE_NAME)) {
+            $dbMap->addTableObject(new PositionJoueurTableMap());
         }
     }
 
     /**
-     * Performs a DELETE on the database, given a Alignement or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a PositionJoueur or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or Alignement object or primary key or array of primary keys
+     * @param mixed               $values Criteria or PositionJoueur object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -403,27 +350,27 @@ class AlignementTableMap extends TableMap
      public static function doDelete($values, ConnectionInterface $con = null)
      {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(AlignementTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(PositionJoueurTableMap::DATABASE_NAME);
         }
 
         if ($values instanceof Criteria) {
             // rename for clarity
             $criteria = $values;
-        } elseif ($values instanceof \Alignement) { // it's a model object
+        } elseif ($values instanceof \PositionJoueur) { // it's a model object
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(AlignementTableMap::DATABASE_NAME);
-            $criteria->add(AlignementTableMap::COL_ID, (array) $values, Criteria::IN);
+            $criteria = new Criteria(PositionJoueurTableMap::DATABASE_NAME);
+            $criteria->add(PositionJoueurTableMap::COL_ID, (array) $values, Criteria::IN);
         }
 
-        $query = AlignementQuery::create()->mergeWith($criteria);
+        $query = PositionJoueurQuery::create()->mergeWith($criteria);
 
         if ($values instanceof Criteria) {
-            AlignementTableMap::clearInstancePool();
+            PositionJoueurTableMap::clearInstancePool();
         } elseif (!is_object($values)) { // it's a primary key, or an array of pks
             foreach ((array) $values as $singleval) {
-                AlignementTableMap::removeInstanceFromPool($singleval);
+                PositionJoueurTableMap::removeInstanceFromPool($singleval);
             }
         }
 
@@ -431,20 +378,20 @@ class AlignementTableMap extends TableMap
     }
 
     /**
-     * Deletes all rows from the Alignement table.
+     * Deletes all rows from the Position_Joueur table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
     {
-        return AlignementQuery::create()->doDeleteAll($con);
+        return PositionJoueurQuery::create()->doDeleteAll($con);
     }
 
     /**
-     * Performs an INSERT on the database, given a Alignement or Criteria object.
+     * Performs an INSERT on the database, given a PositionJoueur or Criteria object.
      *
-     * @param mixed               $criteria Criteria or Alignement object containing data that is used to create the INSERT statement.
+     * @param mixed               $criteria Criteria or PositionJoueur object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -453,22 +400,22 @@ class AlignementTableMap extends TableMap
     public static function doInsert($criteria, ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(AlignementTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(PositionJoueurTableMap::DATABASE_NAME);
         }
 
         if ($criteria instanceof Criteria) {
             $criteria = clone $criteria; // rename for clarity
         } else {
-            $criteria = $criteria->buildCriteria(); // build Criteria from Alignement object
+            $criteria = $criteria->buildCriteria(); // build Criteria from PositionJoueur object
         }
 
-        if ($criteria->containsKey(AlignementTableMap::COL_ID) && $criteria->keyContainsValue(AlignementTableMap::COL_ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.AlignementTableMap::COL_ID.')');
+        if ($criteria->containsKey(PositionJoueurTableMap::COL_ID) && $criteria->keyContainsValue(PositionJoueurTableMap::COL_ID) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.PositionJoueurTableMap::COL_ID.')');
         }
 
 
         // Set the correct dbName
-        $query = AlignementQuery::create()->mergeWith($criteria);
+        $query = PositionJoueurQuery::create()->mergeWith($criteria);
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
@@ -477,7 +424,7 @@ class AlignementTableMap extends TableMap
         });
     }
 
-} // AlignementTableMap
+} // PositionJoueurTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-AlignementTableMap::buildTableMap();
+PositionJoueurTableMap::buildTableMap();

@@ -12,25 +12,12 @@ DROP TABLE IF EXISTS `Alignement`;
 CREATE TABLE `Alignement`
 (
     `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-    `EquipeNo` int(10) unsigned NOT NULL,
-    `JoueurNo` int(10) unsigned NOT NULL,
-    `PosAbbr` VARCHAR(3) NOT NULL,
-    `But` INTEGER(2) NOT NULL,
-    `Passe` INTEGER NOT NULL,
-    `Blanchissage` INTEGER NOT NULL,
+    `EquipeId` int(10) unsigned NOT NULL,
     PRIMARY KEY (`Id`),
-    INDEX `Align_Eqfk` (`EquipeNo`),
-    INDEX `Align_Joufk` (`JoueurNo`),
-    INDEX `Align_Posfk` (`PosAbbr`),
-    CONSTRAINT `Align_Eqfk`
-        FOREIGN KEY (`EquipeNo`)
-        REFERENCES `Equipe` (`id`),
-    CONSTRAINT `Align_Joufk`
-        FOREIGN KEY (`JoueurNo`)
-        REFERENCES `Joueur` (`id`),
-    CONSTRAINT `Align_Posfk`
-        FOREIGN KEY (`PosAbbr`)
-        REFERENCES `Position` (`abbr`)
+    INDEX `Alignement_Eqfk` (`EquipeId`),
+    CONSTRAINT `Alignement_Eqfk`
+        FOREIGN KEY (`EquipeId`)
+        REFERENCES `Equipe` (`id`)
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -128,12 +115,12 @@ CREATE TABLE `Position`
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
--- PositionJoueur
+-- Position_Joueur
 -- ---------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `PositionJoueur`;
+DROP TABLE IF EXISTS `Position_Joueur`;
 
-CREATE TABLE `PositionJoueur`
+CREATE TABLE `Position_Joueur`
 (
     `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
     `idJoueur` int(10) unsigned NOT NULL,
@@ -141,10 +128,10 @@ CREATE TABLE `PositionJoueur`
     PRIMARY KEY (`id`),
     INDEX `idJoueur` (`idJoueur`),
     INDEX `abbrPos` (`abbrPos`),
-    CONSTRAINT `PositionJoueur_ibfk_1`
+    CONSTRAINT `Position_Joueur_ibfk_1`
         FOREIGN KEY (`idJoueur`)
         REFERENCES `Joueur` (`id`),
-    CONSTRAINT `PositionJoueur_ibfk_2`
+    CONSTRAINT `Position_Joueur_ibfk_2`
         FOREIGN KEY (`abbrPos`)
         REFERENCES `Position` (`abbr`)
 ) ENGINE=InnoDB;

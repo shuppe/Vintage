@@ -218,6 +218,10 @@ code {
 	background-color: #CCC;
 }
 
+.navbar-collapse{
+ justify-content: flex-end;
+}
+
 @media ( max-width : 767px) {
 	.navbar-default .navbar-nav .open .dropdown-menu>li>a {
 		color: #777;

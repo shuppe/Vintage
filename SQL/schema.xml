@@ -1,30 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<database name="default" defaultIdMethod="native" namespace="vintage\hockey\pickup" defaultPhpNamingMethod="underscore">
+<database name="default" defaultIdMethod="native" namespace="vhl" defaultPhpNamingMethod="underscore">
   <table name="Alignement" idMethod="native" phpName="Alignement">
     <column name="Id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="EquipeNo" phpName="Equipeno" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" required="true"/>
-    <column name="JoueurNo" phpName="Joueurno" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" required="true"/>
-    <column name="PosAbbr" phpName="Posabbr" type="VARCHAR" size="3" required="true"/>
-    <column name="But" phpName="But" type="INTEGER" size="2" required="true"/>
-    <column name="Passe" phpName="Passe" type="INTEGER" required="true"/>
-    <column name="Blanchissage" phpName="Blanchissage" type="INTEGER" required="true"/>
-    <foreign-key foreignTable="Equipe" name="Align_Eqfk">
-      <reference local="EquipeNo" foreign="id"/>
+    <column name="EquipeId" phpName="Equipeid" type="INTEGER" size="10" sqlType="int(10) unsigned" required="true"/>
+    <foreign-key foreignTable="Equipe" name="Alignement_Eqfk">
+      <reference local="EquipeId" foreign="id"/>
     </foreign-key>
-    <foreign-key foreignTable="Joueur" name="Align_Joufk">
-      <reference local="JoueurNo" foreign="id"/>
-    </foreign-key>
-    <foreign-key foreignTable="Position" name="Align_Posfk">
-      <reference local="PosAbbr" foreign="abbr"/>
-    </foreign-key>
-    <index name="Align_Eqfk">
-      <index-column name="EquipeNo"/>
-    </index>
-    <index name="Align_Joufk">
-      <index-column name="JoueurNo"/>
-    </index>
-    <index name="Align_Posfk">
-      <index-column name="PosAbbr"/>
+    <index name="Alignement_Eqfk">
+      <index-column name="EquipeId"/>
     </index>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
@@ -100,14 +83,14 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="PositionJoueur" idMethod="native" phpName="Positionjoueur">
+  <table name="Position_Joueur" idMethod="native" phpName="PositionJoueur">
     <column name="id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="idJoueur" phpName="Idjoueur" type="INTEGER" size="10" sqlType="int(10) unsigned" required="true"/>
     <column name="abbrPos" phpName="Abbrpos" type="VARCHAR" size="3" required="true"/>
-    <foreign-key foreignTable="Joueur" name="PositionJoueur_ibfk_1">
+    <foreign-key foreignTable="Joueur" name="Position_Joueur_ibfk_1">
       <reference local="idJoueur" foreign="id"/>
     </foreign-key>
-    <foreign-key foreignTable="Position" name="PositionJoueur_ibfk_2">
+    <foreign-key foreignTable="Position" name="Position_Joueur_ibfk_2">
       <reference local="abbrPos" foreign="abbr"/>
     </foreign-key>
     <index name="idJoueur">

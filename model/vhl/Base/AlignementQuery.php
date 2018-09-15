@@ -21,20 +21,10 @@ use Propel\Runtime\Exception\PropelException;
  *
  *
  * @method     ChildAlignementQuery orderById($order = Criteria::ASC) Order by the Id column
- * @method     ChildAlignementQuery orderByEquipeno($order = Criteria::ASC) Order by the EquipeNo column
- * @method     ChildAlignementQuery orderByJoueurno($order = Criteria::ASC) Order by the JoueurNo column
- * @method     ChildAlignementQuery orderByPosabbr($order = Criteria::ASC) Order by the PosAbbr column
- * @method     ChildAlignementQuery orderByBut($order = Criteria::ASC) Order by the But column
- * @method     ChildAlignementQuery orderByPasse($order = Criteria::ASC) Order by the Passe column
- * @method     ChildAlignementQuery orderByBlanchissage($order = Criteria::ASC) Order by the Blanchissage column
+ * @method     ChildAlignementQuery orderByEquipeid($order = Criteria::ASC) Order by the EquipeId column
  *
  * @method     ChildAlignementQuery groupById() Group by the Id column
- * @method     ChildAlignementQuery groupByEquipeno() Group by the EquipeNo column
- * @method     ChildAlignementQuery groupByJoueurno() Group by the JoueurNo column
- * @method     ChildAlignementQuery groupByPosabbr() Group by the PosAbbr column
- * @method     ChildAlignementQuery groupByBut() Group by the But column
- * @method     ChildAlignementQuery groupByPasse() Group by the Passe column
- * @method     ChildAlignementQuery groupByBlanchissage() Group by the Blanchissage column
+ * @method     ChildAlignementQuery groupByEquipeid() Group by the EquipeId column
  *
  * @method     ChildAlignementQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildAlignementQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -53,26 +43,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAlignementQuery leftJoinWithEquipe() Adds a LEFT JOIN clause and with to the query using the Equipe relation
  * @method     ChildAlignementQuery rightJoinWithEquipe() Adds a RIGHT JOIN clause and with to the query using the Equipe relation
  * @method     ChildAlignementQuery innerJoinWithEquipe() Adds a INNER JOIN clause and with to the query using the Equipe relation
- *
- * @method     ChildAlignementQuery leftJoinJoueur($relationAlias = null) Adds a LEFT JOIN clause to the query using the Joueur relation
- * @method     ChildAlignementQuery rightJoinJoueur($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Joueur relation
- * @method     ChildAlignementQuery innerJoinJoueur($relationAlias = null) Adds a INNER JOIN clause to the query using the Joueur relation
- *
- * @method     ChildAlignementQuery joinWithJoueur($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Joueur relation
- *
- * @method     ChildAlignementQuery leftJoinWithJoueur() Adds a LEFT JOIN clause and with to the query using the Joueur relation
- * @method     ChildAlignementQuery rightJoinWithJoueur() Adds a RIGHT JOIN clause and with to the query using the Joueur relation
- * @method     ChildAlignementQuery innerJoinWithJoueur() Adds a INNER JOIN clause and with to the query using the Joueur relation
- *
- * @method     ChildAlignementQuery leftJoinPosition($relationAlias = null) Adds a LEFT JOIN clause to the query using the Position relation
- * @method     ChildAlignementQuery rightJoinPosition($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Position relation
- * @method     ChildAlignementQuery innerJoinPosition($relationAlias = null) Adds a INNER JOIN clause to the query using the Position relation
- *
- * @method     ChildAlignementQuery joinWithPosition($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Position relation
- *
- * @method     ChildAlignementQuery leftJoinWithPosition() Adds a LEFT JOIN clause and with to the query using the Position relation
- * @method     ChildAlignementQuery rightJoinWithPosition() Adds a RIGHT JOIN clause and with to the query using the Position relation
- * @method     ChildAlignementQuery innerJoinWithPosition() Adds a INNER JOIN clause and with to the query using the Position relation
  *
  * @method     ChildAlignementQuery leftJoinPartieRelatedByEquipelocale($relationAlias = null) Adds a LEFT JOIN clause to the query using the PartieRelatedByEquipelocale relation
  * @method     ChildAlignementQuery rightJoinPartieRelatedByEquipelocale($relationAlias = null) Adds a RIGHT JOIN clause to the query using the PartieRelatedByEquipelocale relation
@@ -94,38 +64,23 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAlignementQuery rightJoinWithPartieRelatedByEquipevisite() Adds a RIGHT JOIN clause and with to the query using the PartieRelatedByEquipevisite relation
  * @method     ChildAlignementQuery innerJoinWithPartieRelatedByEquipevisite() Adds a INNER JOIN clause and with to the query using the PartieRelatedByEquipevisite relation
  *
- * @method     \EquipeQuery|\JoueurQuery|\PositionQuery|\PartieQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \EquipeQuery|\PartieQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildAlignement findOne(ConnectionInterface $con = null) Return the first ChildAlignement matching the query
  * @method     ChildAlignement findOneOrCreate(ConnectionInterface $con = null) Return the first ChildAlignement matching the query, or a new ChildAlignement object populated from the query conditions when no match is found
  *
  * @method     ChildAlignement findOneById(int $Id) Return the first ChildAlignement filtered by the Id column
- * @method     ChildAlignement findOneByEquipeno(int $EquipeNo) Return the first ChildAlignement filtered by the EquipeNo column
- * @method     ChildAlignement findOneByJoueurno(int $JoueurNo) Return the first ChildAlignement filtered by the JoueurNo column
- * @method     ChildAlignement findOneByPosabbr(string $PosAbbr) Return the first ChildAlignement filtered by the PosAbbr column
- * @method     ChildAlignement findOneByBut(int $But) Return the first ChildAlignement filtered by the But column
- * @method     ChildAlignement findOneByPasse(int $Passe) Return the first ChildAlignement filtered by the Passe column
- * @method     ChildAlignement findOneByBlanchissage(int $Blanchissage) Return the first ChildAlignement filtered by the Blanchissage column *
+ * @method     ChildAlignement findOneByEquipeid(int $EquipeId) Return the first ChildAlignement filtered by the EquipeId column *
 
  * @method     ChildAlignement requirePk($key, ConnectionInterface $con = null) Return the ChildAlignement by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAlignement requireOne(ConnectionInterface $con = null) Return the first ChildAlignement matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildAlignement requireOneById(int $Id) Return the first ChildAlignement filtered by the Id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAlignement requireOneByEquipeno(int $EquipeNo) Return the first ChildAlignement filtered by the EquipeNo column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAlignement requireOneByJoueurno(int $JoueurNo) Return the first ChildAlignement filtered by the JoueurNo column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAlignement requireOneByPosabbr(string $PosAbbr) Return the first ChildAlignement filtered by the PosAbbr column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAlignement requireOneByBut(int $But) Return the first ChildAlignement filtered by the But column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAlignement requireOneByPasse(int $Passe) Return the first ChildAlignement filtered by the Passe column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAlignement requireOneByBlanchissage(int $Blanchissage) Return the first ChildAlignement filtered by the Blanchissage column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAlignement requireOneByEquipeid(int $EquipeId) Return the first ChildAlignement filtered by the EquipeId column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildAlignement[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildAlignement objects based on current ModelCriteria
  * @method     ChildAlignement[]|ObjectCollection findById(int $Id) Return ChildAlignement objects filtered by the Id column
- * @method     ChildAlignement[]|ObjectCollection findByEquipeno(int $EquipeNo) Return ChildAlignement objects filtered by the EquipeNo column
- * @method     ChildAlignement[]|ObjectCollection findByJoueurno(int $JoueurNo) Return ChildAlignement objects filtered by the JoueurNo column
- * @method     ChildAlignement[]|ObjectCollection findByPosabbr(string $PosAbbr) Return ChildAlignement objects filtered by the PosAbbr column
- * @method     ChildAlignement[]|ObjectCollection findByBut(int $But) Return ChildAlignement objects filtered by the But column
- * @method     ChildAlignement[]|ObjectCollection findByPasse(int $Passe) Return ChildAlignement objects filtered by the Passe column
- * @method     ChildAlignement[]|ObjectCollection findByBlanchissage(int $Blanchissage) Return ChildAlignement objects filtered by the Blanchissage column
+ * @method     ChildAlignement[]|ObjectCollection findByEquipeid(int $EquipeId) Return ChildAlignement objects filtered by the EquipeId column
  * @method     ChildAlignement[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
@@ -224,7 +179,7 @@ abstract class AlignementQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT Id, EquipeNo, JoueurNo, PosAbbr, But, Passe, Blanchissage FROM Alignement WHERE Id = :p0';
+        $sql = 'SELECT Id, EquipeId FROM Alignement WHERE Id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -356,18 +311,18 @@ abstract class AlignementQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the EquipeNo column
+     * Filter the query on the EquipeId column
      *
      * Example usage:
      * <code>
-     * $query->filterByEquipeno(1234); // WHERE EquipeNo = 1234
-     * $query->filterByEquipeno(array(12, 34)); // WHERE EquipeNo IN (12, 34)
-     * $query->filterByEquipeno(array('min' => 12)); // WHERE EquipeNo > 12
+     * $query->filterByEquipeid(1234); // WHERE EquipeId = 1234
+     * $query->filterByEquipeid(array(12, 34)); // WHERE EquipeId IN (12, 34)
+     * $query->filterByEquipeid(array('min' => 12)); // WHERE EquipeId > 12
      * </code>
      *
      * @see       filterByEquipe()
      *
-     * @param     mixed $equipeno The value to use as filter.
+     * @param     mixed $equipeid The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -375,16 +330,16 @@ abstract class AlignementQuery extends ModelCriteria
      *
      * @return $this|ChildAlignementQuery The current query, for fluid interface
      */
-    public function filterByEquipeno($equipeno = null, $comparison = null)
+    public function filterByEquipeid($equipeid = null, $comparison = null)
     {
-        if (is_array($equipeno)) {
+        if (is_array($equipeid)) {
             $useMinMax = false;
-            if (isset($equipeno['min'])) {
-                $this->addUsingAlias(AlignementTableMap::COL_EQUIPENO, $equipeno['min'], Criteria::GREATER_EQUAL);
+            if (isset($equipeid['min'])) {
+                $this->addUsingAlias(AlignementTableMap::COL_EQUIPEID, $equipeid['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($equipeno['max'])) {
-                $this->addUsingAlias(AlignementTableMap::COL_EQUIPENO, $equipeno['max'], Criteria::LESS_EQUAL);
+            if (isset($equipeid['max'])) {
+                $this->addUsingAlias(AlignementTableMap::COL_EQUIPEID, $equipeid['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -395,198 +350,7 @@ abstract class AlignementQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(AlignementTableMap::COL_EQUIPENO, $equipeno, $comparison);
-    }
-
-    /**
-     * Filter the query on the JoueurNo column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByJoueurno(1234); // WHERE JoueurNo = 1234
-     * $query->filterByJoueurno(array(12, 34)); // WHERE JoueurNo IN (12, 34)
-     * $query->filterByJoueurno(array('min' => 12)); // WHERE JoueurNo > 12
-     * </code>
-     *
-     * @see       filterByJoueur()
-     *
-     * @param     mixed $joueurno The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildAlignementQuery The current query, for fluid interface
-     */
-    public function filterByJoueurno($joueurno = null, $comparison = null)
-    {
-        if (is_array($joueurno)) {
-            $useMinMax = false;
-            if (isset($joueurno['min'])) {
-                $this->addUsingAlias(AlignementTableMap::COL_JOUEURNO, $joueurno['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($joueurno['max'])) {
-                $this->addUsingAlias(AlignementTableMap::COL_JOUEURNO, $joueurno['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(AlignementTableMap::COL_JOUEURNO, $joueurno, $comparison);
-    }
-
-    /**
-     * Filter the query on the PosAbbr column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByPosabbr('fooValue');   // WHERE PosAbbr = 'fooValue'
-     * $query->filterByPosabbr('%fooValue%', Criteria::LIKE); // WHERE PosAbbr LIKE '%fooValue%'
-     * </code>
-     *
-     * @param     string $posabbr The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildAlignementQuery The current query, for fluid interface
-     */
-    public function filterByPosabbr($posabbr = null, $comparison = null)
-    {
-        if (null === $comparison) {
-            if (is_array($posabbr)) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(AlignementTableMap::COL_POSABBR, $posabbr, $comparison);
-    }
-
-    /**
-     * Filter the query on the But column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByBut(1234); // WHERE But = 1234
-     * $query->filterByBut(array(12, 34)); // WHERE But IN (12, 34)
-     * $query->filterByBut(array('min' => 12)); // WHERE But > 12
-     * </code>
-     *
-     * @param     mixed $but The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildAlignementQuery The current query, for fluid interface
-     */
-    public function filterByBut($but = null, $comparison = null)
-    {
-        if (is_array($but)) {
-            $useMinMax = false;
-            if (isset($but['min'])) {
-                $this->addUsingAlias(AlignementTableMap::COL_BUT, $but['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($but['max'])) {
-                $this->addUsingAlias(AlignementTableMap::COL_BUT, $but['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(AlignementTableMap::COL_BUT, $but, $comparison);
-    }
-
-    /**
-     * Filter the query on the Passe column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByPasse(1234); // WHERE Passe = 1234
-     * $query->filterByPasse(array(12, 34)); // WHERE Passe IN (12, 34)
-     * $query->filterByPasse(array('min' => 12)); // WHERE Passe > 12
-     * </code>
-     *
-     * @param     mixed $passe The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildAlignementQuery The current query, for fluid interface
-     */
-    public function filterByPasse($passe = null, $comparison = null)
-    {
-        if (is_array($passe)) {
-            $useMinMax = false;
-            if (isset($passe['min'])) {
-                $this->addUsingAlias(AlignementTableMap::COL_PASSE, $passe['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($passe['max'])) {
-                $this->addUsingAlias(AlignementTableMap::COL_PASSE, $passe['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(AlignementTableMap::COL_PASSE, $passe, $comparison);
-    }
-
-    /**
-     * Filter the query on the Blanchissage column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByBlanchissage(1234); // WHERE Blanchissage = 1234
-     * $query->filterByBlanchissage(array(12, 34)); // WHERE Blanchissage IN (12, 34)
-     * $query->filterByBlanchissage(array('min' => 12)); // WHERE Blanchissage > 12
-     * </code>
-     *
-     * @param     mixed $blanchissage The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildAlignementQuery The current query, for fluid interface
-     */
-    public function filterByBlanchissage($blanchissage = null, $comparison = null)
-    {
-        if (is_array($blanchissage)) {
-            $useMinMax = false;
-            if (isset($blanchissage['min'])) {
-                $this->addUsingAlias(AlignementTableMap::COL_BLANCHISSAGE, $blanchissage['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($blanchissage['max'])) {
-                $this->addUsingAlias(AlignementTableMap::COL_BLANCHISSAGE, $blanchissage['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(AlignementTableMap::COL_BLANCHISSAGE, $blanchissage, $comparison);
+        return $this->addUsingAlias(AlignementTableMap::COL_EQUIPEID, $equipeid, $comparison);
     }
 
     /**
@@ -603,14 +367,14 @@ abstract class AlignementQuery extends ModelCriteria
     {
         if ($equipe instanceof \Equipe) {
             return $this
-                ->addUsingAlias(AlignementTableMap::COL_EQUIPENO, $equipe->getId(), $comparison);
+                ->addUsingAlias(AlignementTableMap::COL_EQUIPEID, $equipe->getId(), $comparison);
         } elseif ($equipe instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             return $this
-                ->addUsingAlias(AlignementTableMap::COL_EQUIPENO, $equipe->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(AlignementTableMap::COL_EQUIPEID, $equipe->toKeyValue('PrimaryKey', 'Id'), $comparison);
         } else {
             throw new PropelException('filterByEquipe() only accepts arguments of type \Equipe or Collection');
         }
@@ -664,160 +428,6 @@ abstract class AlignementQuery extends ModelCriteria
         return $this
             ->joinEquipe($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Equipe', '\EquipeQuery');
-    }
-
-    /**
-     * Filter the query by a related \Joueur object
-     *
-     * @param \Joueur|ObjectCollection $joueur The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @throws \Propel\Runtime\Exception\PropelException
-     *
-     * @return ChildAlignementQuery The current query, for fluid interface
-     */
-    public function filterByJoueur($joueur, $comparison = null)
-    {
-        if ($joueur instanceof \Joueur) {
-            return $this
-                ->addUsingAlias(AlignementTableMap::COL_JOUEURNO, $joueur->getId(), $comparison);
-        } elseif ($joueur instanceof ObjectCollection) {
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-
-            return $this
-                ->addUsingAlias(AlignementTableMap::COL_JOUEURNO, $joueur->toKeyValue('PrimaryKey', 'Id'), $comparison);
-        } else {
-            throw new PropelException('filterByJoueur() only accepts arguments of type \Joueur or Collection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the Joueur relation
-     *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return $this|ChildAlignementQuery The current query, for fluid interface
-     */
-    public function joinJoueur($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('Joueur');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'Joueur');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the Joueur relation Joueur object
-     *
-     * @see useQuery()
-     *
-     * @param     string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return \JoueurQuery A secondary query class using the current class as primary query
-     */
-    public function useJoueurQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        return $this
-            ->joinJoueur($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Joueur', '\JoueurQuery');
-    }
-
-    /**
-     * Filter the query by a related \Position object
-     *
-     * @param \Position|ObjectCollection $position The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @throws \Propel\Runtime\Exception\PropelException
-     *
-     * @return ChildAlignementQuery The current query, for fluid interface
-     */
-    public function filterByPosition($position, $comparison = null)
-    {
-        if ($position instanceof \Position) {
-            return $this
-                ->addUsingAlias(AlignementTableMap::COL_POSABBR, $position->getAbbr(), $comparison);
-        } elseif ($position instanceof ObjectCollection) {
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-
-            return $this
-                ->addUsingAlias(AlignementTableMap::COL_POSABBR, $position->toKeyValue('PrimaryKey', 'Abbr'), $comparison);
-        } else {
-            throw new PropelException('filterByPosition() only accepts arguments of type \Position or Collection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the Position relation
-     *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return $this|ChildAlignementQuery The current query, for fluid interface
-     */
-    public function joinPosition($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('Position');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'Position');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the Position relation Position object
-     *
-     * @see useQuery()
-     *
-     * @param     string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return \PositionQuery A secondary query class using the current class as primary query
-     */
-    public function usePositionQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        return $this
-            ->joinPosition($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Position', '\PositionQuery');
     }
 
     /**

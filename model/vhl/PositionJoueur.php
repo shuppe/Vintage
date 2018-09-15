@@ -1,9 +1,9 @@
 <?php
 
-use Base\Positionjoueur as BasePositionjoueur;
+use Base\PositionJoueur as BasePositionJoueur;
 
 /**
- * Skeleton subclass for representing a row from the 'PositionJoueur' table.
+ * Skeleton subclass for representing a row from the 'Position_Joueur' table.
  *
  *
  *
@@ -12,7 +12,7 @@ use Base\Positionjoueur as BasePositionjoueur;
  * long as it does not already exist in the output directory.
  *
  */
-class Positionjoueur extends BasePositionjoueur
+class PositionJoueur extends BasePositionJoueur
 {
 
 }

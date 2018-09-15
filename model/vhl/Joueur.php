@@ -14,7 +14,6 @@ use Base\Joueur as BaseJoueur;
  */
 class Joueur extends BaseJoueur
 {
-
     public function getNomStatut()
     {
     	$nomStatut = 'Indéterminé';
@@ -28,5 +27,6 @@ class Joueur extends BaseJoueur
     	}
         return $nomStatut;
     }
+
 
 }

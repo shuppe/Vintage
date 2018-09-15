@@ -2,14 +2,14 @@
 
 namespace Base;
 
-use \Arena as ChildArena;
-use \ArenaQuery as ChildArenaQuery;
-use \Partie as ChildPartie;
-use \PartieQuery as ChildPartieQuery;
+use \Alignement as ChildAlignement;
+use \AlignementQuery as ChildAlignementQuery;
+use \Equipe as ChildEquipe;
+use \EquipeQuery as ChildEquipeQuery;
 use \Exception;
 use \PDO;
-use Map\ArenaTableMap;
-use Map\PartieTableMap;
+use Map\AlignementTableMap;
+use Map\EquipeTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -24,18 +24,18 @@ use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Parser\AbstractParser;
 
 /**
- * Base class that represents a row from the 'Arena' table.
+ * Base class that represents a row from the 'Equipe' table.
  *
  *
  *
- * @package    propel.generator.vintage.hockey.pickup.Base
+ * @package    propel.generator.vhl.Base
  */
-abstract class Arena implements ActiveRecordInterface
+abstract class Equipe implements ActiveRecordInterface
 {
     /**
      * TableMap class name
      */
-    const TABLE_MAP = '\\Map\\ArenaTableMap';
+    const TABLE_MAP = '\\Map\\EquipeTableMap';
 
 
     /**
@@ -79,45 +79,10 @@ abstract class Arena implements ActiveRecordInterface
     protected $nom;
 
     /**
-     * The value for the adresse field.
-     *
-     * @var        string
+     * @var        ObjectCollection|ChildAlignement[] Collection to store aggregation of ChildAlignement objects.
      */
-    protected $adresse;
-
-    /**
-     * The value for the ville field.
-     *
-     * @var        string
-     */
-    protected $ville;
-
-    /**
-     * The value for the province field.
-     *
-     * @var        string
-     */
-    protected $province;
-
-    /**
-     * The value for the codepostal field.
-     *
-     * @var        string
-     */
-    protected $codepostal;
-
-    /**
-     * The value for the url field.
-     *
-     * @var        string
-     */
-    protected $url;
-
-    /**
-     * @var        ObjectCollection|ChildPartie[] Collection to store aggregation of ChildPartie objects.
-     */
-    protected $collParties;
-    protected $collPartiesPartial;
+    protected $collAlignements;
+    protected $collAlignementsPartial;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -129,12 +94,12 @@ abstract class Arena implements ActiveRecordInterface
 
     /**
      * An array of objects scheduled for deletion.
-     * @var ObjectCollection|ChildPartie[]
+     * @var ObjectCollection|ChildAlignement[]
      */
-    protected $partiesScheduledForDeletion = null;
+    protected $alignementsScheduledForDeletion = null;
 
     /**
-     * Initializes internal state of Base\Arena object.
+     * Initializes internal state of Base\Equipe object.
      */
     public function __construct()
     {
@@ -229,9 +194,9 @@ abstract class Arena implements ActiveRecordInterface
     }
 
     /**
-     * Compares this with another <code>Arena</code> instance.  If
-     * <code>obj</code> is an instance of <code>Arena</code>, delegates to
-     * <code>equals(Arena)</code>.  Otherwise, returns <code>false</code>.
+     * Compares this with another <code>Equipe</code> instance.  If
+     * <code>obj</code> is an instance of <code>Equipe</code>, delegates to
+     * <code>equals(Equipe)</code>.  Otherwise, returns <code>false</code>.
      *
      * @param  mixed   $obj The object to compare to.
      * @return boolean Whether equal to the object specified.
@@ -297,7 +262,7 @@ abstract class Arena implements ActiveRecordInterface
      * @param string $name  The virtual column name
      * @param mixed  $value The value to give to the virtual column
      *
-     * @return $this|Arena The current object, for fluid interface
+     * @return $this|Equipe The current object, for fluid interface
      */
     public function setVirtualColumn($name, $value)
     {
@@ -379,60 +344,10 @@ abstract class Arena implements ActiveRecordInterface
     }
 
     /**
-     * Get the [adresse] column value.
-     *
-     * @return string
-     */
-    public function getAdresse()
-    {
-        return $this->adresse;
-    }
-
-    /**
-     * Get the [ville] column value.
-     *
-     * @return string
-     */
-    public function getVille()
-    {
-        return $this->ville;
-    }
-
-    /**
-     * Get the [province] column value.
-     *
-     * @return string
-     */
-    public function getProvince()
-    {
-        return $this->province;
-    }
-
-    /**
-     * Get the [codepostal] column value.
-     *
-     * @return string
-     */
-    public function getCodepostal()
-    {
-        return $this->codepostal;
-    }
-
-    /**
-     * Get the [url] column value.
-     *
-     * @return string
-     */
-    public function getUrl()
-    {
-        return $this->url;
-    }
-
-    /**
      * Set the value of [id] column.
      *
      * @param int $v new value
-     * @return $this|\Arena The current object (for fluent API support)
+     * @return $this|\Equipe The current object (for fluent API support)
      */
     public function setId($v)
     {
@@ -442,7 +357,7 @@ abstract class Arena implements ActiveRecordInterface
 
         if ($this->id !== $v) {
             $this->id = $v;
-            $this->modifiedColumns[ArenaTableMap::COL_ID] = true;
+            $this->modifiedColumns[EquipeTableMap::COL_ID] = true;
         }
 
         return $this;
@@ -452,7 +367,7 @@ abstract class Arena implements ActiveRecordInterface
      * Set the value of [nom] column.
      *
      * @param string $v new value
-     * @return $this|\Arena The current object (for fluent API support)
+     * @return $this|\Equipe The current object (for fluent API support)
      */
     public function setNom($v)
     {
@@ -462,111 +377,11 @@ abstract class Arena implements ActiveRecordInterface
 
         if ($this->nom !== $v) {
             $this->nom = $v;
-            $this->modifiedColumns[ArenaTableMap::COL_NOM] = true;
+            $this->modifiedColumns[EquipeTableMap::COL_NOM] = true;
         }
 
         return $this;
     } // setNom()
-
-    /**
-     * Set the value of [adresse] column.
-     *
-     * @param string $v new value
-     * @return $this|\Arena The current object (for fluent API support)
-     */
-    public function setAdresse($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->adresse !== $v) {
-            $this->adresse = $v;
-            $this->modifiedColumns[ArenaTableMap::COL_ADRESSE] = true;
-        }
-
-        return $this;
-    } // setAdresse()
-
-    /**
-     * Set the value of [ville] column.
-     *
-     * @param string $v new value
-     * @return $this|\Arena The current object (for fluent API support)
-     */
-    public function setVille($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->ville !== $v) {
-            $this->ville = $v;
-            $this->modifiedColumns[ArenaTableMap::COL_VILLE] = true;
-        }
-
-        return $this;
-    } // setVille()
-
-    /**
-     * Set the value of [province] column.
-     *
-     * @param string $v new value
-     * @return $this|\Arena The current object (for fluent API support)
-     */
-    public function setProvince($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->province !== $v) {
-            $this->province = $v;
-            $this->modifiedColumns[ArenaTableMap::COL_PROVINCE] = true;
-        }
-
-        return $this;
-    } // setProvince()
-
-    /**
-     * Set the value of [codepostal] column.
-     *
-     * @param string $v new value
-     * @return $this|\Arena The current object (for fluent API support)
-     */
-    public function setCodepostal($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->codepostal !== $v) {
-            $this->codepostal = $v;
-            $this->modifiedColumns[ArenaTableMap::COL_CODEPOSTAL] = true;
-        }
-
-        return $this;
-    } // setCodepostal()
-
-    /**
-     * Set the value of [url] column.
-     *
-     * @param string $v new value
-     * @return $this|\Arena The current object (for fluent API support)
-     */
-    public function setUrl($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->url !== $v) {
-            $this->url = $v;
-            $this->modifiedColumns[ArenaTableMap::COL_URL] = true;
-        }
-
-        return $this;
-    } // setUrl()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -604,26 +419,11 @@ abstract class Arena implements ActiveRecordInterface
     {
         try {
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : ArenaTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : EquipeTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
             $this->id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : ArenaTableMap::translateFieldName('Nom', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : EquipeTableMap::translateFieldName('Nom', TableMap::TYPE_PHPNAME, $indexType)];
             $this->nom = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : ArenaTableMap::translateFieldName('Adresse', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->adresse = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : ArenaTableMap::translateFieldName('Ville', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->ville = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : ArenaTableMap::translateFieldName('Province', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->province = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : ArenaTableMap::translateFieldName('Codepostal', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->codepostal = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : ArenaTableMap::translateFieldName('Url', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->url = (null !== $col) ? (string) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -632,10 +432,10 @@ abstract class Arena implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 7; // 7 = ArenaTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 2; // 2 = EquipeTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException(sprintf('Error populating %s object', '\\Arena'), 0, $e);
+            throw new PropelException(sprintf('Error populating %s object', '\\Equipe'), 0, $e);
         }
     }
 
@@ -677,13 +477,13 @@ abstract class Arena implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(ArenaTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(EquipeTableMap::DATABASE_NAME);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $dataFetcher = ChildArenaQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
+        $dataFetcher = ChildEquipeQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
         $row = $dataFetcher->fetch();
         $dataFetcher->close();
         if (!$row) {
@@ -693,7 +493,7 @@ abstract class Arena implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->collParties = null;
+            $this->collAlignements = null;
 
         } // if (deep)
     }
@@ -704,8 +504,8 @@ abstract class Arena implements ActiveRecordInterface
      * @param      ConnectionInterface $con
      * @return void
      * @throws PropelException
-     * @see Arena::setDeleted()
-     * @see Arena::isDeleted()
+     * @see Equipe::setDeleted()
+     * @see Equipe::isDeleted()
      */
     public function delete(ConnectionInterface $con = null)
     {
@@ -714,11 +514,11 @@ abstract class Arena implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(ArenaTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(EquipeTableMap::DATABASE_NAME);
         }
 
         $con->transaction(function () use ($con) {
-            $deleteQuery = ChildArenaQuery::create()
+            $deleteQuery = ChildEquipeQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -753,7 +553,7 @@ abstract class Arena implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(ArenaTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(EquipeTableMap::DATABASE_NAME);
         }
 
         return $con->transaction(function () use ($con) {
@@ -772,7 +572,7 @@ abstract class Arena implements ActiveRecordInterface
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                ArenaTableMap::addInstanceToPool($this);
+                EquipeTableMap::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -809,18 +609,17 @@ abstract class Arena implements ActiveRecordInterface
                 $this->resetModified();
             }
 
-            if ($this->partiesScheduledForDeletion !== null) {
-                if (!$this->partiesScheduledForDeletion->isEmpty()) {
-                    foreach ($this->partiesScheduledForDeletion as $partie) {
-                        // need to save related object because we set the relation to null
-                        $partie->save($con);
-                    }
-                    $this->partiesScheduledForDeletion = null;
+            if ($this->alignementsScheduledForDeletion !== null) {
+                if (!$this->alignementsScheduledForDeletion->isEmpty()) {
+                    \AlignementQuery::create()
+                        ->filterByPrimaryKeys($this->alignementsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->alignementsScheduledForDeletion = null;
                 }
             }
 
-            if ($this->collParties !== null) {
-                foreach ($this->collParties as $referrerFK) {
+            if ($this->collAlignements !== null) {
+                foreach ($this->collAlignements as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -847,36 +646,21 @@ abstract class Arena implements ActiveRecordInterface
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[ArenaTableMap::COL_ID] = true;
+        $this->modifiedColumns[EquipeTableMap::COL_ID] = true;
         if (null !== $this->id) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . ArenaTableMap::COL_ID . ')');
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . EquipeTableMap::COL_ID . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(ArenaTableMap::COL_ID)) {
+        if ($this->isColumnModified(EquipeTableMap::COL_ID)) {
             $modifiedColumns[':p' . $index++]  = 'id';
         }
-        if ($this->isColumnModified(ArenaTableMap::COL_NOM)) {
-            $modifiedColumns[':p' . $index++]  = 'Nom';
-        }
-        if ($this->isColumnModified(ArenaTableMap::COL_ADRESSE)) {
-            $modifiedColumns[':p' . $index++]  = 'adresse';
-        }
-        if ($this->isColumnModified(ArenaTableMap::COL_VILLE)) {
-            $modifiedColumns[':p' . $index++]  = 'Ville';
-        }
-        if ($this->isColumnModified(ArenaTableMap::COL_PROVINCE)) {
-            $modifiedColumns[':p' . $index++]  = 'province';
-        }
-        if ($this->isColumnModified(ArenaTableMap::COL_CODEPOSTAL)) {
-            $modifiedColumns[':p' . $index++]  = 'codePostal';
-        }
-        if ($this->isColumnModified(ArenaTableMap::COL_URL)) {
-            $modifiedColumns[':p' . $index++]  = 'url';
+        if ($this->isColumnModified(EquipeTableMap::COL_NOM)) {
+            $modifiedColumns[':p' . $index++]  = 'nom';
         }
 
         $sql = sprintf(
-            'INSERT INTO Arena (%s) VALUES (%s)',
+            'INSERT INTO Equipe (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -888,23 +672,8 @@ abstract class Arena implements ActiveRecordInterface
                     case 'id':
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
                         break;
-                    case 'Nom':
+                    case 'nom':
                         $stmt->bindValue($identifier, $this->nom, PDO::PARAM_STR);
-                        break;
-                    case 'adresse':
-                        $stmt->bindValue($identifier, $this->adresse, PDO::PARAM_STR);
-                        break;
-                    case 'Ville':
-                        $stmt->bindValue($identifier, $this->ville, PDO::PARAM_STR);
-                        break;
-                    case 'province':
-                        $stmt->bindValue($identifier, $this->province, PDO::PARAM_STR);
-                        break;
-                    case 'codePostal':
-                        $stmt->bindValue($identifier, $this->codepostal, PDO::PARAM_STR);
-                        break;
-                    case 'url':
-                        $stmt->bindValue($identifier, $this->url, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -952,7 +721,7 @@ abstract class Arena implements ActiveRecordInterface
      */
     public function getByName($name, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = ArenaTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = EquipeTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -973,21 +742,6 @@ abstract class Arena implements ActiveRecordInterface
                 break;
             case 1:
                 return $this->getNom();
-                break;
-            case 2:
-                return $this->getAdresse();
-                break;
-            case 3:
-                return $this->getVille();
-                break;
-            case 4:
-                return $this->getProvince();
-                break;
-            case 5:
-                return $this->getCodepostal();
-                break;
-            case 6:
-                return $this->getUrl();
                 break;
             default:
                 return null;
@@ -1013,19 +767,14 @@ abstract class Arena implements ActiveRecordInterface
     public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
 
-        if (isset($alreadyDumpedObjects['Arena'][$this->hashCode()])) {
+        if (isset($alreadyDumpedObjects['Equipe'][$this->hashCode()])) {
             return '*RECURSION*';
         }
-        $alreadyDumpedObjects['Arena'][$this->hashCode()] = true;
-        $keys = ArenaTableMap::getFieldNames($keyType);
+        $alreadyDumpedObjects['Equipe'][$this->hashCode()] = true;
+        $keys = EquipeTableMap::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getId(),
             $keys[1] => $this->getNom(),
-            $keys[2] => $this->getAdresse(),
-            $keys[3] => $this->getVille(),
-            $keys[4] => $this->getProvince(),
-            $keys[5] => $this->getCodepostal(),
-            $keys[6] => $this->getUrl(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1033,20 +782,20 @@ abstract class Arena implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
-            if (null !== $this->collParties) {
+            if (null !== $this->collAlignements) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'parties';
+                        $key = 'alignements';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'Parties';
+                        $key = 'Alignements';
                         break;
                     default:
-                        $key = 'Parties';
+                        $key = 'Alignements';
                 }
 
-                $result[$key] = $this->collParties->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+                $result[$key] = $this->collAlignements->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1062,11 +811,11 @@ abstract class Arena implements ActiveRecordInterface
      *                one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *                Defaults to TableMap::TYPE_PHPNAME.
-     * @return $this|\Arena
+     * @return $this|\Equipe
      */
     public function setByName($name, $value, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = ArenaTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = EquipeTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
 
         return $this->setByPosition($pos, $value);
     }
@@ -1077,7 +826,7 @@ abstract class Arena implements ActiveRecordInterface
      *
      * @param  int $pos position in xml schema
      * @param  mixed $value field value
-     * @return $this|\Arena
+     * @return $this|\Equipe
      */
     public function setByPosition($pos, $value)
     {
@@ -1087,21 +836,6 @@ abstract class Arena implements ActiveRecordInterface
                 break;
             case 1:
                 $this->setNom($value);
-                break;
-            case 2:
-                $this->setAdresse($value);
-                break;
-            case 3:
-                $this->setVille($value);
-                break;
-            case 4:
-                $this->setProvince($value);
-                break;
-            case 5:
-                $this->setCodepostal($value);
-                break;
-            case 6:
-                $this->setUrl($value);
                 break;
         } // switch()
 
@@ -1127,28 +861,13 @@ abstract class Arena implements ActiveRecordInterface
      */
     public function fromArray($arr, $keyType = TableMap::TYPE_PHPNAME)
     {
-        $keys = ArenaTableMap::getFieldNames($keyType);
+        $keys = EquipeTableMap::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) {
             $this->setId($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
             $this->setNom($arr[$keys[1]]);
-        }
-        if (array_key_exists($keys[2], $arr)) {
-            $this->setAdresse($arr[$keys[2]]);
-        }
-        if (array_key_exists($keys[3], $arr)) {
-            $this->setVille($arr[$keys[3]]);
-        }
-        if (array_key_exists($keys[4], $arr)) {
-            $this->setProvince($arr[$keys[4]]);
-        }
-        if (array_key_exists($keys[5], $arr)) {
-            $this->setCodepostal($arr[$keys[5]]);
-        }
-        if (array_key_exists($keys[6], $arr)) {
-            $this->setUrl($arr[$keys[6]]);
         }
     }
 
@@ -1169,7 +888,7 @@ abstract class Arena implements ActiveRecordInterface
      * @param string $data The source data to import from
      * @param string $keyType The type of keys the array uses.
      *
-     * @return $this|\Arena The current object, for fluid interface
+     * @return $this|\Equipe The current object, for fluid interface
      */
     public function importFrom($parser, $data, $keyType = TableMap::TYPE_PHPNAME)
     {
@@ -1189,28 +908,13 @@ abstract class Arena implements ActiveRecordInterface
      */
     public function buildCriteria()
     {
-        $criteria = new Criteria(ArenaTableMap::DATABASE_NAME);
+        $criteria = new Criteria(EquipeTableMap::DATABASE_NAME);
 
-        if ($this->isColumnModified(ArenaTableMap::COL_ID)) {
-            $criteria->add(ArenaTableMap::COL_ID, $this->id);
+        if ($this->isColumnModified(EquipeTableMap::COL_ID)) {
+            $criteria->add(EquipeTableMap::COL_ID, $this->id);
         }
-        if ($this->isColumnModified(ArenaTableMap::COL_NOM)) {
-            $criteria->add(ArenaTableMap::COL_NOM, $this->nom);
-        }
-        if ($this->isColumnModified(ArenaTableMap::COL_ADRESSE)) {
-            $criteria->add(ArenaTableMap::COL_ADRESSE, $this->adresse);
-        }
-        if ($this->isColumnModified(ArenaTableMap::COL_VILLE)) {
-            $criteria->add(ArenaTableMap::COL_VILLE, $this->ville);
-        }
-        if ($this->isColumnModified(ArenaTableMap::COL_PROVINCE)) {
-            $criteria->add(ArenaTableMap::COL_PROVINCE, $this->province);
-        }
-        if ($this->isColumnModified(ArenaTableMap::COL_CODEPOSTAL)) {
-            $criteria->add(ArenaTableMap::COL_CODEPOSTAL, $this->codepostal);
-        }
-        if ($this->isColumnModified(ArenaTableMap::COL_URL)) {
-            $criteria->add(ArenaTableMap::COL_URL, $this->url);
+        if ($this->isColumnModified(EquipeTableMap::COL_NOM)) {
+            $criteria->add(EquipeTableMap::COL_NOM, $this->nom);
         }
 
         return $criteria;
@@ -1228,8 +932,8 @@ abstract class Arena implements ActiveRecordInterface
      */
     public function buildPkeyCriteria()
     {
-        $criteria = ChildArenaQuery::create();
-        $criteria->add(ArenaTableMap::COL_ID, $this->id);
+        $criteria = ChildEquipeQuery::create();
+        $criteria->add(EquipeTableMap::COL_ID, $this->id);
 
         return $criteria;
     }
@@ -1291,7 +995,7 @@ abstract class Arena implements ActiveRecordInterface
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param      object $copyObj An object of \Arena (or compatible) type.
+     * @param      object $copyObj An object of \Equipe (or compatible) type.
      * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
@@ -1299,20 +1003,15 @@ abstract class Arena implements ActiveRecordInterface
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
         $copyObj->setNom($this->getNom());
-        $copyObj->setAdresse($this->getAdresse());
-        $copyObj->setVille($this->getVille());
-        $copyObj->setProvince($this->getProvince());
-        $copyObj->setCodepostal($this->getCodepostal());
-        $copyObj->setUrl($this->getUrl());
 
         if ($deepCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
             // the getter/setter methods for fkey referrer objects.
             $copyObj->setNew(false);
 
-            foreach ($this->getParties() as $relObj) {
+            foreach ($this->getAlignements() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addPartie($relObj->copy($deepCopy));
+                    $copyObj->addAlignement($relObj->copy($deepCopy));
                 }
             }
 
@@ -1333,7 +1032,7 @@ abstract class Arena implements ActiveRecordInterface
      * objects.
      *
      * @param  boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return \Arena Clone of current object.
+     * @return \Equipe Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -1357,38 +1056,38 @@ abstract class Arena implements ActiveRecordInterface
      */
     public function initRelation($relationName)
     {
-        if ('Partie' == $relationName) {
-            $this->initParties();
+        if ('Alignement' == $relationName) {
+            $this->initAlignements();
             return;
         }
     }
 
     /**
-     * Clears out the collParties collection
+     * Clears out the collAlignements collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addParties()
+     * @see        addAlignements()
      */
-    public function clearParties()
+    public function clearAlignements()
     {
-        $this->collParties = null; // important to set this to NULL since that means it is uninitialized
+        $this->collAlignements = null; // important to set this to NULL since that means it is uninitialized
     }
 
     /**
-     * Reset is the collParties collection loaded partially.
+     * Reset is the collAlignements collection loaded partially.
      */
-    public function resetPartialParties($v = true)
+    public function resetPartialAlignements($v = true)
     {
-        $this->collPartiesPartial = $v;
+        $this->collAlignementsPartial = $v;
     }
 
     /**
-     * Initializes the collParties collection.
+     * Initializes the collAlignements collection.
      *
-     * By default this just sets the collParties collection to an empty array (like clearcollParties());
+     * By default this just sets the collAlignements collection to an empty array (like clearcollAlignements());
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
@@ -1397,162 +1096,162 @@ abstract class Arena implements ActiveRecordInterface
      *
      * @return void
      */
-    public function initParties($overrideExisting = true)
+    public function initAlignements($overrideExisting = true)
     {
-        if (null !== $this->collParties && !$overrideExisting) {
+        if (null !== $this->collAlignements && !$overrideExisting) {
             return;
         }
 
-        $collectionClassName = PartieTableMap::getTableMap()->getCollectionClassName();
+        $collectionClassName = AlignementTableMap::getTableMap()->getCollectionClassName();
 
-        $this->collParties = new $collectionClassName;
-        $this->collParties->setModel('\Partie');
+        $this->collAlignements = new $collectionClassName;
+        $this->collAlignements->setModel('\Alignement');
     }
 
     /**
-     * Gets an array of ChildPartie objects which contain a foreign key that references this object.
+     * Gets an array of ChildAlignement objects which contain a foreign key that references this object.
      *
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
      * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildArena is new, it will return
+     * If this ChildEquipe is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
-     * @return ObjectCollection|ChildPartie[] List of ChildPartie objects
+     * @return ObjectCollection|ChildAlignement[] List of ChildAlignement objects
      * @throws PropelException
      */
-    public function getParties(Criteria $criteria = null, ConnectionInterface $con = null)
+    public function getAlignements(Criteria $criteria = null, ConnectionInterface $con = null)
     {
-        $partial = $this->collPartiesPartial && !$this->isNew();
-        if (null === $this->collParties || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collParties) {
+        $partial = $this->collAlignementsPartial && !$this->isNew();
+        if (null === $this->collAlignements || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collAlignements) {
                 // return empty collection
-                $this->initParties();
+                $this->initAlignements();
             } else {
-                $collParties = ChildPartieQuery::create(null, $criteria)
-                    ->filterByArena($this)
+                $collAlignements = ChildAlignementQuery::create(null, $criteria)
+                    ->filterByEquipe($this)
                     ->find($con);
 
                 if (null !== $criteria) {
-                    if (false !== $this->collPartiesPartial && count($collParties)) {
-                        $this->initParties(false);
+                    if (false !== $this->collAlignementsPartial && count($collAlignements)) {
+                        $this->initAlignements(false);
 
-                        foreach ($collParties as $obj) {
-                            if (false == $this->collParties->contains($obj)) {
-                                $this->collParties->append($obj);
+                        foreach ($collAlignements as $obj) {
+                            if (false == $this->collAlignements->contains($obj)) {
+                                $this->collAlignements->append($obj);
                             }
                         }
 
-                        $this->collPartiesPartial = true;
+                        $this->collAlignementsPartial = true;
                     }
 
-                    return $collParties;
+                    return $collAlignements;
                 }
 
-                if ($partial && $this->collParties) {
-                    foreach ($this->collParties as $obj) {
+                if ($partial && $this->collAlignements) {
+                    foreach ($this->collAlignements as $obj) {
                         if ($obj->isNew()) {
-                            $collParties[] = $obj;
+                            $collAlignements[] = $obj;
                         }
                     }
                 }
 
-                $this->collParties = $collParties;
-                $this->collPartiesPartial = false;
+                $this->collAlignements = $collAlignements;
+                $this->collAlignementsPartial = false;
             }
         }
 
-        return $this->collParties;
+        return $this->collAlignements;
     }
 
     /**
-     * Sets a collection of ChildPartie objects related by a one-to-many relationship
+     * Sets a collection of ChildAlignement objects related by a one-to-many relationship
      * to the current object.
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $parties A Propel collection.
+     * @param      Collection $alignements A Propel collection.
      * @param      ConnectionInterface $con Optional connection object
-     * @return $this|ChildArena The current object (for fluent API support)
+     * @return $this|ChildEquipe The current object (for fluent API support)
      */
-    public function setParties(Collection $parties, ConnectionInterface $con = null)
+    public function setAlignements(Collection $alignements, ConnectionInterface $con = null)
     {
-        /** @var ChildPartie[] $partiesToDelete */
-        $partiesToDelete = $this->getParties(new Criteria(), $con)->diff($parties);
+        /** @var ChildAlignement[] $alignementsToDelete */
+        $alignementsToDelete = $this->getAlignements(new Criteria(), $con)->diff($alignements);
 
 
-        $this->partiesScheduledForDeletion = $partiesToDelete;
+        $this->alignementsScheduledForDeletion = $alignementsToDelete;
 
-        foreach ($partiesToDelete as $partieRemoved) {
-            $partieRemoved->setArena(null);
+        foreach ($alignementsToDelete as $alignementRemoved) {
+            $alignementRemoved->setEquipe(null);
         }
 
-        $this->collParties = null;
-        foreach ($parties as $partie) {
-            $this->addPartie($partie);
+        $this->collAlignements = null;
+        foreach ($alignements as $alignement) {
+            $this->addAlignement($alignement);
         }
 
-        $this->collParties = $parties;
-        $this->collPartiesPartial = false;
+        $this->collAlignements = $alignements;
+        $this->collAlignementsPartial = false;
 
         return $this;
     }
 
     /**
-     * Returns the number of related Partie objects.
+     * Returns the number of related Alignement objects.
      *
      * @param      Criteria $criteria
      * @param      boolean $distinct
      * @param      ConnectionInterface $con
-     * @return int             Count of related Partie objects.
+     * @return int             Count of related Alignement objects.
      * @throws PropelException
      */
-    public function countParties(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    public function countAlignements(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
     {
-        $partial = $this->collPartiesPartial && !$this->isNew();
-        if (null === $this->collParties || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collParties) {
+        $partial = $this->collAlignementsPartial && !$this->isNew();
+        if (null === $this->collAlignements || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collAlignements) {
                 return 0;
             }
 
             if ($partial && !$criteria) {
-                return count($this->getParties());
+                return count($this->getAlignements());
             }
 
-            $query = ChildPartieQuery::create(null, $criteria);
+            $query = ChildAlignementQuery::create(null, $criteria);
             if ($distinct) {
                 $query->distinct();
             }
 
             return $query
-                ->filterByArena($this)
+                ->filterByEquipe($this)
                 ->count($con);
         }
 
-        return count($this->collParties);
+        return count($this->collAlignements);
     }
 
     /**
-     * Method called to associate a ChildPartie object to this object
-     * through the ChildPartie foreign key attribute.
+     * Method called to associate a ChildAlignement object to this object
+     * through the ChildAlignement foreign key attribute.
      *
-     * @param  ChildPartie $l ChildPartie
-     * @return $this|\Arena The current object (for fluent API support)
+     * @param  ChildAlignement $l ChildAlignement
+     * @return $this|\Equipe The current object (for fluent API support)
      */
-    public function addPartie(ChildPartie $l)
+    public function addAlignement(ChildAlignement $l)
     {
-        if ($this->collParties === null) {
-            $this->initParties();
-            $this->collPartiesPartial = true;
+        if ($this->collAlignements === null) {
+            $this->initAlignements();
+            $this->collAlignementsPartial = true;
         }
 
-        if (!$this->collParties->contains($l)) {
-            $this->doAddPartie($l);
+        if (!$this->collAlignements->contains($l)) {
+            $this->doAddAlignement($l);
 
-            if ($this->partiesScheduledForDeletion and $this->partiesScheduledForDeletion->contains($l)) {
-                $this->partiesScheduledForDeletion->remove($this->partiesScheduledForDeletion->search($l));
+            if ($this->alignementsScheduledForDeletion and $this->alignementsScheduledForDeletion->contains($l)) {
+                $this->alignementsScheduledForDeletion->remove($this->alignementsScheduledForDeletion->search($l));
             }
         }
 
@@ -1560,82 +1259,32 @@ abstract class Arena implements ActiveRecordInterface
     }
 
     /**
-     * @param ChildPartie $partie The ChildPartie object to add.
+     * @param ChildAlignement $alignement The ChildAlignement object to add.
      */
-    protected function doAddPartie(ChildPartie $partie)
+    protected function doAddAlignement(ChildAlignement $alignement)
     {
-        $this->collParties[]= $partie;
-        $partie->setArena($this);
+        $this->collAlignements[]= $alignement;
+        $alignement->setEquipe($this);
     }
 
     /**
-     * @param  ChildPartie $partie The ChildPartie object to remove.
-     * @return $this|ChildArena The current object (for fluent API support)
+     * @param  ChildAlignement $alignement The ChildAlignement object to remove.
+     * @return $this|ChildEquipe The current object (for fluent API support)
      */
-    public function removePartie(ChildPartie $partie)
+    public function removeAlignement(ChildAlignement $alignement)
     {
-        if ($this->getParties()->contains($partie)) {
-            $pos = $this->collParties->search($partie);
-            $this->collParties->remove($pos);
-            if (null === $this->partiesScheduledForDeletion) {
-                $this->partiesScheduledForDeletion = clone $this->collParties;
-                $this->partiesScheduledForDeletion->clear();
+        if ($this->getAlignements()->contains($alignement)) {
+            $pos = $this->collAlignements->search($alignement);
+            $this->collAlignements->remove($pos);
+            if (null === $this->alignementsScheduledForDeletion) {
+                $this->alignementsScheduledForDeletion = clone $this->collAlignements;
+                $this->alignementsScheduledForDeletion->clear();
             }
-            $this->partiesScheduledForDeletion[]= $partie;
-            $partie->setArena(null);
+            $this->alignementsScheduledForDeletion[]= clone $alignement;
+            $alignement->setEquipe(null);
         }
 
         return $this;
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this Arena is new, it will return
-     * an empty collection; or if this Arena has previously
-     * been saved, it will retrieve related Parties from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in Arena.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildPartie[] List of ChildPartie objects
-     */
-    public function getPartiesJoinAlignementRelatedByEquipelocale(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
-    {
-        $query = ChildPartieQuery::create(null, $criteria);
-        $query->joinWith('AlignementRelatedByEquipelocale', $joinBehavior);
-
-        return $this->getParties($query, $con);
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this Arena is new, it will return
-     * an empty collection; or if this Arena has previously
-     * been saved, it will retrieve related Parties from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in Arena.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildPartie[] List of ChildPartie objects
-     */
-    public function getPartiesJoinAlignementRelatedByEquipevisite(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
-    {
-        $query = ChildPartieQuery::create(null, $criteria);
-        $query->joinWith('AlignementRelatedByEquipevisite', $joinBehavior);
-
-        return $this->getParties($query, $con);
     }
 
     /**
@@ -1647,11 +1296,6 @@ abstract class Arena implements ActiveRecordInterface
     {
         $this->id = null;
         $this->nom = null;
-        $this->adresse = null;
-        $this->ville = null;
-        $this->province = null;
-        $this->codepostal = null;
-        $this->url = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();
@@ -1670,14 +1314,14 @@ abstract class Arena implements ActiveRecordInterface
     public function clearAllReferences($deep = false)
     {
         if ($deep) {
-            if ($this->collParties) {
-                foreach ($this->collParties as $o) {
+            if ($this->collAlignements) {
+                foreach ($this->collAlignements as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
         } // if ($deep)
 
-        $this->collParties = null;
+        $this->collAlignements = null;
     }
 
     /**
@@ -1687,7 +1331,7 @@ abstract class Arena implements ActiveRecordInterface
      */
     public function __toString()
     {
-        return (string) $this->exportTo(ArenaTableMap::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(EquipeTableMap::DEFAULT_STRING_FORMAT);
     }
 
     /**

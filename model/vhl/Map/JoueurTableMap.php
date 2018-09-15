@@ -2,8 +2,8 @@
 
 namespace Map;
 
-use \Equipe;
-use \EquipeQuery;
+use \Joueur;
+use \JoueurQuery;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\InstancePoolTrait;
@@ -16,7 +16,7 @@ use Propel\Runtime\Map\TableMapTrait;
 
 
 /**
- * This class defines the structure of the 'Equipe' table.
+ * This class defines the structure of the 'Joueur' table.
  *
  *
  *
@@ -26,7 +26,7 @@ use Propel\Runtime\Map\TableMapTrait;
  * (i.e. if it's a text column type).
  *
  */
-class EquipeTableMap extends TableMap
+class JoueurTableMap extends TableMap
 {
     use InstancePoolTrait;
     use TableMapTrait;
@@ -34,7 +34,7 @@ class EquipeTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'vintage.hockey.pickup.Map.EquipeTableMap';
+    const CLASS_NAME = 'vhl.Map.JoueurTableMap';
 
     /**
      * The default database name for this class
@@ -44,22 +44,22 @@ class EquipeTableMap extends TableMap
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'Equipe';
+    const TABLE_NAME = 'Joueur';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\Equipe';
+    const OM_CLASS = '\\Joueur';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'vintage.hockey.pickup.Equipe';
+    const CLASS_DEFAULT = 'vhl.Joueur';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 2;
+    const NUM_COLUMNS = 8;
 
     /**
      * The number of lazy-loaded columns
@@ -69,17 +69,47 @@ class EquipeTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 2;
+    const NUM_HYDRATE_COLUMNS = 8;
 
     /**
      * the column name for the id field
      */
-    const COL_ID = 'Equipe.id';
+    const COL_ID = 'Joueur.id';
 
     /**
      * the column name for the nom field
      */
-    const COL_NOM = 'Equipe.nom';
+    const COL_NOM = 'Joueur.nom';
+
+    /**
+     * the column name for the prenom field
+     */
+    const COL_PRENOM = 'Joueur.prenom';
+
+    /**
+     * the column name for the courriel field
+     */
+    const COL_COURRIEL = 'Joueur.courriel';
+
+    /**
+     * the column name for the telephone field
+     */
+    const COL_TELEPHONE = 'Joueur.telephone';
+
+    /**
+     * the column name for the statut field
+     */
+    const COL_STATUT = 'Joueur.statut';
+
+    /**
+     * the column name for the Cote field
+     */
+    const COL_COTE = 'Joueur.Cote';
+
+    /**
+     * the column name for the numero field
+     */
+    const COL_NUMERO = 'Joueur.numero';
 
     /**
      * The default string format for model objects of the related table
@@ -93,11 +123,11 @@ class EquipeTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Nom', ),
-        self::TYPE_CAMELNAME     => array('id', 'nom', ),
-        self::TYPE_COLNAME       => array(EquipeTableMap::COL_ID, EquipeTableMap::COL_NOM, ),
-        self::TYPE_FIELDNAME     => array('id', 'nom', ),
-        self::TYPE_NUM           => array(0, 1, )
+        self::TYPE_PHPNAME       => array('Id', 'Nom', 'Prenom', 'Courriel', 'Telephone', 'Statut', 'Cote', 'Numero', ),
+        self::TYPE_CAMELNAME     => array('id', 'nom', 'prenom', 'courriel', 'telephone', 'statut', 'cote', 'numero', ),
+        self::TYPE_COLNAME       => array(JoueurTableMap::COL_ID, JoueurTableMap::COL_NOM, JoueurTableMap::COL_PRENOM, JoueurTableMap::COL_COURRIEL, JoueurTableMap::COL_TELEPHONE, JoueurTableMap::COL_STATUT, JoueurTableMap::COL_COTE, JoueurTableMap::COL_NUMERO, ),
+        self::TYPE_FIELDNAME     => array('id', 'nom', 'prenom', 'courriel', 'telephone', 'statut', 'Cote', 'numero', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -107,11 +137,11 @@ class EquipeTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Nom' => 1, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'nom' => 1, ),
-        self::TYPE_COLNAME       => array(EquipeTableMap::COL_ID => 0, EquipeTableMap::COL_NOM => 1, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'nom' => 1, ),
-        self::TYPE_NUM           => array(0, 1, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Nom' => 1, 'Prenom' => 2, 'Courriel' => 3, 'Telephone' => 4, 'Statut' => 5, 'Cote' => 6, 'Numero' => 7, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'nom' => 1, 'prenom' => 2, 'courriel' => 3, 'telephone' => 4, 'statut' => 5, 'cote' => 6, 'numero' => 7, ),
+        self::TYPE_COLNAME       => array(JoueurTableMap::COL_ID => 0, JoueurTableMap::COL_NOM => 1, JoueurTableMap::COL_PRENOM => 2, JoueurTableMap::COL_COURRIEL => 3, JoueurTableMap::COL_TELEPHONE => 4, JoueurTableMap::COL_STATUT => 5, JoueurTableMap::COL_COTE => 6, JoueurTableMap::COL_NUMERO => 7, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'nom' => 1, 'prenom' => 2, 'courriel' => 3, 'telephone' => 4, 'statut' => 5, 'Cote' => 6, 'numero' => 7, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -124,15 +154,21 @@ class EquipeTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('Equipe');
-        $this->setPhpName('Equipe');
+        $this->setName('Joueur');
+        $this->setPhpName('Joueur');
         $this->setIdentifierQuoting(false);
-        $this->setClassName('\\Equipe');
-        $this->setPackage('vintage.hockey.pickup');
+        $this->setClassName('\\Joueur');
+        $this->setPackage('vhl');
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, 10, null);
-        $this->addColumn('nom', 'Nom', 'LONGVARCHAR', false, null, null);
+        $this->addColumn('nom', 'Nom', 'VARCHAR', true, 50, null);
+        $this->addColumn('prenom', 'Prenom', 'VARCHAR', true, 50, null);
+        $this->addColumn('courriel', 'Courriel', 'VARCHAR', false, 100, null);
+        $this->addColumn('telephone', 'Telephone', 'VARCHAR', false, 15, null);
+        $this->addColumn('statut', 'Statut', 'VARCHAR', false, 1, null);
+        $this->addColumn('Cote', 'Cote', 'LONGVARCHAR', true, null, null);
+        $this->addColumn('numero', 'Numero', 'INTEGER', false, 3, null);
     } // initialize()
 
     /**
@@ -140,13 +176,13 @@ class EquipeTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Alignement', '\\Alignement', RelationMap::ONE_TO_MANY, array (
+        $this->addRelation('PositionJoueur', '\\PositionJoueur', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
-    0 => ':EquipeNo',
+    0 => ':idJoueur',
     1 => ':id',
   ),
-), null, null, 'Alignements', false);
+), null, null, 'PositionJoueurs', false);
     } // buildRelations()
 
     /**
@@ -206,7 +242,7 @@ class EquipeTableMap extends TableMap
      */
     public static function getOMClass($withPrefix = true)
     {
-        return $withPrefix ? EquipeTableMap::CLASS_DEFAULT : EquipeTableMap::OM_CLASS;
+        return $withPrefix ? JoueurTableMap::CLASS_DEFAULT : JoueurTableMap::OM_CLASS;
     }
 
     /**
@@ -220,22 +256,22 @@ class EquipeTableMap extends TableMap
      *
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (Equipe object, last column rank)
+     * @return array           (Joueur object, last column rank)
      */
     public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        $key = EquipeTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
-        if (null !== ($obj = EquipeTableMap::getInstanceFromPool($key))) {
+        $key = JoueurTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
+        if (null !== ($obj = JoueurTableMap::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $offset, true); // rehydrate
-            $col = $offset + EquipeTableMap::NUM_HYDRATE_COLUMNS;
+            $col = $offset + JoueurTableMap::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = EquipeTableMap::OM_CLASS;
-            /** @var Equipe $obj */
+            $cls = JoueurTableMap::OM_CLASS;
+            /** @var Joueur $obj */
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
-            EquipeTableMap::addInstanceToPool($obj, $key);
+            JoueurTableMap::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -258,18 +294,18 @@ class EquipeTableMap extends TableMap
         $cls = static::getOMClass(false);
         // populate the object(s)
         while ($row = $dataFetcher->fetch()) {
-            $key = EquipeTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
-            if (null !== ($obj = EquipeTableMap::getInstanceFromPool($key))) {
+            $key = JoueurTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
+            if (null !== ($obj = JoueurTableMap::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var Equipe $obj */
+                /** @var Joueur $obj */
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                EquipeTableMap::addInstanceToPool($obj, $key);
+                JoueurTableMap::addInstanceToPool($obj, $key);
             } // if key exists
         }
 
@@ -290,11 +326,23 @@ class EquipeTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(EquipeTableMap::COL_ID);
-            $criteria->addSelectColumn(EquipeTableMap::COL_NOM);
+            $criteria->addSelectColumn(JoueurTableMap::COL_ID);
+            $criteria->addSelectColumn(JoueurTableMap::COL_NOM);
+            $criteria->addSelectColumn(JoueurTableMap::COL_PRENOM);
+            $criteria->addSelectColumn(JoueurTableMap::COL_COURRIEL);
+            $criteria->addSelectColumn(JoueurTableMap::COL_TELEPHONE);
+            $criteria->addSelectColumn(JoueurTableMap::COL_STATUT);
+            $criteria->addSelectColumn(JoueurTableMap::COL_COTE);
+            $criteria->addSelectColumn(JoueurTableMap::COL_NUMERO);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.nom');
+            $criteria->addSelectColumn($alias . '.prenom');
+            $criteria->addSelectColumn($alias . '.courriel');
+            $criteria->addSelectColumn($alias . '.telephone');
+            $criteria->addSelectColumn($alias . '.statut');
+            $criteria->addSelectColumn($alias . '.Cote');
+            $criteria->addSelectColumn($alias . '.numero');
         }
     }
 
@@ -307,7 +355,7 @@ class EquipeTableMap extends TableMap
      */
     public static function getTableMap()
     {
-        return Propel::getServiceContainer()->getDatabaseMap(EquipeTableMap::DATABASE_NAME)->getTable(EquipeTableMap::TABLE_NAME);
+        return Propel::getServiceContainer()->getDatabaseMap(JoueurTableMap::DATABASE_NAME)->getTable(JoueurTableMap::TABLE_NAME);
     }
 
     /**
@@ -315,16 +363,16 @@ class EquipeTableMap extends TableMap
      */
     public static function buildTableMap()
     {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(EquipeTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(EquipeTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new EquipeTableMap());
+        $dbMap = Propel::getServiceContainer()->getDatabaseMap(JoueurTableMap::DATABASE_NAME);
+        if (!$dbMap->hasTable(JoueurTableMap::TABLE_NAME)) {
+            $dbMap->addTableObject(new JoueurTableMap());
         }
     }
 
     /**
-     * Performs a DELETE on the database, given a Equipe or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a Joueur or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or Equipe object or primary key or array of primary keys
+     * @param mixed               $values Criteria or Joueur object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -335,27 +383,27 @@ class EquipeTableMap extends TableMap
      public static function doDelete($values, ConnectionInterface $con = null)
      {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(EquipeTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(JoueurTableMap::DATABASE_NAME);
         }
 
         if ($values instanceof Criteria) {
             // rename for clarity
             $criteria = $values;
-        } elseif ($values instanceof \Equipe) { // it's a model object
+        } elseif ($values instanceof \Joueur) { // it's a model object
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(EquipeTableMap::DATABASE_NAME);
-            $criteria->add(EquipeTableMap::COL_ID, (array) $values, Criteria::IN);
+            $criteria = new Criteria(JoueurTableMap::DATABASE_NAME);
+            $criteria->add(JoueurTableMap::COL_ID, (array) $values, Criteria::IN);
         }
 
-        $query = EquipeQuery::create()->mergeWith($criteria);
+        $query = JoueurQuery::create()->mergeWith($criteria);
 
         if ($values instanceof Criteria) {
-            EquipeTableMap::clearInstancePool();
+            JoueurTableMap::clearInstancePool();
         } elseif (!is_object($values)) { // it's a primary key, or an array of pks
             foreach ((array) $values as $singleval) {
-                EquipeTableMap::removeInstanceFromPool($singleval);
+                JoueurTableMap::removeInstanceFromPool($singleval);
             }
         }
 
@@ -363,20 +411,20 @@ class EquipeTableMap extends TableMap
     }
 
     /**
-     * Deletes all rows from the Equipe table.
+     * Deletes all rows from the Joueur table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
     {
-        return EquipeQuery::create()->doDeleteAll($con);
+        return JoueurQuery::create()->doDeleteAll($con);
     }
 
     /**
-     * Performs an INSERT on the database, given a Equipe or Criteria object.
+     * Performs an INSERT on the database, given a Joueur or Criteria object.
      *
-     * @param mixed               $criteria Criteria or Equipe object containing data that is used to create the INSERT statement.
+     * @param mixed               $criteria Criteria or Joueur object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -385,22 +433,22 @@ class EquipeTableMap extends TableMap
     public static function doInsert($criteria, ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(EquipeTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(JoueurTableMap::DATABASE_NAME);
         }
 
         if ($criteria instanceof Criteria) {
             $criteria = clone $criteria; // rename for clarity
         } else {
-            $criteria = $criteria->buildCriteria(); // build Criteria from Equipe object
+            $criteria = $criteria->buildCriteria(); // build Criteria from Joueur object
         }
 
-        if ($criteria->containsKey(EquipeTableMap::COL_ID) && $criteria->keyContainsValue(EquipeTableMap::COL_ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.EquipeTableMap::COL_ID.')');
+        if ($criteria->containsKey(JoueurTableMap::COL_ID) && $criteria->keyContainsValue(JoueurTableMap::COL_ID) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.JoueurTableMap::COL_ID.')');
         }
 
 
         // Set the correct dbName
-        $query = EquipeQuery::create()->mergeWith($criteria);
+        $query = JoueurQuery::create()->mergeWith($criteria);
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
@@ -409,7 +457,7 @@ class EquipeTableMap extends TableMap
         });
     }
 
-} // EquipeTableMap
+} // JoueurTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-EquipeTableMap::buildTableMap();
+JoueurTableMap::buildTableMap();
