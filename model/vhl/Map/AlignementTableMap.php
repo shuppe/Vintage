@@ -147,6 +147,13 @@ class AlignementTableMap extends TableMap
     1 => ':id',
   ),
 ), null, null, null, false);
+        $this->addRelation('Formation', '\\Formation', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':AlignementId',
+    1 => ':Id',
+  ),
+), null, null, 'Formations', false);
         $this->addRelation('PartieRelatedByEquipelocale', '\\Partie', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (

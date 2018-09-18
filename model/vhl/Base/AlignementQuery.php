@@ -44,6 +44,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAlignementQuery rightJoinWithEquipe() Adds a RIGHT JOIN clause and with to the query using the Equipe relation
  * @method     ChildAlignementQuery innerJoinWithEquipe() Adds a INNER JOIN clause and with to the query using the Equipe relation
  *
+ * @method     ChildAlignementQuery leftJoinFormation($relationAlias = null) Adds a LEFT JOIN clause to the query using the Formation relation
+ * @method     ChildAlignementQuery rightJoinFormation($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Formation relation
+ * @method     ChildAlignementQuery innerJoinFormation($relationAlias = null) Adds a INNER JOIN clause to the query using the Formation relation
+ *
+ * @method     ChildAlignementQuery joinWithFormation($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Formation relation
+ *
+ * @method     ChildAlignementQuery leftJoinWithFormation() Adds a LEFT JOIN clause and with to the query using the Formation relation
+ * @method     ChildAlignementQuery rightJoinWithFormation() Adds a RIGHT JOIN clause and with to the query using the Formation relation
+ * @method     ChildAlignementQuery innerJoinWithFormation() Adds a INNER JOIN clause and with to the query using the Formation relation
+ *
  * @method     ChildAlignementQuery leftJoinPartieRelatedByEquipelocale($relationAlias = null) Adds a LEFT JOIN clause to the query using the PartieRelatedByEquipelocale relation
  * @method     ChildAlignementQuery rightJoinPartieRelatedByEquipelocale($relationAlias = null) Adds a RIGHT JOIN clause to the query using the PartieRelatedByEquipelocale relation
  * @method     ChildAlignementQuery innerJoinPartieRelatedByEquipelocale($relationAlias = null) Adds a INNER JOIN clause to the query using the PartieRelatedByEquipelocale relation
@@ -64,7 +74,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAlignementQuery rightJoinWithPartieRelatedByEquipevisite() Adds a RIGHT JOIN clause and with to the query using the PartieRelatedByEquipevisite relation
  * @method     ChildAlignementQuery innerJoinWithPartieRelatedByEquipevisite() Adds a INNER JOIN clause and with to the query using the PartieRelatedByEquipevisite relation
  *
- * @method     \EquipeQuery|\PartieQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \EquipeQuery|\FormationQuery|\PartieQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildAlignement findOne(ConnectionInterface $con = null) Return the first ChildAlignement matching the query
  * @method     ChildAlignement findOneOrCreate(ConnectionInterface $con = null) Return the first ChildAlignement matching the query, or a new ChildAlignement object populated from the query conditions when no match is found
@@ -428,6 +438,79 @@ abstract class AlignementQuery extends ModelCriteria
         return $this
             ->joinEquipe($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Equipe', '\EquipeQuery');
+    }
+
+    /**
+     * Filter the query by a related \Formation object
+     *
+     * @param \Formation|ObjectCollection $formation the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildAlignementQuery The current query, for fluid interface
+     */
+    public function filterByFormation($formation, $comparison = null)
+    {
+        if ($formation instanceof \Formation) {
+            return $this
+                ->addUsingAlias(AlignementTableMap::COL_ID, $formation->getAlignementid(), $comparison);
+        } elseif ($formation instanceof ObjectCollection) {
+            return $this
+                ->useFormationQuery()
+                ->filterByPrimaryKeys($formation->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByFormation() only accepts arguments of type \Formation or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Formation relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildAlignementQuery The current query, for fluid interface
+     */
+    public function joinFormation($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Formation');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Formation');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Formation relation Formation object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \FormationQuery A secondary query class using the current class as primary query
+     */
+    public function useFormationQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinFormation($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Formation', '\FormationQuery');
     }
 
     /**

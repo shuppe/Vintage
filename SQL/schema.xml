@@ -32,6 +32,32 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
+  <table name="Formation" idMethod="native" phpName="Formation">
+    <column name="AlignementId" phpName="Alignementid" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" required="true"/>
+    <column name="JoueurId" phpName="Joueurid" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" required="true"/>
+    <column name="PosAbbr" phpName="Posabbr" type="VARCHAR" size="3" required="true"/>
+    <column name="But" phpName="But" type="INTEGER" size="2" required="true"/>
+    <column name="Passe" phpName="Passe" type="INTEGER" required="true"/>
+    <column name="Blanchissage" phpName="Blanchissage" type="INTEGER" required="true"/>
+    <foreign-key foreignTable="Alignement" name="Formation_Alifk">
+      <reference local="AlignementId" foreign="Id"/>
+    </foreign-key>
+    <foreign-key foreignTable="Joueur" name="Formation_Joufk">
+      <reference local="JoueurId" foreign="id"/>
+    </foreign-key>
+    <foreign-key foreignTable="Position" name="Formation_Posfk">
+      <reference local="PosAbbr" foreign="abbr"/>
+    </foreign-key>
+    <index name="Formation_Joufk">
+      <index-column name="JoueurId"/>
+    </index>
+    <index name="Formation_Posfk">
+      <index-column name="PosAbbr"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
   <table name="Joueur" idMethod="native" phpName="Joueur">
     <column name="id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="nom" phpName="Nom" type="VARCHAR" size="50" required="true"/>

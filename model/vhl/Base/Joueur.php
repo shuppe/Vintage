@@ -2,12 +2,15 @@
 
 namespace Base;
 
+use \Formation as ChildFormation;
+use \FormationQuery as ChildFormationQuery;
 use \Joueur as ChildJoueur;
 use \JoueurQuery as ChildJoueurQuery;
 use \PositionJoueur as ChildPositionJoueur;
 use \PositionJoueurQuery as ChildPositionJoueurQuery;
 use \Exception;
 use \PDO;
+use Map\FormationTableMap;
 use Map\JoueurTableMap;
 use Map\PositionJoueurTableMap;
 use Propel\Runtime\Propel;
@@ -121,6 +124,12 @@ abstract class Joueur implements ActiveRecordInterface
     protected $numero;
 
     /**
+     * @var        ObjectCollection|ChildFormation[] Collection to store aggregation of ChildFormation objects.
+     */
+    protected $collFormations;
+    protected $collFormationsPartial;
+
+    /**
      * @var        ObjectCollection|ChildPositionJoueur[] Collection to store aggregation of ChildPositionJoueur objects.
      */
     protected $collPositionJoueurs;
@@ -133,6 +142,12 @@ abstract class Joueur implements ActiveRecordInterface
      * @var boolean
      */
     protected $alreadyInSave = false;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildFormation[]
+     */
+    protected $formationsScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -733,6 +748,8 @@ abstract class Joueur implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->collFormations = null;
+
             $this->collPositionJoueurs = null;
 
         } // if (deep)
@@ -847,6 +864,23 @@ abstract class Joueur implements ActiveRecordInterface
                     $affectedRows += $this->doUpdate($con);
                 }
                 $this->resetModified();
+            }
+
+            if ($this->formationsScheduledForDeletion !== null) {
+                if (!$this->formationsScheduledForDeletion->isEmpty()) {
+                    \FormationQuery::create()
+                        ->filterByPrimaryKeys($this->formationsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->formationsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collFormations !== null) {
+                foreach ($this->collFormations as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
             }
 
             if ($this->positionJoueursScheduledForDeletion !== null) {
@@ -1082,6 +1116,21 @@ abstract class Joueur implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
+            if (null !== $this->collFormations) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'formations';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'Formations';
+                        break;
+                    default:
+                        $key = 'Formations';
+                }
+
+                $result[$key] = $this->collFormations->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
             if (null !== $this->collPositionJoueurs) {
 
                 switch ($keyType) {
@@ -1369,6 +1418,12 @@ abstract class Joueur implements ActiveRecordInterface
             // the getter/setter methods for fkey referrer objects.
             $copyObj->setNew(false);
 
+            foreach ($this->getFormations() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addFormation($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getPositionJoueurs() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addPositionJoueur($relObj->copy($deepCopy));
@@ -1416,10 +1471,292 @@ abstract class Joueur implements ActiveRecordInterface
      */
     public function initRelation($relationName)
     {
+        if ('Formation' == $relationName) {
+            $this->initFormations();
+            return;
+        }
         if ('PositionJoueur' == $relationName) {
             $this->initPositionJoueurs();
             return;
         }
+    }
+
+    /**
+     * Clears out the collFormations collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addFormations()
+     */
+    public function clearFormations()
+    {
+        $this->collFormations = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collFormations collection loaded partially.
+     */
+    public function resetPartialFormations($v = true)
+    {
+        $this->collFormationsPartial = $v;
+    }
+
+    /**
+     * Initializes the collFormations collection.
+     *
+     * By default this just sets the collFormations collection to an empty array (like clearcollFormations());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initFormations($overrideExisting = true)
+    {
+        if (null !== $this->collFormations && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = FormationTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collFormations = new $collectionClassName;
+        $this->collFormations->setModel('\Formation');
+    }
+
+    /**
+     * Gets an array of ChildFormation objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildJoueur is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildFormation[] List of ChildFormation objects
+     * @throws PropelException
+     */
+    public function getFormations(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collFormationsPartial && !$this->isNew();
+        if (null === $this->collFormations || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collFormations) {
+                // return empty collection
+                $this->initFormations();
+            } else {
+                $collFormations = ChildFormationQuery::create(null, $criteria)
+                    ->filterByJoueur($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collFormationsPartial && count($collFormations)) {
+                        $this->initFormations(false);
+
+                        foreach ($collFormations as $obj) {
+                            if (false == $this->collFormations->contains($obj)) {
+                                $this->collFormations->append($obj);
+                            }
+                        }
+
+                        $this->collFormationsPartial = true;
+                    }
+
+                    return $collFormations;
+                }
+
+                if ($partial && $this->collFormations) {
+                    foreach ($this->collFormations as $obj) {
+                        if ($obj->isNew()) {
+                            $collFormations[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collFormations = $collFormations;
+                $this->collFormationsPartial = false;
+            }
+        }
+
+        return $this->collFormations;
+    }
+
+    /**
+     * Sets a collection of ChildFormation objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $formations A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildJoueur The current object (for fluent API support)
+     */
+    public function setFormations(Collection $formations, ConnectionInterface $con = null)
+    {
+        /** @var ChildFormation[] $formationsToDelete */
+        $formationsToDelete = $this->getFormations(new Criteria(), $con)->diff($formations);
+
+
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->formationsScheduledForDeletion = clone $formationsToDelete;
+
+        foreach ($formationsToDelete as $formationRemoved) {
+            $formationRemoved->setJoueur(null);
+        }
+
+        $this->collFormations = null;
+        foreach ($formations as $formation) {
+            $this->addFormation($formation);
+        }
+
+        $this->collFormations = $formations;
+        $this->collFormationsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Formation objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related Formation objects.
+     * @throws PropelException
+     */
+    public function countFormations(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collFormationsPartial && !$this->isNew();
+        if (null === $this->collFormations || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collFormations) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getFormations());
+            }
+
+            $query = ChildFormationQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByJoueur($this)
+                ->count($con);
+        }
+
+        return count($this->collFormations);
+    }
+
+    /**
+     * Method called to associate a ChildFormation object to this object
+     * through the ChildFormation foreign key attribute.
+     *
+     * @param  ChildFormation $l ChildFormation
+     * @return $this|\Joueur The current object (for fluent API support)
+     */
+    public function addFormation(ChildFormation $l)
+    {
+        if ($this->collFormations === null) {
+            $this->initFormations();
+            $this->collFormationsPartial = true;
+        }
+
+        if (!$this->collFormations->contains($l)) {
+            $this->doAddFormation($l);
+
+            if ($this->formationsScheduledForDeletion and $this->formationsScheduledForDeletion->contains($l)) {
+                $this->formationsScheduledForDeletion->remove($this->formationsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildFormation $formation The ChildFormation object to add.
+     */
+    protected function doAddFormation(ChildFormation $formation)
+    {
+        $this->collFormations[]= $formation;
+        $formation->setJoueur($this);
+    }
+
+    /**
+     * @param  ChildFormation $formation The ChildFormation object to remove.
+     * @return $this|ChildJoueur The current object (for fluent API support)
+     */
+    public function removeFormation(ChildFormation $formation)
+    {
+        if ($this->getFormations()->contains($formation)) {
+            $pos = $this->collFormations->search($formation);
+            $this->collFormations->remove($pos);
+            if (null === $this->formationsScheduledForDeletion) {
+                $this->formationsScheduledForDeletion = clone $this->collFormations;
+                $this->formationsScheduledForDeletion->clear();
+            }
+            $this->formationsScheduledForDeletion[]= clone $formation;
+            $formation->setJoueur(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Joueur is new, it will return
+     * an empty collection; or if this Joueur has previously
+     * been saved, it will retrieve related Formations from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Joueur.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildFormation[] List of ChildFormation objects
+     */
+    public function getFormationsJoinAlignement(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildFormationQuery::create(null, $criteria);
+        $query->joinWith('Alignement', $joinBehavior);
+
+        return $this->getFormations($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Joueur is new, it will return
+     * an empty collection; or if this Joueur has previously
+     * been saved, it will retrieve related Formations from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Joueur.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildFormation[] List of ChildFormation objects
+     */
+    public function getFormationsJoinPosition(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildFormationQuery::create(null, $criteria);
+        $query->joinWith('Position', $joinBehavior);
+
+        return $this->getFormations($query, $con);
     }
 
     /**
@@ -1705,6 +2042,11 @@ abstract class Joueur implements ActiveRecordInterface
     public function clearAllReferences($deep = false)
     {
         if ($deep) {
+            if ($this->collFormations) {
+                foreach ($this->collFormations as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collPositionJoueurs) {
                 foreach ($this->collPositionJoueurs as $o) {
                     $o->clearAllReferences($deep);
@@ -1712,6 +2054,7 @@ abstract class Joueur implements ActiveRecordInterface
             }
         } // if ($deep)
 
+        $this->collFormations = null;
         $this->collPositionJoueurs = null;
     }
 

@@ -52,6 +52,34 @@ CREATE TABLE `Equipe`
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
+-- Formation
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `Formation`;
+
+CREATE TABLE `Formation`
+(
+    `AlignementId` int(10) unsigned NOT NULL,
+    `JoueurId` int(10) unsigned NOT NULL,
+    `PosAbbr` VARCHAR(3) NOT NULL,
+    `But` INTEGER(2) NOT NULL,
+    `Passe` INTEGER NOT NULL,
+    `Blanchissage` INTEGER NOT NULL,
+    PRIMARY KEY (`AlignementId`,`JoueurId`),
+    INDEX `Formation_Joufk` (`JoueurId`),
+    INDEX `Formation_Posfk` (`PosAbbr`),
+    CONSTRAINT `Formation_Alifk`
+        FOREIGN KEY (`AlignementId`)
+        REFERENCES `Alignement` (`Id`),
+    CONSTRAINT `Formation_Joufk`
+        FOREIGN KEY (`JoueurId`)
+        REFERENCES `Joueur` (`id`),
+    CONSTRAINT `Formation_Posfk`
+        FOREIGN KEY (`PosAbbr`)
+        REFERENCES `Position` (`abbr`)
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
 -- Joueur
 -- ---------------------------------------------------------------------
 

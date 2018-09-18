@@ -16,6 +16,7 @@
 <!-- Bootstrap core CSS -->
 <link href="./dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="./assets/icons/iconic/font/css/open-iconic-bootstrap.css" rel="stylesheet">
+<link href="./assets/js/jquery-ui-1.12.1.custom/jquery-ui.min.css" rel="stylesheet">
 
 <!-- Fontawsome core CSS -->
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
@@ -143,8 +144,11 @@
 	<!-- Bootstrap core JavaScript
     ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
-	<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<!-- <script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> -->
+	<script	src="./assets/js/jquery.min.js"></script>
+	<!-- <script src="./assets/js/jquery-ui-1.12.1.custom/jquery-1.12.4.js"></script> -->
+	<script src="./assets/js/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+
 	<script type="text/javascript">
     $(document).ready(function()
     {

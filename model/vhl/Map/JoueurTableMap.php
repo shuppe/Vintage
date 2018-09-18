@@ -176,6 +176,13 @@ class JoueurTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Formation', '\\Formation', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':JoueurId',
+    1 => ':id',
+  ),
+), null, null, 'Formations', false);
         $this->addRelation('PositionJoueur', '\\PositionJoueur', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
