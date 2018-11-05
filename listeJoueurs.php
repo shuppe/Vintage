@@ -1,8 +1,9 @@
 <?php
-	header('Content-type: text/html; charset=utf-8');
+    header('Content-type: text/html; charset=utf-8');
     require __DIR__.'/vendor/autoload.php';
     use Propel\Runtime\Propel;
-	use Propel\Runtime\Map\TableMap;
+    use Propel\Runtime\Map\TableMap;
+
     include "generated-conf/config.php";
     include "includes/functions.php"
 ?>
@@ -13,8 +14,8 @@
 	</div>
 	<div class="card-body">
 	<?php
-	if (JoueurQuery::create()->count() > 0) {
-	?>
+    if (JoueurQuery::create()->count() > 0) {
+        ?>
 	<div class="table-responsive">
 			<table class="table-hover table-striped liste-joueurs">
 				<tbody class="table-striped">
@@ -29,13 +30,11 @@
 					</tr>
 	<?php
         $joueurs = JoueurQuery::create()->orderByNom()->find();
-	foreach ($joueurs as $joueur) {
-        $joueurArray = $joueur->toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = true);
-            
-            ?>
+        foreach ($joueurs as $joueur) {
+            $joueurArray = $joueur->toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = true); ?>
 			<tr class="joueur">
 						<td>
-							<a href="#" class="joueurUpdate" data-id="<?php print ($joueur->getId()); ?>"><?php print htmlspecialchars($joueurArray['Prenom']." ".$joueurArray['Nom']); ?></a>
+							<a href="#" class="joueurUpdate" data-id="<?php print($joueur->getId()); ?>"><?php print htmlspecialchars($joueurArray['Prenom']." ".$joueurArray['Nom']); ?></a>
 							<!--  -->
 						</td>
 						<td class="courriel">
@@ -46,20 +45,18 @@
 						<td style='text-align: center;'> <?php print htmlspecialchars($joueur->getNumero()); ?> </td>
 						<td>
 						<?php
-			            $positions = $joueur->getPositionJoueurs();
-			            foreach ($positions as $pos) {
-			                print "<span class=\"badge badge-Primary\">".$pos->getAbbrpos()."</span>";
-			            }
-			            ?>
+                        $positions = $joueur->getPositionJoueurs();
+            foreach ($positions as $pos) {
+                print "<span class=\"badge badge-Primary\">".$pos->getAbbrpos()."</span>";
+            } ?>
  				</td>
 				<td>
-					<a href="#" class="joueurUpdate" data-id="<?php print ($joueur->getId()); ?>"><span class="oi oi-delete" title="delete" aria-hidden="true"></span></a>
+					<a href="#" class="joueurUpdate" data-id="<?php print($joueur->getId()); ?>"><span class="oi oi-delete" title="delete" aria-hidden="true"></span></a>
 					<!-- <button type="button" class="btn btn-danger"></button> -->
 				</td>
 					</tr>
 			<?php
-        }
-        ?>
+        } ?>
 		</tbody>
 			</table>
 		</div>
