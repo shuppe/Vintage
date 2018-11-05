@@ -17,15 +17,6 @@
 	?>
 	<div class="table-responsive">
 			<table class="table-hover table-striped liste-joueurs">
-				<!-- <colgroup>
-					<col class="col-md-4" />
-					<col class="col-md-4" />
-					<col class="col-md-2" />
-					<col class="col-md-2" />
-					<col class="col-md-2" />
-					<col class="col-md-2" />
-					<col class="col-md-2" />
-				</colgroup> -->
 				<tbody class="table-striped">
 					<tr>
 						<th>Nom</th>
