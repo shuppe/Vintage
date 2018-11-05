@@ -14,5 +14,20 @@ use Base\Partie as BasePartie;
  */
 class Partie extends BasePartie
 {
+    /**
+     * Initializes internal state of Base\Partie object.
+     */
+    public static function creerPartieConnue($datePartie, $heure = '22:00', $eqLocale, $eqVisite)
+    {
+        $partie = new Partie();
+        $partie->setDatepartie($datePartie);
+        $partie->setHeure($heure);
+        $partie->setEquipelocale($eqLocale->getId());
+        $partie->setEquipevisite($eqVisite->getId());
+        $partie->setPtsequipelocale(0);
+        $partie->setPtsequipevisite(0);
+
+        return $partie;
+    }
 
 }

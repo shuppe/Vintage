@@ -35,9 +35,10 @@
 
 <!-- <script type="text/javascript" src="poolDesSeries.js"></script> -->
 	<?php
-    require __DIR__.'/vendor/autoload.php';
+    require_once __DIR__.'/vendor/autoload.php';
     use Propel\Runtime\Propel;
-	include "generated-conf/config.php";
+
+    require_once "generated-conf/config.php";
     // use \vintage\hockey\pickup\JoueurQuery;
     // use \JoueurQuery;
 // header('Content-type: text/html; charset=utf-8');
@@ -93,13 +94,13 @@
 						</a>
 					</li>
 					<li class="nav-item dropdown">
-						<a id="menuCal" class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-topmenu="2">Calendrier<span class="caret"></span>
+						<a id="menuCal" class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-topmenu="2" href="">Calendrier<span class="caret"></span>
 						</a>
 						<ul class="dropdown-menu">
 							<li><a id="menuCalNext" class="dropdown-item" href="">Prochain match</a></li>
 							<li><a id="menuCalNew" class="dropdown-item" href="">Nouveau match</a></li>
-							<li><a id="menuCalNew2" class="dropdown-item">Modif match</a></li>
-							<li><a id="menuCalList" class="dropdown-item">Liste des matches</a></li>
+							<li><a id="menuCalNew2" class="dropdown-item" href="">Modif match</a></li>
+							<li><a id="menuCalList" class="dropdown-item" href="">Liste des matches</a></li>
 						</ul></li>
 					<li class="nav-item dropdown">
 						<a id="menuJoueur" class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-topmenu="3">Joueurs<span class="caret" /></span></a>
@@ -165,12 +166,17 @@
     	    		});
 		*/
 		
-        	$("#menuHome").click(function() {
- 	   	    	$("#dataContainer").load("accueil.html");
-        	});
+		$("#menuHome").click(function() {
+			$("#dataContainer").load("accueil.html");
+		});
 		
        	$("#menuCalNew").click(function() {
 	   	    	$("#dataContainer").load("ajouterPartie.php", function(responseTxt, statusTxt, xhr){
+        	});
+    	});
+
+       	$("#menuCalList").click(function() {
+	   	    	$("#dataContainer").load("listeParties.php", function(responseTxt, statusTxt, xhr){
         	});
     	});
 
@@ -196,7 +202,7 @@
         	  }
         	  e.preventDefault();
         	});
-    	$("#dataContainer").load("modifPartie.php", function(responseTxt, statusTxt, xhr){
+    	$("#dataContainer").load("listeParties.php", function(responseTxt, statusTxt, xhr){
         	});
     	$(".navbar-leaf").click(function() {
             if($('.navbar-toggle').css('display') !='none'){

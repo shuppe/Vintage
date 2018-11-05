@@ -14,5 +14,19 @@ use Base\Alignement as BaseAlignement;
  */
 class Alignement extends BaseAlignement
 {
+/**
+     * Initializes internal state of Base\Alignement object.
+     */
+    public static function creer($equipeNo)
+    {
+        $alignement = new Alignement();
+        $equipe = EquipeQuery::create()->findPk($equipeNo);
+        if ($equipe != null) {
+            $alignement->setEquipe($equipe);
+        }
+        $alignement->save();
+
+        return $alignement;
+    }
 
 }

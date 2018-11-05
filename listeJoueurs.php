@@ -17,14 +17,15 @@
 	?>
 	<div class="table-responsive">
 			<table class="table-hover table-striped liste-joueurs">
-				<colgroup>
+				<!-- <colgroup>
 					<col class="col-md-4" />
 					<col class="col-md-4" />
 					<col class="col-md-2" />
 					<col class="col-md-2" />
 					<col class="col-md-2" />
 					<col class="col-md-2" />
-				</colgroup>
+					<col class="col-md-2" />
+				</colgroup> -->
 				<tbody class="table-striped">
 					<tr>
 						<th>Nom</th>
@@ -33,6 +34,7 @@
 						<th>Présence</th>
 						<th>Numéro</th>
 						<th>Positions</th>
+						<th></th>
 					</tr>
 	<?php
         $joueurs = JoueurQuery::create()->orderByNom()->find();
@@ -45,8 +47,8 @@
 							<a href="#" class="joueurUpdate" data-id="<?php print ($joueur->getId()); ?>"><?php print htmlspecialchars($joueurArray['Prenom']." ".$joueurArray['Nom']); ?></a>
 							<!--  -->
 						</td>
-						<td class="courriel"><a
-							href="mailto:<?php print htmlspecialchars($joueur->getCourriel()); ?>"> <?php print htmlspecialchars($joueur->getCourriel()); ?> </a>
+						<td class="courriel">
+							<a href="mailto:<?php print htmlspecialchars($joueur->getCourriel()); ?>"> <?php print htmlspecialchars($joueur->getCourriel()); ?> </a>
 						</td>
 						<td> <?php print htmlspecialchars(format_phone('canada', $joueur->getTelephone())); ?> </td>
 						<td> <?php print htmlspecialchars($joueur->getNomStatut()); ?> </td> 

@@ -14,5 +14,10 @@ use Base\Arena as BaseArena;
  */
 class Arena extends BaseArena
 {
+	public function asListOption() {
+
+		return "<option value='" . $this->id . "'>" . $this->nom . "</option>\n";
+
+	}
 
 }
