@@ -53,9 +53,6 @@ if (isset($_POST['datePartie'])) {
         <div class="card-header text-white bg-vintage">
             <h3 class="card-title  bg-vintage">Joueurs</h3>
         </div>
-        <div class="card">
-            
-        </div>
         <div class="card-body" id="joueursContainer">
         </div>
     </div>

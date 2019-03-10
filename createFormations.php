@@ -87,7 +87,7 @@
 		  		</div>
 			</div>
 		</div>
-		<div class="row partie-eq">
+		<div class="row partie-grp-eq">
 			<div class="col partie-eq formation" data-eq="<?php print $equipeVisite ?>">
 				<div class="card">
 					<div class="card-header text-white bg-vintage">
