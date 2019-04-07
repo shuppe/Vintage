@@ -16,7 +16,22 @@ if (ArenaQuery::create()->count() > 0) {
 
 if (isset($_POST['datePartie'])) {
     $partie = PartieQuery::create()->findOneByDatepartie($_POST['datePartie']);
-}
+    if ($partie == null) {
+            $nouvellePartie = true;
+            $datePartie = $_POST['datePartie'];
+        }
+    } else {
+        $nouvellePartie = true;
+        $datePartie = date("Y-m-d");
+    }
+
+    if ($nouvellePartie) {
+        $partie = Partie::creerPartieConnue($datePartie, '22:00', Alignement::creer(1), Alignement::creer(2));
+        ?>
+            <script> $('#confCreationModal').modal('show');</script>
+        <?php
+    }
+
 
 ?>
 <form id="form-partie" class="form-horizontal" data-changed="false">
@@ -77,7 +92,7 @@ $(document).ready(function () {
     <?php if (isset($partie)) { ?>
         $('#arena').val(<?php print($partie->getArenano()); ?>);
         $('#arena').trigger('change');
-        // $('#datePartie').trigger('change');
+        $('#datePartie').trigger('change');
         <?php
     }
 ?>

@@ -8,7 +8,7 @@ $manager->setConfiguration(
     array(
         'dsn' => 'mysql:host=www.3csh.ca;port=3306;dbname=z3csh562_vhl',
         'user' => 'z3csh562_vintage',
-        'password' => 'G0Hab5G0',
+        'password' => 'LYRwMxexEF,Q7*jt3aBG6ukQ',
         'settings' => array(
             'charset' => 'utf8',
             'queries' => array(

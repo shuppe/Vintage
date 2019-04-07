@@ -23,8 +23,10 @@
 		}
 
 		if ($nouvellePartie) {
-			$partie = Partie::creerPartieConnue($datePartie,'22:00',Alignement::creer(1),Alignement::creer(2));
-			$partie->save();
+			$partie = Partie::creerPartieConnue($datePartie, '22:00', Alignement::creer(1), Alignement::creer(2));
+			?>
+				<script> $('#confCreationModal').modal('show');</script>
+			<?php
 		}
 
 		$equipeLocale = $partie->getEquipelocale();
@@ -232,6 +234,27 @@
 				</div>
 			</div> 
 		</div>
+		<!-- Modal -->
+		<div class="modal fade" id="confCreationModal" role="dialog">
+			<div class="modal-dialog">
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title">Nouvelle partie</h4>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<div class="modal-body">
+						<p>Aucune partie enregistrée pour cette date.</p>
+						<p>Créer une partie ?</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-submit" id="nouvelle-partie" data-dismiss="modal">Créer</button>
+						<button type="button" class="btn btn-cancel" id="annuler-nouvelle-partie" data-dismiss="modal">Annuler</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
 	<?php
 	} else {
 	    print "Aucun joueur inscrit.";
@@ -240,14 +263,32 @@
 ?>
 <script type="text/javascript">
 
-    $(".score").on('focus', function () {
+	$("#nouvelle-partie").on('click', function(event) {
+		event.preventDefault();
+		// $partie->save();
+	});
+
+	$("#annuler-nouvelle-partie").on('click', function(event) {
+		event.preventDefault();
+		window.history.go(-4);
+		console.log("Annuler Nouvelle Partie");
+
+	});
+
+	$(".score").on('focus', function () {
         // Store the current value on focus and on change
         previous = this.value;
     }).change(function() {
         // Do something with the previous value after the change
 		$.post( 'ajusterScore.php', 
 				{
-					partie : <?php print $partie->getId(); ?>,
+					partie : <?php if ($partie == null) {
+						print -1;
+					}
+					else {
+						print $partie->getId();
+					}
+					?>,
 					equipe : $(this).data('eq'),
 					score : $(this).val()
 				}, 
